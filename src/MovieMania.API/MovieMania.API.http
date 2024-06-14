@@ -1,0 +1,6 @@
+@MovieMania.API_HostAddress = http://localhost:5227
+
+GET {{MovieMania.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
