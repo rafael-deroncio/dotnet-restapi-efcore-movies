@@ -14,7 +14,7 @@ public class DepartamentController : Controller
     public async Task<IActionResult> GetDepartaments([FromQuery] int page, [FromQuery] int size)
         => Ok(await Task.FromResult(new { page, size }));
 
-    [HttpGet("id:int")]
+    [HttpGet("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetDepartament([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));
@@ -24,12 +24,12 @@ public class DepartamentController : Controller
     public async Task<IActionResult> PostDepartament([FromBody] object request)
         => Ok(await Task.FromResult(request));
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> PutDepartament([FromRoute] int id, [FromBody] object request)
         => Ok(await Task.FromResult(new { id, request }));
 
-    [HttpDelete("id:int")]
+    [HttpDelete("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteDepartament([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));

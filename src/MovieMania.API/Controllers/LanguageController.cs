@@ -14,9 +14,9 @@ public class LanguageController : Controller
     public async Task<IActionResult> GetLanguages([FromQuery] int page, [FromQuery] int size)
         => Ok(await Task.FromResult(new { page, size }));
 
-    [HttpGet("id:int")]
+    [HttpGet("{id:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguage([FromRoute] int id)
+    public async Task<IActionResult> GetLanguage(int id)
         => Ok(await Task.FromResult(new { id }));
 
     [HttpPost()]
@@ -24,39 +24,39 @@ public class LanguageController : Controller
     public async Task<IActionResult> PostLanguage([FromBody] object request)
         => Ok(await Task.FromResult(request));
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> PutLanguage([FromRoute] int id, [FromBody] object request)
         => Ok(await Task.FromResult(new { id, request }));
 
-    [HttpDelete("id:int")]
+    [HttpDelete("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteLanguage([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));
 
 
-    [HttpGet("language/languageId:int/role/paged")]
+    [HttpGet("{languageId:int}/role/paged")]
     [AllowAnonymous]
     public async Task<IActionResult> GetLanguageRoles([FromRoute] int languageId, [FromQuery] int page, [FromQuery] int size)
         => Ok(await Task.FromResult(new { languageId, page, size }));
 
-    [HttpGet("language/languageId:int/role/id:int")]
+    [HttpGet("{languageId:int}/role/{roleId:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguage([FromRoute] int languageId, [FromRoute] int id)
-        => Ok(await Task.FromResult(new { languageId, id }));
+    public async Task<IActionResult> GetLanguage([FromRoute] int languageId, [FromRoute] int roleId)
+        => Ok(await Task.FromResult(new { languageId, roleId }));
 
-    [HttpPost("language/languageId:int/role/")]
+    [HttpPost("{languageId:int}/role")]
     [AllowAnonymous]
     public async Task<IActionResult> PostLanguage([FromRoute] int languageId, [FromBody] object request)
         => Ok(await Task.FromResult(new { languageId, request }));
 
-    [HttpPut("language/languageId:int/role/id:int")]
+    [HttpPut("{languageId:int}/role/{roleId:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> PutLanguage([FromRoute] int languageId, [FromRoute] int id, [FromBody] object request)
-        => Ok(await Task.FromResult(new { languageId, id, request }));
+    public async Task<IActionResult> PutLanguage([FromRoute] int languageId, [FromRoute] int roleId, [FromBody] object request)
+        => Ok(await Task.FromResult(new { languageId, roleId, request }));
 
-    [HttpDelete("language/languageId:int/role/id:int")]
+    [HttpDelete("{languageId:int}/role/{roleId:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> DeleteLanguage([FromRoute] int languageId, [FromRoute] int id)
-        => Ok(await Task.FromResult(new { languageId, id }));
+    public async Task<IActionResult> DeleteLanguage([FromRoute] int languageId, [FromRoute] int roleId)
+        => Ok(await Task.FromResult(new { languageId, roleId }));
 }

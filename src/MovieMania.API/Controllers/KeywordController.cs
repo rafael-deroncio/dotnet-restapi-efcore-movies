@@ -14,7 +14,7 @@ public class KeywordController : Controller
     public async Task<IActionResult> GetKeywords([FromQuery] int page, [FromQuery] int size)
         => Ok(await Task.FromResult(new { page, size }));
 
-    [HttpGet("id:int")]
+    [HttpGet("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetKeyword([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));
@@ -24,12 +24,12 @@ public class KeywordController : Controller
     public async Task<IActionResult> PostKeyword([FromBody] object request)
         => Ok(await Task.FromResult(request));
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> PutKeyword([FromRoute] int id, [FromBody] object request)
         => Ok(await Task.FromResult(new { id, request }));
 
-    [HttpDelete("id:int")]
+    [HttpDelete("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteKeyword([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));

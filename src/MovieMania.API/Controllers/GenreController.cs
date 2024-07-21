@@ -14,7 +14,7 @@ public class GenreController : Controller
     public async Task<IActionResult> GetGenres([FromQuery] int page, [FromQuery] int size)
         => Ok(await Task.FromResult(new { page, size }));
 
-    [HttpGet("id:int")]
+    [HttpGet("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetGenre([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));
@@ -24,12 +24,12 @@ public class GenreController : Controller
     public async Task<IActionResult> PostGenre([FromBody] object request)
         => Ok(await Task.FromResult(request));
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> PutGenre([FromRoute] int id, [FromBody] object request)
         => Ok(await Task.FromResult(new { id, request }));
 
-    [HttpDelete("id:int")]
+    [HttpDelete("{id:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteGenre([FromRoute] int id)
         => Ok(await Task.FromResult(new { id }));
