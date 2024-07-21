@@ -1,4 +1,6 @@
-﻿namespace MovieMania.Core;
+﻿using System.ComponentModel;
+
+namespace MovieMania.Core.Extensions;
 
 public static class EnumExtension
 {

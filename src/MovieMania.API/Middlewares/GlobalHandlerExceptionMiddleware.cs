@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Text.Json;
 using MovieMania.Core.Exceptions;
+using MovieMania.Core.Extensions;
 using MovieMania.Domain.Enums;
 using MovieMania.Domain.Responses;
 

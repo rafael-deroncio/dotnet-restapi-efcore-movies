@@ -1,4 +1,7 @@
-﻿namespace MovieMania.Core.Exceptions;
+﻿using System.Net;
+using MovieMania.Domain.Enums;
+
+namespace MovieMania.Core.Exceptions;
 
 public class BaseException : Exception
 {
