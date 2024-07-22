@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieMania.Core.Entities;
 
-public record MovieEntity : ContextBaseDTO
+public record MovieEntity : EntityBase
 {
     [Key]
     [Column("movie_id")]

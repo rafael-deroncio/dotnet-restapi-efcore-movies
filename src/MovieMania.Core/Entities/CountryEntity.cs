@@ -4,7 +4,7 @@ using MovieMania.Core.Configurations.DTOs;
 
 namespace MovieMania.Core.Entities;
 
-public record CountryEntity : ContextBaseDTO
+public record CountryEntity : EntityBase
 {
     [Key]
     [Column("country_id")]

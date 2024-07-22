@@ -4,7 +4,7 @@ using MovieMania.Core.Configurations.DTOs;
 
 namespace MovieMania.Core.Entities;
 
-public record LanguageEntity : ContextBaseDTO
+public record LanguageEntity : EntityBase
 {
     [Key]
     [Column("language_id")]

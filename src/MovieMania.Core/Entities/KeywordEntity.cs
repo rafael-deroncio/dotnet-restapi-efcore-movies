@@ -4,7 +4,7 @@ using MovieMania.Core.Configurations.DTOs;
 
 namespace MovieMania.Core.Entities;
 
-public record KeywordEntity : ContextBaseDTO
+public record KeywordEntity : EntityBase
 {
     [Key]
     [Column("keyword_id")]

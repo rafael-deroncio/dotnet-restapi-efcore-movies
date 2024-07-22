@@ -4,7 +4,7 @@ using MovieMania.Core.Configurations.DTOs;
 
 namespace MovieMania.Core.Entities;
 
-public record ProductionCountryEntity : ContextBaseDTO
+public record ProductionCountryEntity : EntityBase
 {
     [ForeignKey("Movie")]
     [Column("movie_id")]

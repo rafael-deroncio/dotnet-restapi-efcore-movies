@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieMania.Core.Configurations.DTOs;
 
-public record ContextBaseDTO
+public record EntityBase
 {
     [Column("created_at")]
     public DateTime CreatedAt { get; set; } = DateTime.Now;

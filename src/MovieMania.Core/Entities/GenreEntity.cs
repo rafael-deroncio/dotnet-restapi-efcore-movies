@@ -4,7 +4,7 @@ using MovieMania.Core.Configurations.DTOs;
 
 namespace MovieMania.Core.Entities;
 
-public record GenreEntity : ContextBaseDTO
+public record GenreEntity : EntityBase
 {
     [Key]
     [Column("genre_id")]
