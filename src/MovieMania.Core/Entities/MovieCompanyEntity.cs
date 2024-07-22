@@ -13,6 +13,6 @@ public record MovieCompanyEntity : ContextBaseDTO
     [Column("company_id")]
     public int CompanyId { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public ProductionCompanyModel ProductionCompany { get; set; }
+    public MovieEntity Movie { get; set; }
+    public ProductionCompanyEntity ProductionCompany { get; set; }
 }

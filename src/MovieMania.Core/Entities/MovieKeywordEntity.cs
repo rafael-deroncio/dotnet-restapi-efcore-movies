@@ -13,6 +13,6 @@ public record MovieKeywordEntity : ContextBaseDTO
     [Column("keyword_id")]
     public int KeywordId { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public KeywordModel Keyword { get; set; }
+    public MovieEntity Movie { get; set; }
+    public KeywordEntity Keyword { get; set; }
 }

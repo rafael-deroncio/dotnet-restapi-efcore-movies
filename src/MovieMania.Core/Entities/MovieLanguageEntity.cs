@@ -17,7 +17,7 @@ public record MovieLanguageEntity : ContextBaseDTO
     [Column("language_role_id")]
     public int LanguageRoleId { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public LanguageModel Language { get; set; }
-    public LanguageRoleModel LanguageRole { get; set; }
+    public MovieEntity Movie { get; set; }
+    public LanguageEntity Language { get; set; }
+    public LanguageRoleEntity LanguageRole { get; set; }
 }

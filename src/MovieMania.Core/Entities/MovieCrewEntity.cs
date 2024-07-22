@@ -22,8 +22,8 @@ public record MovieCrewEntity : ContextBaseDTO
     [Column("job")]
     public string Job { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public PersonModel Person { get; set; }
-    public DepartmentModel Department { get; set; }
+    public MovieEntity Movie { get; set; }
+    public PersonEntity Person { get; set; }
+    public DepartmentEntity Department { get; set; }
 }
 

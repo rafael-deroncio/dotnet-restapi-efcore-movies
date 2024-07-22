@@ -25,7 +25,7 @@ public record MovieCastEntity : ContextBaseDTO
     [Column("cast_order")]
     public int CastOrder { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public GenderModel Gender { get; set; }
-    public PersonModel Person { get; set; }
+    public MovieEntity Movie { get; set; }
+    public GenderEntity Gender { get; set; }
+    public PersonEntity Person { get; set; }
 }

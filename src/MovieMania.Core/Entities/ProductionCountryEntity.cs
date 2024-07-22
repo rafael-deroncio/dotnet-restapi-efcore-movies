@@ -14,6 +14,6 @@ public record ProductionCountryEntity : ContextBaseDTO
     [Column("country_id")]
     public int CountryId { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public CountryModel Country { get; set; }
+    public MovieEntity Movie { get; set; }
+    public CountryEntity Country { get; set; }
 }

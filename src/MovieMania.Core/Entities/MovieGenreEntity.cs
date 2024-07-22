@@ -13,6 +13,6 @@ public record MovieGenreEntity : ContextBaseDTO
     [Column("genre_id")]
     public int GenreId { get; set; }
 
-    public MovieModel Movie { get; set; }
-    public GenreModel Genre { get; set; }
+    public MovieEntity Movie { get; set; }
+    public GenreEntity Genre { get; set; }
 }

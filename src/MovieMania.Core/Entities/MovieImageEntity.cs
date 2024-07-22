@@ -19,6 +19,6 @@ public record MovieImageEntity : ContextBaseDTO
     [Column("image_url")]
     public string ImageUrl { get; set; }
 
-    public MovieModel Movie { get; set; }
+    public MovieEntity Movie { get; set; }
 }
 
