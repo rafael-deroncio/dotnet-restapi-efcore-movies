@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record KeywordModel : ContextBaseDTO
+public record KeywordEntity : ContextBaseDTO
 {
     [Key]
     [Column("keyword_id")]
@@ -15,5 +15,5 @@ public record KeywordModel : ContextBaseDTO
     [Column("keyword_name")]
     public string Name { get; set; }
 
-    public ICollection<MovieKeywordModel> MovieKeywords { get; set; }
+    public ICollection<MovieKeywordEntity> MovieKeywords { get; set; }
 }

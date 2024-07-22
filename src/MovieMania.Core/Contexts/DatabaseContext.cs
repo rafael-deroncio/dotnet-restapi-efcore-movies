@@ -1,28 +1,28 @@
 using Microsoft.EntityFrameworkCore;
-using MovieMania.Core.Models;
+using MovieMania.Core.Entities;
 
 namespace MovieMania.Core.Contexts;
 
 public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : DbContext(options)
 {
-    public DbSet<CountryModel> Countries { get; set; }
-    public DbSet<DepartmentModel> Departments { get; set; }
-    public DbSet<GenderModel> Genders { get; set; }
-    public DbSet<GenreModel> Genres { get; set; }
-    public DbSet<KeywordModel> Keywords { get; set; }
-    public DbSet<LanguageModel> Languages { get; set; }
-    public DbSet<LanguageRoleModel> LanguageRoles { get; set; }
-    public DbSet<MovieCastModel> MovieCasts { get; set; }
-    public DbSet<MovieCompanyModel> MovieCompanies { get; set; }
-    public DbSet<MovieCrewModel> MovieCrews { get; set; }
-    public DbSet<MovieGenreModel> MovieGenres { get; set; }
-    public DbSet<MovieImageModel> MovieImages { get; set; }
-    public DbSet<MovieKeywordModel> MovieKeywords { get; set; }
-    public DbSet<MovieLanguageModel> MovieLanguages { get; set; }
-    public DbSet<MovieModel> Movies { get; set; }
-    public DbSet<PersonModel> People { get; set; }
-    public DbSet<ProductionCompanyModel> ProductionCompanies { get; set; }
-    public DbSet<ProductionCountryModel> ProductionCountries { get; set; }
+    public DbSet<CountryEntity> Countries { get; set; }
+    public DbSet<DepartmentEntity> Departments { get; set; }
+    public DbSet<GenderEntity> Genders { get; set; }
+    public DbSet<GenreEntity> Genres { get; set; }
+    public DbSet<KeywordEntity> Keywords { get; set; }
+    public DbSet<LanguageEntity> Languages { get; set; }
+    public DbSet<LanguageRoleEntity> LanguageRoles { get; set; }
+    public DbSet<MovieCastEntity> MovieCasts { get; set; }
+    public DbSet<MovieCompanyEntity> MovieCompanies { get; set; }
+    public DbSet<MovieCrewEntity> MovieCrews { get; set; }
+    public DbSet<MovieGenreEntity> MovieGenres { get; set; }
+    public DbSet<MovieImageEntity> MovieImages { get; set; }
+    public DbSet<MovieKeywordEntity> MovieKeywords { get; set; }
+    public DbSet<MovieLanguageEntity> MovieLanguages { get; set; }
+    public DbSet<MovieEntity> Movies { get; set; }
+    public DbSet<PersonEntity> People { get; set; }
+    public DbSet<ProductionCompanyEntity> ProductionCompanies { get; set; }
+    public DbSet<ProductionCountryEntity> ProductionCountries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,21 +50,21 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieLanguageEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieLanguageModel>()
+        modelBuilder.Entity<MovieLanguageEntity>()
             .ToTable("movie_languages")
             .HasKey(ml => new { ml.MovieId, ml.LanguageId, ml.LanguageRoleId });
 
-        modelBuilder.Entity<MovieLanguageModel>()
+        modelBuilder.Entity<MovieLanguageEntity>()
             .HasOne(ml => ml.Movie)
             .WithMany(m => m.Languages)
             .HasForeignKey(ml => ml.MovieId);
 
-        modelBuilder.Entity<MovieLanguageModel>()
+        modelBuilder.Entity<MovieLanguageEntity>()
             .HasOne(ml => ml.Language)
             .WithMany(l => l.MovieLanguages)
             .HasForeignKey(ml => ml.LanguageId);
 
-        modelBuilder.Entity<MovieLanguageModel>()
+        modelBuilder.Entity<MovieLanguageEntity>()
             .HasOne(ml => ml.LanguageRole)
             .WithMany(lr => lr.MovieLanguages)
             .HasForeignKey(ml => ml.LanguageRoleId);
@@ -72,16 +72,16 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieKeywordEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieKeywordModel>()
+        modelBuilder.Entity<MovieKeywordEntity>()
             .ToTable("movie_keywords")
             .HasKey(mk => new { mk.MovieId, mk.KeywordId });
 
-        modelBuilder.Entity<MovieKeywordModel>()
+        modelBuilder.Entity<MovieKeywordEntity>()
             .HasOne(mk => mk.Movie)
             .WithMany(m => m.Keywords)
             .HasForeignKey(mk => mk.MovieId);
 
-        modelBuilder.Entity<MovieKeywordModel>()
+        modelBuilder.Entity<MovieKeywordEntity>()
             .HasOne(mk => mk.Keyword)
             .WithMany(k => k.MovieKeywords)
             .HasForeignKey(mk => mk.KeywordId);
@@ -89,10 +89,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieImageEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieImageModel>()
+        modelBuilder.Entity<MovieImageEntity>()
             .ToTable("movie_images");
 
-        modelBuilder.Entity<MovieImageModel>()
+        modelBuilder.Entity<MovieImageEntity>()
             .HasOne(mi => mi.Movie)
             .WithMany(m => m.Images)
             .HasForeignKey(mi => mi.MovieId);
@@ -100,16 +100,16 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieGenreEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieGenreModel>()
+        modelBuilder.Entity<MovieGenreEntity>()
             .ToTable("movie_genres")
             .HasKey(mg => new { mg.MovieId, mg.GenreId });
 
-        modelBuilder.Entity<MovieGenreModel>()
+        modelBuilder.Entity<MovieGenreEntity>()
             .HasOne(mg => mg.Movie)
             .WithMany(m => m.Genres)
             .HasForeignKey(mg => mg.MovieId);
 
-        modelBuilder.Entity<MovieGenreModel>()
+        modelBuilder.Entity<MovieGenreEntity>()
             .HasOne(mg => mg.Genre)
             .WithMany(g => g.MovieGenres)
             .HasForeignKey(mg => mg.GenreId);
@@ -117,21 +117,21 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieCrewEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieCrewModel>()
+        modelBuilder.Entity<MovieCrewEntity>()
             .ToTable("movie_crews")
             .HasKey(mc => new { mc.MovieId, mc.PersonId, mc.DepartmentId });
 
-        modelBuilder.Entity<MovieCrewModel>()
+        modelBuilder.Entity<MovieCrewEntity>()
             .HasOne(mc => mc.Movie)
             .WithMany(m => m.Crews)
             .HasForeignKey(mc => mc.MovieId);
 
-        modelBuilder.Entity<MovieCrewModel>()
+        modelBuilder.Entity<MovieCrewEntity>()
             .HasOne(mc => mc.Person)
             .WithMany(p => p.MovieCrews)
             .HasForeignKey(mc => mc.PersonId);
 
-        modelBuilder.Entity<MovieCrewModel>()
+        modelBuilder.Entity<MovieCrewEntity>()
             .HasOne(mc => mc.Department)
             .WithMany(d => d.MovieCrews)
             .HasForeignKey(mc => mc.DepartmentId);
@@ -139,16 +139,16 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieCompanyEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieCompanyModel>()
+        modelBuilder.Entity<MovieCompanyEntity>()
             .ToTable("movie_companies")
             .HasKey(mc => new { mc.MovieId, mc.CompanyId });
 
-        modelBuilder.Entity<MovieCompanyModel>()
+        modelBuilder.Entity<MovieCompanyEntity>()
             .HasOne(mc => mc.Movie)
             .WithMany(m => m.Companies)
             .HasForeignKey(mc => mc.MovieId);
 
-        modelBuilder.Entity<MovieCompanyModel>()
+        modelBuilder.Entity<MovieCompanyEntity>()
             .HasOne(mc => mc.ProductionCompany)
             .WithMany(pc => pc.MovieCompanies)
             .HasForeignKey(mc => mc.CompanyId);
@@ -156,21 +156,21 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieCastEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieCastModel>()
+        modelBuilder.Entity<MovieCastEntity>()
             .ToTable("movie_casts")
             .HasKey(mc => new { mc.MovieId, mc.PersonId, mc.GenderId });
 
-        modelBuilder.Entity<MovieCastModel>()
+        modelBuilder.Entity<MovieCastEntity>()
             .HasOne(mc => mc.Movie)
             .WithMany(m => m.Casts)
             .HasForeignKey(mc => mc.MovieId);
 
-        modelBuilder.Entity<MovieCastModel>()
+        modelBuilder.Entity<MovieCastEntity>()
             .HasOne(mc => mc.Person)
             .WithMany(p => p.MovieCasts)
             .HasForeignKey(mc => mc.PersonId);
 
-        modelBuilder.Entity<MovieCastModel>()
+        modelBuilder.Entity<MovieCastEntity>()
             .HasOne(mc => mc.Gender)
             .WithMany(g => g.MovieCasts)
             .HasForeignKey(mc => mc.GenderId);
@@ -178,16 +178,16 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureProductionCountryEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProductionCountryModel>()
+        modelBuilder.Entity<ProductionCountryEntity>()
             .ToTable("production_countries")
             .HasKey(pc => new { pc.MovieId, pc.CountryId });
 
-        modelBuilder.Entity<ProductionCountryModel>()
+        modelBuilder.Entity<ProductionCountryEntity>()
             .HasOne(pc => pc.Movie)
             .WithMany(m => m.ProductionCountries)
             .HasForeignKey(pc => pc.MovieId);
 
-        modelBuilder.Entity<ProductionCountryModel>()
+        modelBuilder.Entity<ProductionCountryEntity>()
             .HasOne(pc => pc.Country)
             .WithMany(c => c.ProductionCountries)
             .HasForeignKey(pc => pc.CountryId);
@@ -195,10 +195,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureProductionCompanyEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProductionCompanyModel>()
+        modelBuilder.Entity<ProductionCompanyEntity>()
             .ToTable("production_companies");
 
-        modelBuilder.Entity<ProductionCompanyModel>()
+        modelBuilder.Entity<ProductionCompanyEntity>()
             .HasMany(pc => pc.MovieCompanies)
             .WithOne(mc => mc.ProductionCompany)
             .HasForeignKey(mc => mc.CompanyId);
@@ -206,15 +206,15 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigurePersonEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<PersonModel>()
+        modelBuilder.Entity<PersonEntity>()
             .ToTable("people");
 
-        modelBuilder.Entity<PersonModel>()
+        modelBuilder.Entity<PersonEntity>()
             .HasMany(p => p.MovieCasts)
             .WithOne(mc => mc.Person)
             .HasForeignKey(mc => mc.PersonId);
 
-        modelBuilder.Entity<PersonModel>()
+        modelBuilder.Entity<PersonEntity>()
             .HasMany(p => p.MovieCrews)
             .WithOne(mc => mc.Person)
             .HasForeignKey(mc => mc.PersonId);
@@ -222,16 +222,16 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureMovieEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MovieModel>()
+        modelBuilder.Entity<MovieEntity>()
             .ToTable("movies");
     }
 
     private static void ConfigureLanguageRoleEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LanguageRoleModel>()
+        modelBuilder.Entity<LanguageRoleEntity>()
             .ToTable("language_roles");
 
-        modelBuilder.Entity<LanguageRoleModel>()
+        modelBuilder.Entity<LanguageRoleEntity>()
             .HasMany(lr => lr.MovieLanguages)
             .WithOne(ml => ml.LanguageRole)
             .HasForeignKey(ml => ml.LanguageRoleId);
@@ -239,10 +239,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureLanguageEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<LanguageModel>()
+        modelBuilder.Entity<LanguageEntity>()
             .ToTable("languages");
 
-        modelBuilder.Entity<LanguageModel>()
+        modelBuilder.Entity<LanguageEntity>()
             .HasMany(l => l.MovieLanguages)
             .WithOne(ml => ml.Language)
             .HasForeignKey(ml => ml.LanguageId);
@@ -250,10 +250,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureKeywordEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<KeywordModel>()
+        modelBuilder.Entity<KeywordEntity>()
             .ToTable("keywords");
 
-        modelBuilder.Entity<KeywordModel>()
+        modelBuilder.Entity<KeywordEntity>()
             .HasMany(k => k.MovieKeywords)
             .WithOne(mk => mk.Keyword)
             .HasForeignKey(mk => mk.KeywordId);
@@ -261,10 +261,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureGenreEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GenreModel>()
+        modelBuilder.Entity<GenreEntity>()
             .ToTable("genres");
 
-        modelBuilder.Entity<GenreModel>()
+        modelBuilder.Entity<GenreEntity>()
             .HasMany(g => g.MovieGenres)
             .WithOne(mg => mg.Genre)
             .HasForeignKey(mg => mg.GenreId);
@@ -272,10 +272,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureGenderEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<GenderModel>()
+        modelBuilder.Entity<GenderEntity>()
             .ToTable("genders");
 
-        modelBuilder.Entity<GenderModel>()
+        modelBuilder.Entity<GenderEntity>()
             .HasMany(g => g.MovieCasts)
             .WithOne(mc => mc.Gender)
             .HasForeignKey(mc => mc.GenderId);
@@ -283,10 +283,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureDepartmentEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<DepartmentModel>()
+        modelBuilder.Entity<DepartmentEntity>()
             .ToTable("departments");
 
-        modelBuilder.Entity<DepartmentModel>()
+        modelBuilder.Entity<DepartmentEntity>()
             .HasMany(d => d.MovieCrews)
             .WithOne(mc => mc.Department)
             .HasForeignKey(mc => mc.DepartmentId);
@@ -294,10 +294,10 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
 
     private static void ConfigureCountryEntity(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<CountryModel>()
+        modelBuilder.Entity<CountryEntity>()
             .ToTable("countries");
 
-        modelBuilder.Entity<CountryModel>()
+        modelBuilder.Entity<CountryEntity>()
             .HasMany(c => c.ProductionCountries)
             .WithOne(pc => pc.Country)
             .HasForeignKey(pc => pc.CountryId);

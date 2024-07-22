@@ -2,18 +2,18 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record GenreModel : ContextBaseDTO
+public record ProductionCompanyEntity : ContextBaseDTO
 {
     [Key]
-    [Column("genre_id")]
-    public int GenreId { get; set; }
+    [Column("company_id")]
+    public int CompanyId { get; set; }
 
     [Required]
     [StringLength(100)]
     [Column("name")]
     public string Name { get; set; }
 
-    public ICollection<MovieGenreModel> MovieGenres { get; set; }
+    public ICollection<MovieCompanyEntity> MovieCompanies { get; set; }
 }

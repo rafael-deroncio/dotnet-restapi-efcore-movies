@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record ProductionCountryModel : ContextBaseDTO
+public record ProductionCountryEntity : ContextBaseDTO
 {
     [ForeignKey("Movie")]
     [Column("movie_id")]

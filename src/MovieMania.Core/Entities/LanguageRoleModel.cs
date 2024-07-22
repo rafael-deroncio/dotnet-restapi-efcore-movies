@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record LanguageRoleModel : ContextBaseDTO
+public record LanguageRoleEntity : ContextBaseDTO
 {
     [Key]
     [Column("role_id")]
@@ -15,5 +15,5 @@ public record LanguageRoleModel : ContextBaseDTO
     [Column("role")]
     public string Role { get; set; }
 
-    public ICollection<MovieLanguageModel> MovieLanguages { get; set; }
+    public ICollection<MovieLanguageEntity> MovieLanguages { get; set; }
 }

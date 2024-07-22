@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record MovieLanguageModel : ContextBaseDTO
+public record MovieLanguageEntity : ContextBaseDTO
 {
     [ForeignKey("Movie")]
     [Column("movie_id")]

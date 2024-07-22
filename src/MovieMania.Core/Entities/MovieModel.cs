@@ -2,9 +2,9 @@ using MovieMania.Core.Configurations.DTOs;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record MovieModel : ContextBaseDTO
+public record MovieEntity : ContextBaseDTO
 {
     [Key]
     [Column("movie_id")]
@@ -51,13 +51,13 @@ public record MovieModel : ContextBaseDTO
     [Column("votes_count")]
     public int VotesCount { get; set; }
 
-    public ICollection<ProductionCountryModel> ProductionCountries { get; set; }
-    public ICollection<MovieCompanyModel> Companies { get; set; }
-    public ICollection<MovieLanguageModel> Languages { get; set; }
-    public ICollection<MovieGenreModel> Genres { get; set; }
-    public ICollection<MovieKeywordModel> Keywords { get; set; }
-    public ICollection<MovieCastModel> Casts { get; set; }
-    public ICollection<MovieCrewModel> Crews { get; set; }
-    public ICollection<MovieImageModel> Images { get; set; }
+    public ICollection<ProductionCountryEntity> ProductionCountries { get; set; }
+    public ICollection<MovieCompanyEntity> Companies { get; set; }
+    public ICollection<MovieLanguageEntity> Languages { get; set; }
+    public ICollection<MovieGenreEntity> Genres { get; set; }
+    public ICollection<MovieKeywordEntity> Keywords { get; set; }
+    public ICollection<MovieCastEntity> Casts { get; set; }
+    public ICollection<MovieCrewEntity> Crews { get; set; }
+    public ICollection<MovieImageEntity> Images { get; set; }
 
 }

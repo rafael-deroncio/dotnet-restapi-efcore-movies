@@ -1,18 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record MovieGenreModel : ContextBaseDTO
+public record MovieKeywordEntity : ContextBaseDTO
 {
     [ForeignKey("Movie")]
     [Column("movie_id")]
     public int MovieId { get; set; }
 
-    [ForeignKey("Genre")]
-    [Column("genre_id")]
-    public int GenreId { get; set; }
+    [ForeignKey("Keyword")]
+    [Column("keyword_id")]
+    public int KeywordId { get; set; }
 
     public MovieModel Movie { get; set; }
-    public GenreModel Genre { get; set; }
+    public KeywordModel Keyword { get; set; }
 }

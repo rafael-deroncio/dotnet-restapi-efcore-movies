@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record GenderModel : ContextBaseDTO
+public record GenderEntity : ContextBaseDTO
 {
     [Key]
     [Column("gender_id")]
@@ -15,5 +15,5 @@ public record GenderModel : ContextBaseDTO
     [Column("gender")]
     public string Gender { get; set; }
 
-    public ICollection<MovieCastModel> MovieCasts { get; set; }
+    public ICollection<MovieCastEntity> MovieCasts { get; set; }
 }

@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record PersonModel : ContextBaseDTO
+public record PersonEntity : ContextBaseDTO
 {
     [Key]
     [Column("person_id")]
@@ -15,6 +15,6 @@ public record PersonModel : ContextBaseDTO
     [Column("name")]
     public string Name { get; set; }
 
-    public ICollection<MovieCastModel> MovieCasts { get; set; }
-    public ICollection<MovieCrewModel> MovieCrews { get; set; }
+    public ICollection<MovieCastEntity> MovieCasts { get; set; }
+    public ICollection<MovieCrewEntity> MovieCrews { get; set; }
 }

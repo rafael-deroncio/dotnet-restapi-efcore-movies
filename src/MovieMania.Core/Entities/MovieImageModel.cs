@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Models;
+namespace MovieMania.Core.Entities;
 
-public record MovieImageModel : ContextBaseDTO
+public record MovieImageEntity : ContextBaseDTO
 {
     [Key]
     [Column("image_id")]
