@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieMania.Core.Configurations.DTOs;
@@ -5,7 +6,10 @@ namespace MovieMania.Core.Configurations.DTOs;
 public record EntityBase
 {
     [Column("created_at")]
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    [Required]
+    public DateTime CreatedAt { get; set; }
+
     [Column("updated_at")]
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    [Required]
+    public DateTime UpdatedAt { get; set; }
 }
