@@ -2,19 +2,19 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Entities;
+namespaceMovieMania.Core.Contexts.Entities;
 
-public record PersonEntity : EntityBase
+public record DepartmentEntity : EntityBase
 {
     [Key]
-    [Column("person_id")]
-    public int PersonId { get; set; }
+    [Column("department_id")]
+    public int DepartmentId { get; set; }
 
     [Required]
     [StringLength(100)]
-    [Column("name")]
+    [Column("department_name")]
     public string Name { get; set; }
 
-    public ICollection<MovieCastEntity> MovieCasts { get; set; }
     public ICollection<MovieCrewEntity> MovieCrews { get; set; }
 }
+

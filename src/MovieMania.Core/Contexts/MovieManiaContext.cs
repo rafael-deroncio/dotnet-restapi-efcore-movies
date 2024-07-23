@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using MovieMania.Core.Entities;
+usingMovieMania.Core.Contexts.Entities;
 
 namespace MovieMania.Core.Contexts;
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using MovieMania.Core.Configurations.DTOs;
 
-namespace MovieMania.Core.Entities;
+namespaceMovieMania.Core.Contexts.Entities;
 
 public record MovieKeywordEntity : EntityBase
 {
