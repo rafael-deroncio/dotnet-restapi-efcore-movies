@@ -20,7 +20,7 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
     public DbSet<MovieKeywordEntity> MovieKeywords { get; set; }
     public DbSet<MovieLanguageEntity> MovieLanguages { get; set; }
     public DbSet<MovieEntity> Movies { get; set; }
-    public DbSet<PersonEntity> People { get; set; }
+    public DbSet<PersonEntity> Persons { get; set; }
     public DbSet<ProductionCompanyEntity> ProductionCompanies { get; set; }
     public DbSet<ProductionCountryEntity> ProductionCountries { get; set; }
 

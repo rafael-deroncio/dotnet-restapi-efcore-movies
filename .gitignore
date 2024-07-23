@@ -604,3 +604,6 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,csharp,dotnetcore
 deploy/.vscode/settings.json
+src/MovieMania.API/Migrations/20240723231940_InitialCreate.cs
+src/MovieMania.API/Migrations/20240723231940_InitialCreate.Designer.cs
+src/MovieMania.API/Migrations/MovieManiaContextModelSnapshot.cs
