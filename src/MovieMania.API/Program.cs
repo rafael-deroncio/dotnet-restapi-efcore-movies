@@ -28,7 +28,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddDbContext<MovieManiaContext>(options =>
 {
     string connection = builder.Configuration.GetConnectionString("MovieManiaConnection");
-    string assembly = Assembly.GetExecutingAssembly().GetName().Name;;
+    string assembly = Assembly.GetExecutingAssembly().GetName().Name;
     options.UseNpgsql(connection, opts => opts.MigrationsAssembly(assembly));
 });
 

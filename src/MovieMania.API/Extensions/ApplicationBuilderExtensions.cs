@@ -1,7 +1,6 @@
 ﻿using MovieMania.Core.Configurations.Settings;
 using MovieMania.API.Middlewares;
-
-namespace MovieMania.Core.Extensions;
+namespace MovieMania.API.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
