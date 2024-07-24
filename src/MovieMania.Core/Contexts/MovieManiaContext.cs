@@ -27,5 +27,6 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieManiaContext).Assembly);
     }
 }
