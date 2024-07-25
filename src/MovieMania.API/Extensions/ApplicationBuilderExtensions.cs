@@ -1,5 +1,6 @@
 ﻿using MovieMania.Core.Configurations.Settings;
 using MovieMania.API.Middlewares;
+using MovieMania.Core.Contexts;
 namespace MovieMania.API.Extensions;
 
 public static class ApplicationBuilderExtensions
@@ -39,7 +40,15 @@ public static class ApplicationBuilderExtensions
 
     public static IApplicationBuilder UseGlobalExceptionHandler(this IApplicationBuilder builder)
     {
-        builder.UseMiddleware<GlobalHandlerExceptionMiddleware>();
+        builder.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+        return builder;
+    }
+
+    public static IApplicationBuilder InitializeDatabase(this IApplicationBuilder builder)
+    {
+        DatabaseInitializer.Initialize(
+            builder.ApplicationServices.GetRequiredService<MovieManiaContext>()
+            ).GetAwaiter().GetResult();
         return builder;
     }
 }

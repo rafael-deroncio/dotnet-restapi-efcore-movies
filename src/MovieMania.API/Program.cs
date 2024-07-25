@@ -4,6 +4,7 @@ using MovieMania.API.Extensions;
 using MovieMania.Core.Contexts;
 using Serilog;
 using System.Reflection;
+using MovieMania.Core.Repositories.Interfaces;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +26,16 @@ builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddServices();
+
+builder.Services.AddInMemoryDatabase();
+
 builder.Services.AddDbContext<MovieManiaContext>(options =>
 {
     string connection = builder.Configuration.GetConnectionString("MovieManiaConnection");
     string assembly = Assembly.GetExecutingAssembly().GetName().Name;
     options.UseNpgsql(connection, opts => opts.MigrationsAssembly(assembly));
-});
+}, ServiceLifetime.Singleton, ServiceLifetime.Singleton);
 
 WebApplication app = builder.Build();
 
@@ -53,6 +58,8 @@ app.UseGlobalExceptionHandler();
 app.UseHsts();
 
 app.UseHttpsRedirection();
+
+app.InitializeDatabase();
 
 app.MapControllers();
 
