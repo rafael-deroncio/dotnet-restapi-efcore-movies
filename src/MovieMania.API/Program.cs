@@ -4,7 +4,6 @@ using MovieMania.API.Extensions;
 using MovieMania.Core.Contexts;
 using Serilog;
 using System.Reflection;
-using MovieMania.Core.Repositories.Interfaces;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
