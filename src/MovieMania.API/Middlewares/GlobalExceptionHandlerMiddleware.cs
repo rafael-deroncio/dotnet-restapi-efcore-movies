@@ -7,11 +7,11 @@ using MovieMania.Domain.Responses;
 
 namespace MovieMania.API.Middlewares;
 
-public class GlobalHandlerExceptionMiddleware
+public class GlobalExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
 
-    public GlobalHandlerExceptionMiddleware(RequestDelegate next)
+    public GlobalExceptionHandlerMiddleware(RequestDelegate next)
     {
         _next = next;
     }
