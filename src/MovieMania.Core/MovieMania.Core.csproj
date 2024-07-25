@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Contexts/Configurations/" />
-    <Folder Include="Repositories/Interfaces/" />
   </ItemGroup>
 
   <PropertyGroup>
