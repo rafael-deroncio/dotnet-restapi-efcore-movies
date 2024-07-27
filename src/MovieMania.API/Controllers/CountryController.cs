@@ -18,7 +18,7 @@ public class CountryController(ICountryService service) : Controller
     [ProducesResponseType(typeof(PaginationResponse<CountryResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetCountries(PaginationRequest request)
+    public async Task<IActionResult> GetCountries([FromQuery] PaginationRequest request)
         => Ok(await _service.GetPagedCountries(request));
 
     [HttpGet("{id:int}")]

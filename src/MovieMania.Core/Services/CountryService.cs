@@ -1,7 +1,5 @@
-using Microsoft.EntityFrameworkCore;
-using MovieMania.Core.Contexts;
+using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts.Entities;
-using MovieMania.Core.Extensions;
 using MovieMania.Core.Repositories.Interfaces;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
@@ -13,71 +11,52 @@ public class CountryService(
     ILogger<ICountryService> logger,
     IDatabaseMemory memory,
     IBaseRepository<CountryEntity> repository,
-    IPaginationService paginationService
+    IPaginationService paginationService,
+    IObjectConverter mapper
 ) : ICountryService
 {
     private readonly ILogger<ICountryService> _logger = logger;
     private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<CountryEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
+    private readonly IObjectConverter _mapper = mapper;
 
     public async Task<CountryResponse> CreateCountry(CountryRequest request)
     {
-        bool success = false;
-
         try
         {
             if (_databaseMemory.Countries.Where(x => x.IsoCode == request.IsoCode || x.Name == request.Name).Any())
                 throw new Exception("Country alredy registred with");
 
-            CountryEntity entity = await _repository.Create(new()
-            {
-                IsoCode = request.IsoCode,
-                Name = request.Name,
-            });
+            CountryEntity entity = _mapper.Map<CountryEntity>(request);
 
-            success = true;
+            entity = await _repository.Create(entity);
+            if (entity is not null) await _databaseMemory.UpdateCountries();
 
-            return new CountryResponse()
-            {
-                Id = entity.CountryId,
-                IsoCode = entity.IsoCode,
-                Name = entity.Name,
-                CreatedAt = entity.CreatedAt
-            };
+            return _mapper.Map<CountryResponse>(entity);
         }
         catch (Exception)
         {
             throw;
-        }
-        finally
-        {
-            if (success) await _databaseMemory.UpdateCountries();
         }
     }
 
     public async Task<bool> DeleteCountry(int id)
     {
-        bool success = false;
         try
         {
-            if (!_databaseMemory.Countries.Any(x => x.CountryId == id) ||
-                await _repository.Get(new() { CountryId = id }) == null)
-                throw new Exception("Not found");
+            CountryEntity entity = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
+            entity ??= await _repository.Get(new() { CountryId = id }) ??
+                    throw new Exception("Not found");
 
-            await _repository.Delete(new() { CountryId = id });
+            bool result = await _repository.Delete(entity);
+            if (result) await _databaseMemory.UpdateCountries();
 
-            success = true;
-
-            return success;
+            return result;
         }
         catch (Exception)
         {
             throw;
-        }
-        finally
-        {
-            if (success) await _databaseMemory.UpdateCountries();
         }
     }
 
@@ -85,25 +64,13 @@ public class CountryService(
     {
         try
         {
-            CountryEntity memory = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
-            if (memory is not null)
-                return new CountryResponse()
-                {
-                    Id = memory.CountryId,
-                    IsoCode = memory.IsoCode,
-                    Name = memory.Name,
-                    CreatedAt = memory.CreatedAt
-                };
-
-            CountryEntity entity = await _repository.Get(new() { CountryId = id });
+            CountryEntity entity = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
             if (entity is not null)
-                return new CountryResponse()
-                {
-                    Id = entity.CountryId,
-                    IsoCode = entity.IsoCode,
-                    Name = entity.Name,
-                    CreatedAt = entity.CreatedAt
-                };
+                return _mapper.Map<CountryResponse>(entity);
+
+            entity = await _repository.Get(new() { CountryId = id });
+            if (entity is not null)
+                return _mapper.Map<CountryResponse>(entity);
 
             throw new Exception("Not found");
         }
@@ -121,17 +88,9 @@ public class CountryService(
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
-            IEnumerable<CountryResponse> countryResponses = entities.Select(entity => new CountryResponse
-            {
-                Id = entity.CountryId,
-                IsoCode = entity.IsoCode,
-                Name = entity.Name,
-                CreatedAt = entity.CreatedAt
-            });
-
             return await _paginationService.GetPagination<CountryResponse>(new()
             {
-                Content = countryResponses,
+                Content = _mapper.Map<IEnumerable<CountryResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
                 Total = _databaseMemory.Countries.Count()
@@ -145,36 +104,23 @@ public class CountryService(
 
     public async Task<CountryResponse> UpdateCountry(int id, CountryRequest request)
     {
-        bool success = false;
         try
         {
-            if (!_databaseMemory.Countries.Any(x => x.CountryId == id) ||
-                await _repository.Get(new() { CountryId = id }) == null)
-                throw new Exception("Not found");
+            CountryEntity entity = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
+            entity ??= await _repository.Get(new() { CountryId = id }) ??
+                    throw new Exception("Not found");
 
-            CountryEntity entity = await _repository.Update(new()
-            {
-                CountryId = id,
-                IsoCode = request.IsoCode,
-                Name = request.Name,
-            });
-            success = true;
+            entity.IsoCode = request.IsoCode.Trim().ToUpper();
+            entity.Name = request.Name.Trim();
 
-            return new CountryResponse()
-            {
-                Id = entity.CountryId,
-                IsoCode = entity.IsoCode,
-                Name = entity.Name,
-                CreatedAt = entity.CreatedAt
-            };
+            entity = await _repository.Update(entity);
+            if (entity is not null) await _databaseMemory.UpdateCountries();
+
+            return _mapper.Map<CountryResponse>(entity);
         }
         catch (Exception)
         {
             throw;
-        }
-        finally
-        {
-            if (success) await _databaseMemory.UpdateCountries();
         }
     }
 }
