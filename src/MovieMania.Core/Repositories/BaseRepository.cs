@@ -36,11 +36,11 @@ public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntit
         return result.Entity;
     }
 
-    public async Task<TEntity> Delete(TEntity entity)
+    public async Task<bool> Delete(TEntity entity)
     {
         EntityEntry<TEntity> result = _entity.Remove(entity);
         await _context.SaveChangesAsync();
-        return result.Entity;
+        return result.Entity != null;
     }
 
     public async Task<int> Count()
