@@ -1,6 +1,7 @@
 ﻿using MovieMania.Core.Configurations.Settings;
 using MovieMania.API.Middlewares;
 using MovieMania.Core.Contexts;
+using MovieMania.Core.Repositories.Interfaces;
 namespace MovieMania.API.Extensions;
 
 public static class ApplicationBuilderExtensions
@@ -49,6 +50,12 @@ public static class ApplicationBuilderExtensions
         DatabaseInitializer.Initialize(
             builder.ApplicationServices.GetRequiredService<MovieManiaContext>()
             ).GetAwaiter().GetResult();
+        return builder;
+    }
+
+    public static IApplicationBuilder LoadDatabaseMomory(this IApplicationBuilder builder)
+    {
+        builder.ApplicationServices.GetRequiredService<IDatabaseMemory>();
         return builder;
     }
 }
