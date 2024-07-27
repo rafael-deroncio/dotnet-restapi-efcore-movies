@@ -31,6 +31,8 @@ builder.Services.AddRepositories();
 
 builder.Services.AddInMemoryDatabase();
 
+builder.Services.AddObjectConverter();
+
 builder.Services.AddDbContext<MovieManiaContext>(options =>
 {
     string connection = builder.Configuration.GetConnectionString("MovieManiaConnection");

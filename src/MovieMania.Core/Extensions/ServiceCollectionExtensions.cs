@@ -1,4 +1,6 @@
-﻿using MovieMania.Core.Contexts;
+﻿using MovieMania.Core.Configurations.Mapper;
+using MovieMania.Core.Configurations.Mapper.Interfaces;
+using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;
 using MovieMania.Core.Repositories;
 using MovieMania.Core.Repositories.Interfaces;
@@ -39,6 +41,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
     {
         services.AddSingleton<IDatabaseMemory, DatabaseMemory>();
+        return services;
+    }
+
+    public static IServiceCollection AddObjectConverter(this IServiceCollection services)
+    {
+        services.AddSingleton<IObjectConverter, ObjectConverter>();
         return services;
     }
 }

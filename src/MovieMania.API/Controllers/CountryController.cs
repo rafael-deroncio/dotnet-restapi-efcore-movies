@@ -29,7 +29,7 @@ public class CountryController(ICountryService service) : Controller
     public async Task<IActionResult> GetCountry([FromRoute] int id)
         => Ok(await _service.GetCountryById(id));
 
-    [HttpPost()]
+    [HttpPost]
     [ProducesResponseType(typeof(CountryResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
