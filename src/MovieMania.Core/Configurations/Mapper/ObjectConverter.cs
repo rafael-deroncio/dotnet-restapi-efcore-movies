@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
+using MovieMania.Core.Configurations.Mapper.Profiles;
 
-namespace MovieMania.Core;
+namespace MovieMania.Core.Configurations.Mapper;
 
 public class ObjectConverter : IObjectConverter
 {
@@ -9,7 +10,9 @@ public class ObjectConverter : IObjectConverter
 
     public ObjectConverter()
     {
-        
+        _mapper = new ObjectConverterConfiguration()
+            .RegisterMappings()
+            .CreateMapper();
     }
 
     public T Map<T>(object source)
