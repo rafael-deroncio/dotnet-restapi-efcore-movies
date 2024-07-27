@@ -9,6 +9,7 @@ public class ObjectConverterConfiguration
         => new(configuration =>
         {
             configuration.AddProfile(new EntityToResponseProfile());
+            configuration.AddProfile(new EntityToRequestProfile());
         });
 
 }
