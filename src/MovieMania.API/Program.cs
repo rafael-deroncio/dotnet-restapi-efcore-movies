@@ -27,6 +27,8 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddServices();
 
+builder.Services.AddRepositories();
+
 builder.Services.AddInMemoryDatabase();
 
 builder.Services.AddDbContext<MovieManiaContext>(options =>
@@ -59,6 +61,8 @@ app.UseHsts();
 app.UseHttpsRedirection();
 
 app.InitializeDatabase();
+
+app.LoadDatabaseMomory();
 
 app.MapControllers();
 
