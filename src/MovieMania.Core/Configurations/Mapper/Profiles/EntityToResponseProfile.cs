@@ -8,6 +8,9 @@ public class EntityToResponseProfile : Profile
 {
     public EntityToResponseProfile()
     {
-        CreateMap<CountryEntity, CountryResponse>().ReverseMap();
+        CreateMap<CountryEntity, CountryResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.CountryId))
+            .ReverseMap();
     }
 }
