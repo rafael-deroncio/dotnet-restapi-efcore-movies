@@ -6,7 +6,7 @@ namespace MovieMania.Domain.Requests;
 public record CountryRequest
 {
     [Required]
-    [StringLength(10)]
+    [StringLength(2)]
     [JsonPropertyName("iso_code")]
     public string IsoCode { get; set; }
 
