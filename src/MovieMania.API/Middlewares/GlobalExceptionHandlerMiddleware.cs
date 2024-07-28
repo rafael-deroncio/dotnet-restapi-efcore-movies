@@ -7,14 +7,9 @@ using MovieMania.Domain.Responses;
 
 namespace MovieMania.API.Middlewares;
 
-public class GlobalExceptionHandlerMiddleware
+public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
 {
-    private readonly RequestDelegate _next;
-
-    public GlobalExceptionHandlerMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -33,7 +28,7 @@ public class GlobalExceptionHandlerMiddleware
 
             string json = JsonSerializer.Serialize(response);
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = (int)ex.Code;
 
             await context.Response.WriteAsync(json);
         }
