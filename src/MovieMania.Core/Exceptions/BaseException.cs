@@ -14,15 +14,15 @@ public class BaseException : Exception
         Title = title;
         Code = code;
         Type =  (int)code >= 500 ? ResponseType.Fatal :
-                (int)code >= 400 ? ResponseType.Warning : ResponseType.Warning;
+                (int)code >= 400 ? ResponseType.Warning : ResponseType.Error;
     }
 
     public BaseException(string title, string message, Exception inner, HttpStatusCode code = HttpStatusCode.Continue) : base(message, inner)
     {
         Title = title;
         Code = code;
-        Type = (int)code >= 500 ? ResponseType.Fatal :
-                (int)code >= 400 ? ResponseType.Warning : ResponseType.Warning;
+        Type =  (int)code >= 500 ? ResponseType.Fatal :
+                (int)code >= 400 ? ResponseType.Warning : ResponseType.Error;
     }
 
     public BaseException(string message, Exception inner) : base(message, inner)
