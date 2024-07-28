@@ -17,7 +17,7 @@ public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntit
         IProperty property = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties.FirstOrDefault()
             ?? throw new InvalidOperationException("No primary key defined for entity.");
 
-        return await _entity.FindAsync(property.PropertyInfo.GetValue(entity));
+        return await _entity.FindAsync(property.PropertyInfo.GetValue(entity)) ?? null;
     }
 
     public async Task<TEntity> Create(TEntity entity)
@@ -25,7 +25,7 @@ public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntit
         entity.UpdatedAt = entity.CreatedAt = DateTime.UtcNow;
         EntityEntry<TEntity> result = await _entity.AddAsync(entity);
         await _context.SaveChangesAsync();
-        return result.Entity;
+        return result.Entity ?? null;
     }
 
     public async Task<TEntity> Update(TEntity entity)
@@ -33,7 +33,7 @@ public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntit
         entity.UpdatedAt = DateTime.UtcNow;
         EntityEntry<TEntity> result = _entity.Update(entity);
         await _context.SaveChangesAsync();
-        return result.Entity;
+        return result.Entity ?? null;
     }
 
     public async Task<bool> Delete(TEntity entity)
@@ -47,5 +47,5 @@ public class BaseRepository<TEntity>(DbContext context) : IBaseRepository<TEntit
         => await _entity.CountAsync();
 
     public async Task<IEnumerable<TEntity>> Paged(int page, int size)
-        => await _entity.Skip((page - 1) * size).Take(size).ToListAsync();
+        => await _entity.Skip((page - 1) * size).Take(size).ToListAsync() ?? null;
 }
