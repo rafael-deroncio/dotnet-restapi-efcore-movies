@@ -1,5 +1,6 @@
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts.Entities;
+using MovieMania.Core.Exceptions;
 using MovieMania.Core.Repositories.Interfaces;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
@@ -26,7 +27,7 @@ public class CountryService(
         try
         {
             if (_databaseMemory.Countries.Where(x => x.IsoCode == request.IsoCode || x.Name == request.Name).Any())
-                throw new Exception("Country alredy registred with");
+                throw new EntityBadRequestException("Error on create country entity", "Country alredy registred with name or iso code");
 
             CountryEntity entity = _mapper.Map<CountryEntity>(request);
 
@@ -35,9 +36,13 @@ public class CountryService(
 
             return _mapper.Map<CountryResponse>(entity);
         }
-        catch (Exception)
+        catch (BaseException) { throw; }
+        catch (Exception exception)
         {
-            throw;
+            _logger.LogError("Error on create country with requet {Request}. Error: {Exception}", request, exception);
+            throw new EntityUnprocessableException(
+                title: "Country Entity Error",
+                message: $"Unable to create a new record for country at this time. Please try again.");
         }
     }
 
@@ -47,16 +52,20 @@ public class CountryService(
         {
             CountryEntity entity = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
             entity ??= await _repository.Get(new() { CountryId = id }) ??
-                    throw new Exception("Not found");
+                    throw new EntityNotFoundException("Country Not Found", $"Country with id {id} not exists.");
 
             bool result = await _repository.Delete(entity);
             if (result) await _databaseMemory.UpdateCountries();
 
             return result;
         }
-        catch (Exception)
+        catch (BaseException) { throw; }
+        catch (Exception exception)
         {
-            throw;
+            _logger.LogError("Error on delete country with id {Idntifier}. Error: {Exception}", id, exception);
+            throw new EntityUnprocessableException(
+                title: "Country Entity Error",
+                message: $"Unable to delete country with id {id} at this time. Please try again.");
         }
     }
 
@@ -72,11 +81,15 @@ public class CountryService(
             if (entity is not null)
                 return _mapper.Map<CountryResponse>(entity);
 
-            throw new Exception("Not found");
+            throw new EntityNotFoundException("Country Not Found", $"Country with id {id} not exists.");
         }
-        catch (Exception)
+        catch (BaseException) { throw; }
+        catch (Exception exception)
         {
-            throw;
+            _logger.LogError("Error on get country with id {Idntifier}. Error: {Exception}", id, exception);
+            throw new EntityUnprocessableException(
+                title: "Country Entity Error",
+                message: $"Unable to get Country wit id {id} at this time. Please try again.");
         }
     }
 
@@ -96,9 +109,13 @@ public class CountryService(
                 Total = _databaseMemory.Countries.Count()
             });
         }
-        catch (Exception)
+        catch (BaseException) { throw; }
+        catch (Exception exception)
         {
-            throw;
+            _logger.LogError("Error on get paged countries with request {Request}. Error: {Exception}", request, exception);
+            throw new EntityUnprocessableException(
+                title: "Country Entity Error",
+                message: "Unable get paged records for countries at this time. Please try again.");
         }
     }
 
@@ -108,7 +125,7 @@ public class CountryService(
         {
             CountryEntity entity = _databaseMemory.Countries.FirstOrDefault(x => x.CountryId == id);
             entity ??= await _repository.Get(new() { CountryId = id }) ??
-                    throw new Exception("Not found");
+                    throw new EntityNotFoundException("Country Not Found", $"Country with id {id} not exists.");
 
             entity.IsoCode = request.IsoCode.Trim().ToUpper();
             entity.Name = request.Name.Trim();
@@ -118,9 +135,13 @@ public class CountryService(
 
             return _mapper.Map<CountryResponse>(entity);
         }
-        catch (Exception)
+        catch (BaseException) { throw; }
+        catch (Exception exception)
         {
-            throw;
+            _logger.LogError("Error on update country with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            throw new EntityUnprocessableException(
+                title: "Country Entity Error",
+                message: $"Unable to update country with id {id} at this time. Please try again.");
         }
     }
 }
