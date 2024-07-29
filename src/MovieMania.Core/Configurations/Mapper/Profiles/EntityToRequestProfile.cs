@@ -9,5 +9,6 @@ public class EntityToRequestProfile : Profile
     public EntityToRequestProfile()
     {
         CreateMap<CountryEntity, CountryRequest>().ReverseMap();
+        CreateMap<DepartmentEntity, DepartmentRequest>().ReverseMap();
     }
 }
