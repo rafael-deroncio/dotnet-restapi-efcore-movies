@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieMania.Core.Requests;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
 
-namespace DepartamentMania.API.Controllers;
+namespace DepartmentMania.API.Controllers;
 
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class DepartamentController(IDepartmentService service) : Controller
+public class DepartmentController(IDepartmentService service) : Controller
 {
     private readonly IDepartmentService _service = service;
 
