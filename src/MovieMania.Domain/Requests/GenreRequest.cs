@@ -7,6 +7,6 @@ public record GenreRequest
 {
     [Required]
     [StringLength(100)]
-    [JsonPropertyName("genre")]
-    public string Genre { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }
