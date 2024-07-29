@@ -17,5 +17,10 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.DepartmentId))
             .ReverseMap();
+
+        CreateMap<GenreEntity, GenreResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.GenreId))
+            .ReverseMap();
     }
 }
