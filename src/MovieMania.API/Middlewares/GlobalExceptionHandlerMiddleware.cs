@@ -7,9 +7,10 @@ using MovieMania.Domain.Responses;
 
 namespace MovieMania.API.Middlewares;
 
-public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
+public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<GlobalExceptionHandlerMiddleware> logger)
 {
     private readonly RequestDelegate _next = next;
+    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -32,8 +33,9 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next)
 
             await context.Response.WriteAsync(json);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            _logger.LogCritical(message: ex.Message, exception: ex);
             ExceptionResponse response = new()
             {
                 Title = "Internal Error",

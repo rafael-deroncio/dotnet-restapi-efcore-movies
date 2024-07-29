@@ -14,6 +14,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
         services.AddSingleton<ICountryService, CountryService>();
+        services.AddSingleton<IDepartmentService, DepartmentService>();
         services.AddSingleton<IPaginationService, PaginationService>();
 
         // Service URI
@@ -32,6 +33,11 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IBaseRepository<CountryEntity>, BaseRepository<CountryEntity>>(
             provider => new BaseRepository<CountryEntity>(
+                provider.GetService<MovieManiaContext>()
+            ));
+
+        services.AddSingleton<IBaseRepository<DepartmentEntity>, BaseRepository<DepartmentEntity>>(
+            provider => new BaseRepository<DepartmentEntity>(
                 provider.GetService<MovieManiaContext>()
             ));
             
