@@ -13,7 +13,7 @@ public record KeywordEntity : EntityBase
     [Required]
     [StringLength(100)]
     [Column("keyword")]
-    public string Name { get; set; }
+    public string Keyword { get; set; }
 
     public ICollection<MovieKeywordEntity> MovieKeywords { get; set; }
 }
