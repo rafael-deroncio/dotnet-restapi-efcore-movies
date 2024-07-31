@@ -18,6 +18,11 @@ public class EntityToResponseProfile : Profile
                 opts => opts.MapFrom(src => src.DepartmentId))
             .ReverseMap();
 
+        CreateMap<GenderEntity, GenderResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.GenderId))
+            .ReverseMap();
+
         CreateMap<GenreEntity, GenreResponse>()
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.GenreId))
