@@ -112,10 +112,10 @@ public class GenreService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get paged departments with request {Request}. Error: {Exception}", request, exception);
+            _logger.LogError("Error on get paged genres with request {Request}. Error: {Exception}", request, exception);
             throw new EntityUnprocessableException(
                 title: "Genre Entity Error",
-                message: "Unable get paged records for departments at this time. Please try again.");
+                message: "Unable get paged records for genres at this time. Please try again.");
         }
     }
 
