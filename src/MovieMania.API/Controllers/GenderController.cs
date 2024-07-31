@@ -4,7 +4,7 @@ using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
 
-namespace GenderMania.API.Controllers;
+namespace MovieMania.API.Controllers;
 
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
