@@ -13,5 +13,7 @@ public class EntityToRequestProfile : Profile
         CreateMap<GenderEntity, GenderRequest>().ReverseMap();
         CreateMap<GenreEntity, GenreRequest>().ReverseMap();
         CreateMap<KeywordEntity, KeywordRequest>().ReverseMap();
+        CreateMap<LanguageEntity, LanguageRequest>().ReverseMap();
+        CreateMap<LanguageRoleEntity, LanguageRoleRequest>().ReverseMap();
     }
 }

@@ -32,5 +32,15 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.KeywordId))
             .ReverseMap();
+
+        CreateMap<LanguageEntity, LanguageResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.LanguageId))
+            .ReverseMap();
+
+        CreateMap<LanguageRoleEntity, LanguageRoleResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.LanguageRoleId))
+            .ReverseMap();
     }
 }
