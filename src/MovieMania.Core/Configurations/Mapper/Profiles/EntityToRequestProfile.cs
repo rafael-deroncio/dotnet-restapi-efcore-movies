@@ -12,5 +12,6 @@ public class EntityToRequestProfile : Profile
         CreateMap<DepartmentEntity, DepartmentRequest>().ReverseMap();
         CreateMap<GenderEntity, GenderRequest>().ReverseMap();
         CreateMap<GenreEntity, GenreRequest>().ReverseMap();
+        CreateMap<KeywordEntity, KeywordRequest>().ReverseMap();
     }
 }

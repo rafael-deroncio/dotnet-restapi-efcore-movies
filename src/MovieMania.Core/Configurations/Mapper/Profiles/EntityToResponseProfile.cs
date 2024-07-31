@@ -27,5 +27,10 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.GenreId))
             .ReverseMap();
+
+        CreateMap<KeywordEntity, KeywordResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.KeywordId))
+            .ReverseMap();
     }
 }
