@@ -17,8 +17,8 @@ public record LanguageEntity : EntityBase
 
     [Required]
     [StringLength(100)]
-    [Column("name")]
-    public string Name { get; set; }
+    [Column("language")]
+    public string Language { get; set; }
 
     public ICollection<MovieLanguageEntity> MovieLanguages { get; set; }
 }

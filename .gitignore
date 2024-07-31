@@ -603,9 +603,5 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,csharp,dotnetcore
+src/MovieMania.API/Migrations/
 deploy/.vscode/settings.json
-src/MovieMania.API/Migrations/20240723231940_InitialCreate.cs
-src/MovieMania.API/Migrations/20240723231940_InitialCreate.Designer.cs
-src/MovieMania.API/Migrations/MovieManiaContextModelSnapshot.cs
-src/MovieMania.API/Migrations/20240724213703_InitialCreate.cs
-src/MovieMania.API/Migrations/20240724213703_InitialCreate.Designer.cs

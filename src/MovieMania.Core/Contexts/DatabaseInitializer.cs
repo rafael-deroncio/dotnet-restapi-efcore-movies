@@ -126,11 +126,11 @@ public static class DatabaseInitializer
             await context.Keywords.AddRangeAsync(
                 new List<KeywordEntity>
                 {
-                new() { Name = "Action-packed", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new() { Name = "Romantic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new() { Name = "Thriller", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new() { Name = "Epic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                new() { Name = "Heartwarming", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+                new() { Keyword = "Action-packed", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new() { Keyword = "Romantic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new() { Keyword = "Thriller", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new() { Keyword = "Epic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                new() { Keyword = "Heartwarming", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
                 });
 
         await context.SaveChangesAsync();
@@ -143,26 +143,26 @@ public static class DatabaseInitializer
             await context.Languages.AddRangeAsync(
                 new List<LanguageEntity>
                 {
-                    new() { Code = "EN", Name = "English", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "ES", Name = "Spanish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "FR", Name = "French", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "DE", Name = "German", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "ZH", Name = "Chinese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "JA", Name = "Japanese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "RU", Name = "Russian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "PT", Name = "Portuguese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "IT", Name = "Italian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "HI", Name = "Hindi", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "AR", Name = "Arabic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "KO", Name = "Korean", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "NL", Name = "Dutch", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "SV", Name = "Swedish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "DA", Name = "Danish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "NO", Name = "Norwegian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "FI", Name = "Finnish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "PL", Name = "Polish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "TR", Name = "Turkish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Code = "HE", Name = "Hebrew", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+                    new() { Code = "EN", Language = "English", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "ES", Language = "Spanish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "FR", Language = "French", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "DE", Language = "German", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "ZH", Language = "Chinese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "JA", Language = "Japanese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "RU", Language = "Russian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "PT", Language = "Portuguese", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "IT", Language = "Italian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "HI", Language = "Hindi", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "AR", Language = "Arabic", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "KO", Language = "Korean", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "NL", Language = "Dutch", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "SV", Language = "Swedish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "DA", Language = "Danish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "NO", Language = "Norwegian", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "FI", Language = "Finnish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "PL", Language = "Polish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "TR", Language = "Turkish", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Code = "HE", Language = "Hebrew", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
                 });
 
             await context.SaveChangesAsync();
