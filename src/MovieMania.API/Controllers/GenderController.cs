@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieMania.Core.Services.Interfaces;
+using MovieMania.Domain.Requests;
+using MovieMania.Domain.Responses;
 
 namespace GenderMania.API.Controllers;
 
@@ -7,30 +10,46 @@ namespace GenderMania.API.Controllers;
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class GenderController : Controller
+public class GenderController(IGenderService service) : Controller
 {
+    private readonly IGenderService _service = service;
+
     [HttpGet("paged")]
+    [ProducesResponseType(typeof(PaginationResponse<GenderResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetGenders([FromQuery] int page, [FromQuery] int size)
-        => Ok(await Task.FromResult(new { page, size }));
+    public async Task<IActionResult> GetGenders([FromQuery] PaginationRequest request)
+        => Ok(await _service.GetPagedGenders(request));
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(GenderResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
     public async Task<IActionResult> GetGender([FromRoute] int id)
-        => Ok(await Task.FromResult(new { id }));
+        => Ok(await _service.GetGenderById(id));
 
-    [HttpPost()]
+    [HttpPost]
+    [ProducesResponseType(typeof(GenderResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PostGender([FromBody] object request)
-        => Ok(await Task.FromResult(request));
+    public async Task<IActionResult> PostGender([FromBody] GenderRequest request)
+        => Ok(await _service.CreateGender(request));
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(GenderResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PutGender([FromRoute] int id, [FromBody] object request)
-        => Ok(await Task.FromResult(new { id, request }));
+    public async Task<IActionResult> PutGender([FromRoute] int id, [FromBody] GenderRequest request)
+        => Ok(await _service.UpdateGender(id, request));
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteGender([FromRoute] int id)
-        => Ok(await Task.FromResult(new { id }));
+        => Ok(await _service.DeleteGender(id));
 }
