@@ -62,7 +62,7 @@ public class GenderService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on delete gender with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on delete gender with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Gender Entity Error",
                 message: $"Unable to delete gender with id {id} at this time. Please try again.");
@@ -86,7 +86,7 @@ public class GenderService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get Gender with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on get Gender with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Gender Entity Error",
                 message: $"Unable to get gender wit id {id} at this time. Please try again.");
@@ -137,7 +137,7 @@ public class GenderService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on update gender with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            _logger.LogError("Error on update gender with id {Identifier} from request {Request}. Error: {Exception}", id, request, exception);
             throw new EntityUnprocessableException(
                 title: "Gender Entity Error",
                 message: $"Unable to update gender with id {id} at this time. Please try again.");

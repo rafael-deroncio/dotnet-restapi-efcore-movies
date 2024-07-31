@@ -62,7 +62,7 @@ public class DepartmentService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on delete department with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on delete department with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Department Entity Error",
                 message: $"Unable to delete department with id {id} at this time. Please try again.");
@@ -86,7 +86,7 @@ public class DepartmentService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get Department with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on get Department with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Department Entity Error",
                 message: $"Unable to get department wit id {id} at this time. Please try again.");
@@ -137,7 +137,7 @@ public class DepartmentService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on update department with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            _logger.LogError("Error on update department with id {Identifier} from request {Request}. Error: {Exception}", id, request, exception);
             throw new EntityUnprocessableException(
                 title: "Department Entity Error",
                 message: $"Unable to update department with id {id} at this time. Please try again.");

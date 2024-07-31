@@ -62,7 +62,7 @@ public class GenreService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on delete genre with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on delete genre with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Genre Entity Error",
                 message: $"Unable to delete genre with id {id} at this time. Please try again.");
@@ -86,7 +86,7 @@ public class GenreService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get Genre with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on get Genre with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Genre Entity Error",
                 message: $"Unable to get genre wit id {id} at this time. Please try again.");
@@ -137,7 +137,7 @@ public class GenreService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on update genre with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            _logger.LogError("Error on update genre with id {Identifier} from request {Request}. Error: {Exception}", id, request, exception);
             throw new EntityUnprocessableException(
                 title: "Genre Entity Error",
                 message: $"Unable to update genre with id {id} at this time. Please try again.");

@@ -62,7 +62,7 @@ public class CountryService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on delete country with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on delete country with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Country Entity Error",
                 message: $"Unable to delete country with id {id} at this time. Please try again.");
@@ -86,7 +86,7 @@ public class CountryService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get country with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on get country with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Country Entity Error",
                 message: $"Unable to get Country wit id {id} at this time. Please try again.");
@@ -138,7 +138,7 @@ public class CountryService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on update country with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            _logger.LogError("Error on update country with id {Identifier} from request {Request}. Error: {Exception}", id, request, exception);
             throw new EntityUnprocessableException(
                 title: "Country Entity Error",
                 message: $"Unable to update country with id {id} at this time. Please try again.");

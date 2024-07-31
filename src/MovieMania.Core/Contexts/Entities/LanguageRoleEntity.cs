@@ -7,8 +7,8 @@ namespace MovieMania.Core.Contexts.Entities;
 public record LanguageRoleEntity : EntityBase
 {
     [Key]
-    [Column("role_id")]
-    public int RoleId { get; set; }
+    [Column("language_role_id")]
+    public int LanguageRoleId { get; set; }
 
     [Required]
     [StringLength(50)]

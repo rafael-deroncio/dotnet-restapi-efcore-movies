@@ -62,7 +62,7 @@ public class KeywordService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on delete keyword with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on delete keyword with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Keyword Entity Error",
                 message: $"Unable to delete keyword with id {id} at this time. Please try again.");
@@ -86,7 +86,7 @@ public class KeywordService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on get Keyword with id {Idntifier}. Error: {Exception}", id, exception);
+            _logger.LogError("Error on get Keyword with id {Identifier}. Error: {Exception}", id, exception);
             throw new EntityUnprocessableException(
                 title: "Keyword Entity Error",
                 message: $"Unable to get keyword wit id {id} at this time. Please try again.");
@@ -137,7 +137,7 @@ public class KeywordService(
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
-            _logger.LogError("Error on update keyword with id {Idntifier} from request {Request}. Error: {Exception}", id, request, exception);
+            _logger.LogError("Error on update keyword with id {Identifier} from request {Request}. Error: {Exception}", id, request, exception);
             throw new EntityUnprocessableException(
                 title: "Keyword Entity Error",
                 message: $"Unable to update keyword with id {id} at this time. Please try again.");
