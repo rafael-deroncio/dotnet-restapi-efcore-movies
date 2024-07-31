@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieMania.Core.Services.Interfaces;
+using MovieMania.Domain.Requests;
+using MovieMania.Domain.Responses;
 
 namespace LanguageMania.API.Controllers;
 
@@ -7,56 +10,89 @@ namespace LanguageMania.API.Controllers;
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class LanguageController : Controller
+public class LanguageController(ILanguageService service) : Controller
 {
+    private readonly ILanguageService _service = service;
+
+    #region Language
     [HttpGet("paged")]
+    [ProducesResponseType(typeof(PaginationResponse<LanguageResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguages([FromQuery] int page, [FromQuery] int size)
-        => Ok(await Task.FromResult(new { page, size }));
+    public async Task<IActionResult> GetLanguages([FromQuery] PaginationRequest request)
+        => Ok(await _service.GetPagedLanguages(request));
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(LanguageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguage(int id)
-        => Ok(await Task.FromResult(new { id }));
+    public async Task<IActionResult> GetLanguage([FromRoute] int id)
+        => Ok(await _service.GetLanguageById(id));
 
-    [HttpPost()]
+    [HttpPost]
+    [ProducesResponseType(typeof(LanguageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PostLanguage([FromBody] object request)
-        => Ok(await Task.FromResult(request));
+    public async Task<IActionResult> PostLanguage([FromBody] LanguageRequest request)
+        => Ok(await _service.CreateLanguage(request));
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(LanguageResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PutLanguage([FromRoute] int id, [FromBody] object request)
-        => Ok(await Task.FromResult(new { id, request }));
+    public async Task<IActionResult> PutLanguage([FromRoute] int id, [FromBody] LanguageRequest request)
+        => Ok(await _service.UpdateLanguage(id, request));
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteLanguage([FromRoute] int id)
-        => Ok(await Task.FromResult(new { id }));
+        => Ok(await _service.DeleteLanguage(id));
+    #endregion
 
-
-    [HttpGet("{languageId:int}/role/paged")]
+    #region Language Role
+    [HttpGet("role/paged")]
+    [ProducesResponseType(typeof(PaginationResponse<LanguageRoleResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguageRoles([FromRoute] int languageId, [FromQuery] int page, [FromQuery] int size)
-        => Ok(await Task.FromResult(new { languageId, page, size }));
+    public async Task<IActionResult> GetLanguageRoles([FromQuery] PaginationRequest request)
+        => Ok(await _service.GetPagedLanguageRoles(request));
 
-    [HttpGet("{languageId:int}/role/{roleId:int}")]
+    [HttpGet("role/{id:int}")]
+    [ProducesResponseType(typeof(LanguageRoleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetLanguageRole([FromRoute] int languageId, [FromRoute] int roleId)
-        => Ok(await Task.FromResult(new { languageId, roleId }));
+    public async Task<IActionResult> GetLanguageRole([FromRoute] int id)
+        => Ok(await _service.GetLanguageRoleById(id));
 
-    [HttpPost("{languageId:int}/role")]
+    [HttpPost]
+    [ProducesResponseType(typeof(LanguageRoleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PostLanguageRole([FromRoute] int languageId, [FromBody] object request)
-        => Ok(await Task.FromResult(new { languageId, request }));
+    public async Task<IActionResult> PostLanguageRole([FromBody] LanguageRoleRequest request)
+        => Ok(await _service.CreateLanguageRole(request));
 
-    [HttpPut("{languageId:int}/role/{roleId:int}")]
+    [HttpPut("role/{id:int}")]
+    [ProducesResponseType(typeof(LanguageRoleResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PutLanguageRole([FromRoute] int languageId, [FromRoute] int roleId, [FromBody] object request)
-        => Ok(await Task.FromResult(new { languageId, roleId, request }));
+    public async Task<IActionResult> PutLanguageRole([FromRoute] int id, [FromBody] LanguageRoleRequest request)
+        => Ok(await _service.UpdateLanguageRole(id, request));
 
-    [HttpDelete("{languageId:int}/role/{roleId:int}")]
+    [HttpDelete("role/{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> DeleteLanguageRole([FromRoute] int languageId, [FromRoute] int roleId)
-        => Ok(await Task.FromResult(new { languageId, roleId }));
+    public async Task<IActionResult> DeleteLanguageRole([FromRoute] int id)
+        => Ok(await _service.DeleteLanguageRole(id));
+    #endregion
 }
