@@ -20,7 +20,7 @@ public class DatabaseMemory : IDatabaseMemory
     public DatabaseMemory(MovieManiaContext context)
     {
         this._context = context;
-        Start().GetAwaiter().GetResult();
+        _ = Start().GetAwaiter();
     }
 
     public IEnumerable<CountryEntity> Countries { get { return this._countries; } }
@@ -47,41 +47,41 @@ public class DatabaseMemory : IDatabaseMemory
 
     public async Task UpdateCountries()
     {
-        _countries = await _context.Countries.ToListAsync();
+        _countries = await _context.Countries.Include(x => x.ProductionCountries).ToListAsync();
     }
 
     public async Task UpdateDepartments()
     {
-        _departments = await _context.Departments.ToListAsync();
+        _departments = await _context.Departments.Include(x => x.MovieCrews).ToListAsync();
     }
 
     public async Task UpdateGenders()
     {
-        _genders = await _context.Genders.ToListAsync();
+        _genders = await _context.Genders.Include(x => x.MovieCasts).ToListAsync();
     }
 
     public async Task UpdateGenres()
     {
-        _genres = await _context.Genres.ToListAsync();
+        _genres = await _context.Genres.Include(x => x.MovieGenres).ToListAsync();
     }
 
     public async Task UpdateKeywords()
     {
-        _keywords = await _context.Keywords.ToListAsync();
+        _keywords = await _context.Keywords.Include(x => x.MovieKeywords).ToListAsync();
     }
 
     public async Task UpdateLanguages()
     {
-        _languages = await _context.Languages.ToListAsync();
+        _languages = await _context.Languages.Include(x => x.MovieLanguages).ToListAsync();
     }
 
     public async Task UpdateLanguageRoles()
     {
-        _languageRoles = await _context.LanguageRoles.ToListAsync();
+        _languageRoles = await _context.LanguageRoles.Include(x => x.MovieLanguages).ToListAsync();
     }
 
     public async Task UpdateProductionCompanies()
     {
-        _productionCompanies = await _context.ProductionCompanies.ToListAsync();
+        _productionCompanies = await _context.ProductionCompanies.Include(x => x.MovieCompanies).ToListAsync();
     }
 }
