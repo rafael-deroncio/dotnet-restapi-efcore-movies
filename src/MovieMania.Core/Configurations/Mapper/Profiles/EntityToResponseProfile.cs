@@ -47,5 +47,10 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.CompanyId))
             .ReverseMap();
+
+        CreateMap<PersonEntity, PersonResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.PersonId))
+            .ReverseMap();
     }
 }
