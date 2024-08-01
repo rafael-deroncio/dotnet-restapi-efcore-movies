@@ -47,6 +47,11 @@ public interface IDatabaseMemory
     IEnumerable<ProductionCompanyEntity> ProductionCompanies { get; }
 
     /// <summary>
+    /// Gets the list of persons.
+    /// </summary>
+    IEnumerable<PersonEntity> Persons { get; }
+
+    /// <summary>
     /// Updates the list of countries.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
@@ -93,4 +98,10 @@ public interface IDatabaseMemory
     /// </summary>
     /// <returns>A task that represents the asynchronous operation.</returns>
     Task UpdateProductionCompanies();
+
+    /// <summary>
+    /// Updates the list of persons.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation.</returns>
+    Task UpdatePersons();
 }

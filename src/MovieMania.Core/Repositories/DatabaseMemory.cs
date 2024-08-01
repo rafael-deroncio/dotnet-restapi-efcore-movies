@@ -16,6 +16,7 @@ public class DatabaseMemory : IDatabaseMemory
     private List<LanguageEntity> _languages;
     private List<LanguageRoleEntity> _languageRoles;
     private List<ProductionCompanyEntity> _productionCompanies;
+    private List<PersonEntity> _persons;
 
     public DatabaseMemory(MovieManiaContext context)
     {
@@ -31,7 +32,7 @@ public class DatabaseMemory : IDatabaseMemory
     public IEnumerable<LanguageEntity> Languages { get { return this._languages; } }
     public IEnumerable<LanguageRoleEntity> LanguageRoles { get { return this._languageRoles; } }
     public IEnumerable<ProductionCompanyEntity> ProductionCompanies { get { return this._productionCompanies; } }
-
+    public IEnumerable<PersonEntity> Persons { get { return this._persons; } }
 
     private async Task Start()
     {
@@ -43,6 +44,7 @@ public class DatabaseMemory : IDatabaseMemory
         await UpdateLanguages();
         await UpdateLanguageRoles();
         await UpdateProductionCompanies();
+        await UpdatePersons();
     }
 
     public async Task UpdateCountries()
@@ -83,5 +85,10 @@ public class DatabaseMemory : IDatabaseMemory
     public async Task UpdateProductionCompanies()
     {
         _productionCompanies = await _context.ProductionCompanies.Include(x => x.MovieCompanies).ToListAsync();
+    }
+
+    public async Task UpdatePersons()
+    {
+        _persons = await _context.Persons.Include(x => x.MovieCasts).Include(x => x.MovieCrews).ToListAsync();
     }
 }
