@@ -264,16 +264,16 @@ public static class DatabaseInitializer
             await context.ProductionCompanies.AddRangeAsync(
                 new List<ProductionCompanyEntity>
                 {
-                    new() { Name = "Warner Bros.", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Universal Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "20th Century Studios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Sony Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Paramount Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Walt Disney Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Columbia Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "Lionsgate", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "New Line Cinema", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
-                    new() { Name = "MGM", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
+                    new() { Company = "Warner Bros.", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Universal Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "20th Century Studios", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Sony Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Paramount Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Walt Disney Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Columbia Pictures", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "Lionsgate", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "New Line Cinema", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
+                    new() { Company = "MGM", CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
                 });
 
             await context.SaveChangesAsync();
