@@ -42,5 +42,10 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.LanguageRoleId))
             .ReverseMap();
+
+        CreateMap<ProductionCompanyEntity, ProductionCompanyResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.CompanyId))
+            .ReverseMap();
     }
 }

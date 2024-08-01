@@ -15,5 +15,6 @@ public class EntityToRequestProfile : Profile
         CreateMap<KeywordEntity, KeywordRequest>().ReverseMap();
         CreateMap<LanguageEntity, LanguageRequest>().ReverseMap();
         CreateMap<LanguageRoleEntity, LanguageRoleRequest>().ReverseMap();
+        CreateMap<ProductionCompanyEntity, ProductionCompanyRequest>().ReverseMap();
     }
 }
