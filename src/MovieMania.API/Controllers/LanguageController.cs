@@ -71,7 +71,7 @@ public class LanguageController(ILanguageService service) : Controller
     public async Task<IActionResult> GetLanguageRole([FromRoute] int id)
         => Ok(await _service.GetLanguageRoleById(id));
 
-    [HttpPost]
+    [HttpPost("role")]
     [ProducesResponseType(typeof(LanguageRoleResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
