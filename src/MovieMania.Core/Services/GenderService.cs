@@ -10,14 +10,12 @@ namespace MovieMania.Core.Services;
 
 public class GenderService(
     ILogger<IGenderService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<GenderEntity> repository,
     IPaginationService paginationService,
     IObjectConverter mapper
 ) : IGenderService
 {
     private readonly ILogger<IGenderService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<GenderEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
@@ -26,15 +24,12 @@ public class GenderService(
     {
         try
         {
-            if (_databaseMemory.Genders.Where(x => x.Gender == request.Gender).Any())
+            if ((await _repository.Get()).Where(x => x.Gender == request.Gender).Any())
                 throw new EntityBadRequestException("Error on create gender entity", "Gender alredy registred with name or iso code");
 
             GenderEntity entity = _mapper.Map<GenderEntity>(request);
 
-            entity = await _repository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateGenders();
-
-            return _mapper.Map<GenderResponse>(entity);
+            return _mapper.Map<GenderResponse>(await _repository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -45,19 +40,15 @@ public class GenderService(
                 message: $"Unable to create a new record for gender at this time. Please try again.");
         }
     }
-
+    
     public async Task<bool> DeleteGender(int id)
     {
         try
         {
-            GenderEntity entity = _databaseMemory.Genders.FirstOrDefault(x => x.GenderId == id);
-            entity ??= await _repository.Get(new() { GenderId = id }) ??
-                    throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+            GenderEntity entity = await _repository.Get(new() { GenderId = id })
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
 
-            bool result = await _repository.Delete(entity);
-            if (result) await _databaseMemory.UpdateGenders();
-
-            return result;
+            return await _repository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -73,15 +64,10 @@ public class GenderService(
     {
         try
         {
-            GenderEntity entity = _databaseMemory.Genders.FirstOrDefault(x => x.GenderId == id);
-            if (entity is not null)
-                return _mapper.Map<GenderResponse>(entity);
+            GenderEntity entity = await _repository.Get(new() { GenderId = id })
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
 
-            entity = await _repository.Get(new() { GenderId = id });
-            if (entity is not null)
-                return _mapper.Map<GenderResponse>(entity);
-
-            throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+            return _mapper.Map<GenderResponse>(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -97,7 +83,7 @@ public class GenderService(
     {
         try
         {
-            IEnumerable<GenderEntity> entities = _databaseMemory.Genders
+            IEnumerable<GenderEntity> entities = (await _repository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -106,7 +92,7 @@ public class GenderService(
                 Content = _mapper.Map<IEnumerable<GenderResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Genders.Count()
+                Total = (await _repository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -123,16 +109,12 @@ public class GenderService(
     {
         try
         {
-            GenderEntity entity = _databaseMemory.Genders.FirstOrDefault(x => x.GenderId == id);
-            entity ??= await _repository.Get(new() { GenderId = id }) ??
-                    throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+            GenderEntity entity = await _repository.Get(new() { GenderId = id })
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
 
             entity.Gender = request.Gender.Trim();
 
-            entity = await _repository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateGenders();
-
-            return _mapper.Map<GenderResponse>(entity);
+            return _mapper.Map<GenderResponse>(await _repository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

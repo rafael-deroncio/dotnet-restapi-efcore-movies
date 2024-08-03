@@ -10,14 +10,12 @@ namespace MovieMania.Core.Services;
 
 public class KeywordService(
     ILogger<IKeywordService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<KeywordEntity> repository,
     IPaginationService paginationService,
     IObjectConverter mapper
 ) : IKeywordService
 {
     private readonly ILogger<IKeywordService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<KeywordEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
@@ -26,15 +24,12 @@ public class KeywordService(
     {
         try
         {
-            if (_databaseMemory.Keywords.Where(x => x.Keyword == request.Keyword).Any())
+            if ((await _repository.Get()).Where(x => x.Keyword == request.Keyword).Any())
                 throw new EntityBadRequestException("Error on create keyword entity", "Keyword alredy registred with name or iso code");
 
             KeywordEntity entity = _mapper.Map<KeywordEntity>(request);
 
-            entity = await _repository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateKeywords();
-
-            return _mapper.Map<KeywordResponse>(entity);
+            return _mapper.Map<KeywordResponse>(await _repository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -50,14 +45,10 @@ public class KeywordService(
     {
         try
         {
-            KeywordEntity entity = _databaseMemory.Keywords.FirstOrDefault(x => x.KeywordId == id);
-            entity ??= await _repository.Get(new() { KeywordId = id }) ??
-                    throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+            KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
 
-            bool result = await _repository.Delete(entity);
-            if (result) await _databaseMemory.UpdateKeywords();
-
-            return result;
+            return await _repository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -73,16 +64,10 @@ public class KeywordService(
     {
         try
         {
-            KeywordEntity entity = _databaseMemory.Keywords.FirstOrDefault(x => x.KeywordId == id);
-            if (entity is not null)
-                return _mapper.Map<KeywordResponse>(entity);
-
-            entity = await _repository.Get(new() { KeywordId = id });
-            if (entity is not null)
-                return _mapper.Map<KeywordResponse>(entity);
-
-            throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
-        }
+            KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+            
+            return _mapper.Map<KeywordResponse>(entity);        }
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
@@ -97,7 +82,7 @@ public class KeywordService(
     {
         try
         {
-            IEnumerable<KeywordEntity> entities = _databaseMemory.Keywords
+            IEnumerable<KeywordEntity> entities = (await _repository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -106,7 +91,7 @@ public class KeywordService(
                 Content = _mapper.Map<IEnumerable<KeywordResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Keywords.Count()
+                Total = (await _repository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -123,16 +108,12 @@ public class KeywordService(
     {
         try
         {
-            KeywordEntity entity = _databaseMemory.Keywords.FirstOrDefault(x => x.KeywordId == id);
-            entity ??= await _repository.Get(new() { KeywordId = id }) ??
-                    throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+            KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
 
             entity.Keyword = request.Keyword.Trim();
 
-            entity = await _repository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateKeywords();
-
-            return _mapper.Map<KeywordResponse>(entity);
+            return _mapper.Map<KeywordResponse>(await _repository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

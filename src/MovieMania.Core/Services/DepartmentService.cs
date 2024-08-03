@@ -10,14 +10,12 @@ namespace MovieMania.Core.Services;
 
 public class DepartmentService(
     ILogger<IDepartmentService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<DepartmentEntity> repository,
     IPaginationService paginationService,
     IObjectConverter mapper
 ) : IDepartmentService
 {
     private readonly ILogger<IDepartmentService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<DepartmentEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
@@ -26,15 +24,12 @@ public class DepartmentService(
     {
         try
         {
-            if (_databaseMemory.Departments.Where(x => x.Name == request.Name).Any())
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on create department entity", "Department alredy registred with name or iso code");
 
             DepartmentEntity entity = _mapper.Map<DepartmentEntity>(request);
 
-            entity = await _repository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateDepartments();
-
-            return _mapper.Map<DepartmentResponse>(entity);
+            return _mapper.Map<DepartmentResponse>(await _repository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -50,14 +45,10 @@ public class DepartmentService(
     {
         try
         {
-            DepartmentEntity entity = _databaseMemory.Departments.FirstOrDefault(x => x.DepartmentId == id);
-            entity ??= await _repository.Get(new() { DepartmentId = id }) ??
-                    throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+            DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
 
-            bool result = await _repository.Delete(entity);
-            if (result) await _databaseMemory.UpdateDepartments();
-
-            return result;
+            return await _repository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -73,15 +64,10 @@ public class DepartmentService(
     {
         try
         {
-            DepartmentEntity entity = _databaseMemory.Departments.FirstOrDefault(x => x.DepartmentId == id);
-            if (entity is not null)
-                return _mapper.Map<DepartmentResponse>(entity);
+            DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
 
-            entity = await _repository.Get(new() { DepartmentId = id });
-            if (entity is not null)
-                return _mapper.Map<DepartmentResponse>(entity);
-
-            throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+            return _mapper.Map<DepartmentResponse>(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -97,7 +83,7 @@ public class DepartmentService(
     {
         try
         {
-            IEnumerable<DepartmentEntity> entities = _databaseMemory.Departments
+            IEnumerable<DepartmentEntity> entities = (await _repository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -106,7 +92,7 @@ public class DepartmentService(
                 Content = _mapper.Map<IEnumerable<DepartmentResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Departments.Count()
+                Total = (await _repository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -123,16 +109,12 @@ public class DepartmentService(
     {
         try
         {
-            DepartmentEntity entity = _databaseMemory.Departments.FirstOrDefault(x => x.DepartmentId == id);
-            entity ??= await _repository.Get(new() { DepartmentId = id }) ??
-                    throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+            DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
 
             entity.Name = request.Name.Trim();
 
-            entity = await _repository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateDepartments();
-
-            return _mapper.Map<DepartmentResponse>(entity);
+            return _mapper.Map<DepartmentResponse>(await _repository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

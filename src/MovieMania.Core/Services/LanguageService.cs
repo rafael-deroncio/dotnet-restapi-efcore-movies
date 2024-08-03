@@ -10,7 +10,6 @@ namespace MovieMania.Core.Services;
 
 public class LanguageService(
     ILogger<ILanguageService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<LanguageEntity> languageRepository,
     IBaseRepository<LanguageRoleEntity> languageRoleRepository,
     IPaginationService paginationService,
@@ -18,7 +17,6 @@ public class LanguageService(
 ) : ILanguageService
 {
     private readonly ILogger<ILanguageService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<LanguageEntity> _languageRepository = languageRepository;
     private readonly IBaseRepository<LanguageRoleEntity> _languageRoleRepository = languageRoleRepository;
     private readonly IPaginationService _paginationService = paginationService;
@@ -28,15 +26,12 @@ public class LanguageService(
     {
         try
         {
-            if (_databaseMemory.Languages.Where(x => x.Language == request.Language).Any())
+            if ((await _languageRepository.Get()).Where(x => x.Language == request.Language).Any())
                 throw new EntityBadRequestException("Error on create language entity", "Language alredy registred with name or iso code");
 
             LanguageEntity entity = _mapper.Map<LanguageEntity>(request);
 
-            entity = await _languageRepository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateLanguages();
-
-            return _mapper.Map<LanguageResponse>(entity);
+            return _mapper.Map<LanguageResponse>(await _languageRepository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -52,14 +47,10 @@ public class LanguageService(
     {
         try
         {
-            LanguageEntity entity = _databaseMemory.Languages.FirstOrDefault(x => x.LanguageId == id);
-            entity ??= await _languageRepository.Get(new() { LanguageId = id }) ??
-                    throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
+            LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
+                ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
 
-            bool result = await _languageRepository.Delete(entity);
-            if (result) await _databaseMemory.UpdateLanguages();
-
-            return result;
+            return await _languageRoleRepository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -75,15 +66,10 @@ public class LanguageService(
     {
         try
         {
-            LanguageEntity entity = _databaseMemory.Languages.FirstOrDefault(x => x.LanguageId == id);
-            if (entity is not null)
-                return _mapper.Map<LanguageResponse>(entity);
+            LanguageEntity entity = await _languageRepository.Get(new() { LanguageId = id })
+                ?? throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
 
-            entity = await _languageRepository.Get(new() { LanguageId = id });
-            if (entity is not null)
-                return _mapper.Map<LanguageResponse>(entity);
-
-            throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
+            return _mapper.Map<LanguageResponse>(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -99,7 +85,7 @@ public class LanguageService(
     {
         try
         {
-            IEnumerable<LanguageEntity> entities = _databaseMemory.Languages
+            IEnumerable<LanguageEntity> entities = (await _languageRepository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -108,7 +94,7 @@ public class LanguageService(
                 Content = _mapper.Map<IEnumerable<LanguageResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Languages.Count()
+                Total = (await _languageRepository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -125,16 +111,12 @@ public class LanguageService(
     {
         try
         {
-            LanguageEntity entity = _databaseMemory.Languages.FirstOrDefault(x => x.LanguageId == id);
-            entity ??= await _languageRepository.Get(new() { LanguageId = id }) ??
-                    throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
+            LanguageEntity entity = await _languageRepository.Get(new() { LanguageId = id })
+                ?? throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
 
             entity.Language = request.Language.Trim();
 
-            entity = await _languageRepository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateLanguages();
-
-            return _mapper.Map<LanguageResponse>(entity);
+            return _mapper.Map<LanguageResponse>(await _languageRepository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -150,15 +132,12 @@ public class LanguageService(
     {
         try
         {
-            if (_databaseMemory.LanguageRoles.Where(x => x.Role == request.Role).Any())
-                throw new EntityBadRequestException("Error on create language role entity", "Language role alredy registred with name or iso code");
+            if ((await _languageRoleRepository.Get()).Where(x => x.Role == request.Role).Any())
+                throw new EntityBadRequestException("Error on create language role entity", "Language Role alredy registred with name or iso code");
 
             LanguageRoleEntity entity = _mapper.Map<LanguageRoleEntity>(request);
 
-            entity = await _languageRoleRepository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateLanguageRoles();
-
-            return _mapper.Map<LanguageRoleResponse>(entity);
+            return _mapper.Map<LanguageRoleResponse>(await _languageRoleRepository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -174,14 +153,10 @@ public class LanguageService(
     {
         try
         {
-            LanguageRoleEntity entity = _databaseMemory.LanguageRoles.FirstOrDefault(x => x.LanguageRoleId == id);
-            entity ??= await _languageRoleRepository.Get(new() { LanguageRoleId = id }) ??
-                    throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
+            LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
+                ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
 
-            bool result = await _languageRoleRepository.Delete(entity);
-            if (result) await _databaseMemory.UpdateLanguageRoles();
-
-            return result;
+            return await _languageRoleRepository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -197,15 +172,10 @@ public class LanguageService(
     {
         try
         {
-            LanguageRoleEntity entity = _databaseMemory.LanguageRoles.FirstOrDefault(x => x.LanguageRoleId == id);
-            if (entity is not null)
-                return _mapper.Map<LanguageRoleResponse>(entity);
+            LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
+                ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
 
-            entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id });
-            if (entity is not null)
-                return _mapper.Map<LanguageRoleResponse>(entity);
-
-            throw new EntityNotFoundException("Language Role Not Found", $"Language with id {id} not exists.");
+            return _mapper.Map<LanguageRoleResponse>(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -221,7 +191,7 @@ public class LanguageService(
     {
         try
         {
-            IEnumerable<LanguageRoleEntity> entities = _databaseMemory.LanguageRoles
+            IEnumerable<LanguageRoleEntity> entities = (await _languageRoleRepository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -230,7 +200,7 @@ public class LanguageService(
                 Content = _mapper.Map<IEnumerable<LanguageRoleResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Languages.Count()
+                Total = (await _languageRoleRepository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -247,16 +217,12 @@ public class LanguageService(
     {
         try
         {
-            LanguageRoleEntity entity = _databaseMemory.LanguageRoles.FirstOrDefault(x => x.LanguageRoleId == id);
-            entity ??= await _languageRoleRepository.Get(new() { LanguageRoleId = id }) ??
-                    throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
+            LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
+                ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
 
             entity.Role = request.Role.Trim();
 
-            entity = await _languageRoleRepository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateLanguageRoles();
-
-            return _mapper.Map<LanguageRoleResponse>(entity);
+            return _mapper.Map<LanguageRoleResponse>(await _languageRoleRepository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

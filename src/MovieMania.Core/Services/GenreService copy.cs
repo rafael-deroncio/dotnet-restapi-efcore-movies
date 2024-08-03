@@ -10,14 +10,12 @@ namespace MovieMania.Core.Services;
 
 public class ProductionCompanyService(
     ILogger<IProductionCompanyService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<ProductionCompanyEntity> repository,
     IPaginationService paginationService,
     IObjectConverter mapper
 ) : IProductionCompanyService
 {
     private readonly ILogger<IProductionCompanyService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<ProductionCompanyEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
@@ -26,15 +24,12 @@ public class ProductionCompanyService(
     {
         try
         {
-            if (_databaseMemory.ProductionCompanies.Where(x => x.Company == request.Company).Any())
-                throw new EntityBadRequestException("Error on create production company entity", "Production Company alredy registred with name or iso code");
+            if ((await _repository.Get()).Where(x => x.Company == request.Company).Any())
+                throw new EntityBadRequestException("Error on create production company entity", "ProductionCompany alredy registred with name or iso code");
 
             ProductionCompanyEntity entity = _mapper.Map<ProductionCompanyEntity>(request);
 
-            entity = await _repository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdateProductionCompanies();
-
-            return _mapper.Map<ProductionCompanyResponse>(entity);
+            return _mapper.Map<ProductionCompanyResponse>(await _repository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -50,14 +45,10 @@ public class ProductionCompanyService(
     {
         try
         {
-            ProductionCompanyEntity entity = _databaseMemory.ProductionCompanies.FirstOrDefault(x => x.CompanyId == id);
-            entity ??= await _repository.Get(new() { CompanyId = id }) ??
-                    throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+            ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
 
-            bool result = await _repository.Delete(entity);
-            if (result) await _databaseMemory.UpdateProductionCompanies();
-
-            return result;
+            return await _repository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -73,15 +64,10 @@ public class ProductionCompanyService(
     {
         try
         {
-            ProductionCompanyEntity entity = _databaseMemory.ProductionCompanies.FirstOrDefault(x => x.CompanyId == id);
-            if (entity is not null)
-                return _mapper.Map<ProductionCompanyResponse>(entity);
+            ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
 
-            entity = await _repository.Get(new() { CompanyId = id });
-            if (entity is not null)
-                return _mapper.Map<ProductionCompanyResponse>(entity);
-
-            throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+            return _mapper.Map<ProductionCompanyResponse>(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -97,7 +83,7 @@ public class ProductionCompanyService(
     {
         try
         {
-            IEnumerable<ProductionCompanyEntity> entities = _databaseMemory.ProductionCompanies
+            IEnumerable<ProductionCompanyEntity> entities = (await _repository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -106,7 +92,7 @@ public class ProductionCompanyService(
                 Content = _mapper.Map<IEnumerable<ProductionCompanyResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.ProductionCompanies.Count()
+                Total = (await _repository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -123,16 +109,12 @@ public class ProductionCompanyService(
     {
         try
         {
-            ProductionCompanyEntity entity = _databaseMemory.ProductionCompanies.FirstOrDefault(x => x.CompanyId == id);
-            entity ??= await _repository.Get(new() { CompanyId = id }) ??
-                    throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+            ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
 
             entity.Company = request.Company.Trim();
 
-            entity = await _repository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdateProductionCompanies();
-
-            return _mapper.Map<ProductionCompanyResponse>(entity);
+            return _mapper.Map<ProductionCompanyResponse>(await _repository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

@@ -10,14 +10,12 @@ namespace MovieMania.Core.Services;
 
 public class PersonService(
     ILogger<IPersonService> logger,
-    IDatabaseMemory memory,
     IBaseRepository<PersonEntity> repository,
     IPaginationService paginationService,
     IObjectConverter mapper
 ) : IPersonService
 {
     private readonly ILogger<IPersonService> _logger = logger;
-    private readonly IDatabaseMemory _databaseMemory = memory;
     private readonly IBaseRepository<PersonEntity> _repository = repository;
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
@@ -26,15 +24,12 @@ public class PersonService(
     {
         try
         {
-            if (_databaseMemory.Persons.Where(x => x.Name == request.Name).Any())
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on create person entity", "Person alredy registred with name or iso code");
 
             PersonEntity entity = _mapper.Map<PersonEntity>(request);
 
-            entity = await _repository.Create(entity);
-            if (entity is not null) await _databaseMemory.UpdatePersons();
-
-            return _mapper.Map<PersonResponse>(entity);
+            return _mapper.Map<PersonResponse>(await _repository.Create(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -50,14 +45,10 @@ public class PersonService(
     {
         try
         {
-            PersonEntity entity = _databaseMemory.Persons.FirstOrDefault(x => x.PersonId == id);
-            entity ??= await _repository.Get(new() { PersonId = id }) ??
-                    throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+            PersonEntity entity = await _repository.Get(new() { PersonId = id })
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
 
-            bool result = await _repository.Delete(entity);
-            if (result) await _databaseMemory.UpdatePersons();
-
-            return result;
+            return await _repository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -73,16 +64,10 @@ public class PersonService(
     {
         try
         {
-            PersonEntity entity = _databaseMemory.Persons.FirstOrDefault(x => x.PersonId == id);
-            if (entity is not null)
-                return _mapper.Map<PersonResponse>(entity);
-
-            entity = await _repository.Get(new() { PersonId = id });
-            if (entity is not null)
-                return _mapper.Map<PersonResponse>(entity);
-
-            throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
-        }
+            PersonEntity entity = await _repository.Get(new() { PersonId = id })
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+            
+            return _mapper.Map<PersonResponse>(entity);        }
         catch (BaseException) { throw; }
         catch (Exception exception)
         {
@@ -97,7 +82,7 @@ public class PersonService(
     {
         try
         {
-            IEnumerable<PersonEntity> entities = _databaseMemory.Persons
+            IEnumerable<PersonEntity> entities = (await _repository.Get())
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 
@@ -106,7 +91,7 @@ public class PersonService(
                 Content = _mapper.Map<IEnumerable<PersonResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = _databaseMemory.Persons.Count()
+                Total = (await _repository.Get()).Count()
             });
         }
         catch (BaseException) { throw; }
@@ -123,16 +108,12 @@ public class PersonService(
     {
         try
         {
-            PersonEntity entity = _databaseMemory.Persons.FirstOrDefault(x => x.PersonId == id);
-            entity ??= await _repository.Get(new() { PersonId = id }) ??
-                    throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+            PersonEntity entity = await _repository.Get(new() { PersonId = id })
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
 
             entity.Name = request.Name.Trim();
 
-            entity = await _repository.Update(entity);
-            if (entity is not null) await _databaseMemory.UpdatePersons();
-
-            return _mapper.Map<PersonResponse>(entity);
+            return _mapper.Map<PersonResponse>(await _repository.Update(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)

@@ -15,6 +15,63 @@ public class BaseRepository<TEntity>(DbContext context, IDatabaseMemory memory =
     private readonly DbSet<TEntity> _entity = context.GetEntity<TEntity>();
     private readonly IDatabaseMemory _memory = memory;
 
+    public async Task<TEntity> Get(TEntity entity)
+    {
+        IProperty property = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties.FirstOrDefault()
+            ?? throw new InvalidOperationException("No primary key defined for entity.");
+
+        object id = property.PropertyInfo.GetValue(entity);
+
+        return _memory is not null ? GetDatabaseMemoryFist(id) ?? await _entity.FindAsync(id) ?? null : null;
+    }
+
+    public async Task<IEnumerable<TEntity>> Get()
+        =>  await Task.FromResult(_memory is not null ? GetDatabaseMemoryFist() ?? _entity.AsEnumerable() : null);
+
+    public async Task<TEntity> Create(TEntity entity)
+    {
+        entity.UpdatedAt = entity.CreatedAt = DateTime.UtcNow;
+        EntityEntry<TEntity> result = await _entity.AddAsync(entity);
+        await _context.SaveChangesAsync();
+        if (result.Entity is not null)
+        {
+            await UpdateEntityInDatabaseMemory();
+            return result.Entity;
+        }
+        return null;
+    }
+
+    public async Task<TEntity> Update(TEntity entity)
+    {
+        entity.UpdatedAt = DateTime.UtcNow;
+        EntityEntry<TEntity> result = _entity.Update(entity);
+        if (result.Entity is not null)
+        {
+            await UpdateEntityInDatabaseMemory();
+            return result.Entity;
+        }
+        return null;
+    }
+
+    public async Task<bool> Delete(TEntity entity)
+    {
+        EntityEntry<TEntity> result = _entity.Remove(entity);
+        await _context.SaveChangesAsync();
+        if (result.Entity is not null)
+        {
+            await UpdateEntityInDatabaseMemory();
+            return true;
+        }
+        return false;
+    }
+
+    public async Task<int> Count()
+        => _memory is not null ? await Task.FromResult(GetDatabaseMemoryFist().Count()) : await _entity.CountAsync();
+
+    public async Task<IEnumerable<TEntity>> Paged(int page, int size)
+        => await _entity.Skip((page - 1) * size).Take(size).ToListAsync()
+            ?? new List<TEntity>().AsEnumerable();
+
     private string GetPropertyDbSet()
     {
         PropertyInfo[] properties = _context.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -73,60 +130,4 @@ public class BaseRepository<TEntity>(DbContext context, IDatabaseMemory memory =
         return lambda;
     }
 
-    public async Task<TEntity> Get(TEntity entity)
-    {
-        IProperty property = _context.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties.FirstOrDefault()
-            ?? throw new InvalidOperationException("No primary key defined for entity.");
-
-        object id = property.PropertyInfo.GetValue(entity);
-
-        return _memory is not null ? GetDatabaseMemoryFist(id) ?? await _entity.FindAsync(id) ?? null : null;
-    }
-
-    public async Task<IEnumerable<TEntity>> Get()
-        =>  await Task.FromResult(_memory is not null ? GetDatabaseMemoryFist() ?? _entity.AsEnumerable() : null);
-
-    public async Task<TEntity> Create(TEntity entity)
-    {
-        entity.UpdatedAt = entity.CreatedAt = DateTime.UtcNow;
-        EntityEntry<TEntity> result = await _entity.AddAsync(entity);
-        await _context.SaveChangesAsync();
-        if (result.Entity is not null)
-        {
-            await UpdateEntityInDatabaseMemory();
-            return result.Entity;
-        }
-        return null;
-    }
-
-    public async Task<TEntity> Update(TEntity entity)
-    {
-        entity.UpdatedAt = DateTime.UtcNow;
-        EntityEntry<TEntity> result = _entity.Update(entity);
-        if (result.Entity is not null)
-        {
-            await UpdateEntityInDatabaseMemory();
-            return result.Entity;
-        }
-        return null;
-    }
-
-    public async Task<bool> Delete(TEntity entity)
-    {
-        EntityEntry<TEntity> result = _entity.Remove(entity);
-        await _context.SaveChangesAsync();
-        if (result.Entity is not null)
-        {
-            await UpdateEntityInDatabaseMemory();
-            return true;
-        }
-        return false;
-    }
-
-    public async Task<int> Count()
-        => _memory is not null ? await Task.FromResult(GetDatabaseMemoryFist().Count()) : await _entity.CountAsync();
-
-    public async Task<IEnumerable<TEntity>> Paged(int page, int size)
-        => await _entity.Skip((page - 1) * size).Take(size).ToListAsync()
-            ?? new List<TEntity>().AsEnumerable();
 }
