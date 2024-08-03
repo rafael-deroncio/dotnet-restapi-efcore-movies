@@ -122,12 +122,11 @@ public class BaseRepository<TEntity>(DbContext context, IDatabaseMemory memory =
 
     private static Expression<Func<TEntity, bool>> GetLambda(object id, PropertyInfo entityIdProperty)
     {
-        var parameter = Expression.Parameter(typeof(TEntity), "x");
-        var propertyAccess = Expression.MakeMemberAccess(parameter, entityIdProperty);
-        var constant = Expression.Constant(id);
-        var equality = Expression.Equal(propertyAccess, constant);
-        var lambda = Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
-        return lambda;
+        ParameterExpression parameter = Expression.Parameter(typeof(TEntity), "x");
+        MemberExpression propertyAccess = Expression.MakeMemberAccess(parameter, entityIdProperty);
+        ConstantExpression constant = Expression.Constant(id);
+        BinaryExpression equality = Expression.Equal(propertyAccess, constant);
+        return Expression.Lambda<Func<TEntity, bool>>(equality, parameter);
     }
 
 }

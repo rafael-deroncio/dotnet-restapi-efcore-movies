@@ -39,7 +39,7 @@ public record MovieEntity : EntityBase
 
     [StringLength(50)]
     [Column("movie_status")]
-    public string MovieStatus { get; set; }
+    public string Status { get; set; }
 
     [StringLength(255)]
     [Column("tagline")]
