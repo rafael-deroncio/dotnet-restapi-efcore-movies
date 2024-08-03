@@ -38,39 +38,46 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IBaseRepository<CountryEntity>, BaseRepository<CountryEntity>>(
             provider => new BaseRepository<CountryEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<DepartmentEntity>, BaseRepository<DepartmentEntity>>(
             provider => new BaseRepository<DepartmentEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<GenreEntity>, BaseRepository<GenreEntity>>(
             provider => new BaseRepository<GenreEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<GenderEntity>, BaseRepository<GenderEntity>>(
             provider => new BaseRepository<GenderEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<KeywordEntity>, BaseRepository<KeywordEntity>>(
             provider => new BaseRepository<KeywordEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<ProductionCompanyEntity>, BaseRepository<ProductionCompanyEntity>>(
             provider => new BaseRepository<ProductionCompanyEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
 
         services.AddSingleton<IBaseRepository<PersonEntity>, BaseRepository<PersonEntity>>(
             provider => new BaseRepository<PersonEntity>(
-                provider.GetService<MovieManiaContext>()
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
             ));
-            
+
         return services;
     }
 
