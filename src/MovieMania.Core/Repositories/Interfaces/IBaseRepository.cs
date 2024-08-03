@@ -6,7 +6,7 @@ namespace MovieMania.Core.Repositories.Interfaces;
 /// Interface for basic repository operations.
 /// </summary>
 /// <typeparam name="TEntity">The type of the entity.</typeparam>
-public interface IBaseRepository<TEntity> where TEntity : EntityBase 
+public interface IBaseRepository<TEntity> where TEntity : EntityBase
 {
     /// <summary>
     /// Retrieves an entity.
@@ -14,6 +14,14 @@ public interface IBaseRepository<TEntity> where TEntity : EntityBase
     /// <param name="entity">The entity to retrieve.</param>
     /// <returns>A task representing the asynchronous operation. The task result contains the retrieved entity.</returns>
     Task<TEntity> Get(TEntity entity);
+
+    /// <summary>
+    /// Retrieves all entities.
+    /// </summary>
+    /// <returns>
+    /// A task representing the asynchronous operation. The task result contains an enumerable collection of entities.
+    /// </returns>
+    Task<IEnumerable<TEntity>> Get();
 
     /// <summary>
     /// Creates a new entity.
