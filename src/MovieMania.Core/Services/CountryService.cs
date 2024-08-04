@@ -66,7 +66,7 @@ public class CountryService(
         {
             CountryEntity entity = await _repository.Get(new() { CountryId = id })
                 ?? throw new EntityNotFoundException("Country Not Found", $"Country with id {id} not exists.");
-            
+
             return _mapper.Map<CountryResponse>(entity);
         }
         catch (BaseException) { throw; }

@@ -66,8 +66,9 @@ public class PersonService(
         {
             PersonEntity entity = await _repository.Get(new() { PersonId = id })
                 ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
-            
-            return _mapper.Map<PersonResponse>(entity);        }
+
+            return _mapper.Map<PersonResponse>(entity);
+        }
         catch (BaseException) { throw; }
         catch (Exception exception)
         {

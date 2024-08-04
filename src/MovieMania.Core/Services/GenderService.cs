@@ -40,7 +40,7 @@ public class GenderService(
                 message: $"Unable to create a new record for gender at this time. Please try again.");
         }
     }
-    
+
     public async Task<bool> DeleteGender(int id)
     {
         try
