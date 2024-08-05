@@ -22,7 +22,6 @@ public record PaginationRequest
         set => _page = value <= 0 ? 1 : value;
     }
 
-
     /// <summary>
     /// Gets or sets the size of the page (number of items per page) for the paginated request.
     /// This property maps to the JSON property 'size'.
@@ -31,7 +30,7 @@ public record PaginationRequest
     public int Size
     {
         get => _size;
-        set => _size =  value <= 0 ? 1 :
+        set => _size = value <= 0 ? 1 :
                         value > 10 ? 10 : value;
     }
 }
