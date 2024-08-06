@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MovieMania.Core.Services.Interfaces;
+using MovieMania.Domain.Requests;
+using MovieMania.Domain.Responses;
 
 namespace MovieMania.API.Controllers;
 
@@ -7,30 +10,46 @@ namespace MovieMania.API.Controllers;
 [ApiVersion("1.0")]
 [ApiController]
 [Authorize]
-public class MovieController : Controller
+public class MovieController(IMovieService service) : Controller
 {
+    private readonly IMovieService _service = service;
+
     [HttpGet("paged")]
+    [ProducesResponseType(typeof(PaginationResponse<MovieResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetMovies([FromQuery] int page, [FromQuery] int size)
-        => Ok(await Task.FromResult(new { page, size }));
+    public async Task<IActionResult> GetCountries([FromQuery] PaginationRequest request, MovieFilterRequest filter)
+        => Ok(await _service.GetPagedMovies(request, filter));
 
     [HttpGet("{id:int}")]
+    [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetMovie([FromRoute] int id)
-        => Ok(await Task.FromResult(new { id }));
+    public async Task<IActionResult> GetMovie([FromRoute] int id, [FromQuery] MovieFilterRequest filter)
+        => Ok(await _service.GetMovieById(id, filter));
 
-    [HttpPost()]
+    [HttpPost]
+    [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PostMovie([FromBody] object request)
-        => Ok(await Task.FromResult(request));
+    public async Task<IActionResult> PostMovie([FromBody] MovieRequest request)
+        => Ok(await _service.CreateMovie(request));
 
     [HttpPut("{id:int}")]
+    [ProducesResponseType(typeof(MovieResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
-    public async Task<IActionResult> PutMovie([FromRoute] int id, [FromBody] object request)
-        => Ok(await Task.FromResult(new { id, request }));
+    public async Task<IActionResult> PutMovie([FromRoute] int id, [FromBody] MovieRequest request)
+        => Ok(await _service.UpdateMovie(id, request));
 
     [HttpDelete("{id:int}")]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ExceptionResponse), StatusCodes.Status422UnprocessableEntity)]
     [AllowAnonymous]
     public async Task<IActionResult> DeleteMovie([FromRoute] int id)
-        => Ok(await Task.FromResult(new { id }));
+        => Ok(await _service.DeleteMovie(id));
 }
