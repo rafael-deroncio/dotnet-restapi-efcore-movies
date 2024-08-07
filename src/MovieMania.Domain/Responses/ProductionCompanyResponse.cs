@@ -6,8 +6,8 @@ public record ProductionCompanyResponse
 {
     public int Id { get; set; }
 
-    [JsonPropertyName("company")]
-    public string Company { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 
     [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }
