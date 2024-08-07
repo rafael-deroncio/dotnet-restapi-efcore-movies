@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MovieMania.Core.Contexts.Configurations;
 using MovieMania.Core.Contexts.Entities;
 
 namespace MovieMania.Core.Contexts;
@@ -27,6 +28,13 @@ public class MovieManiaContext(DbContextOptions<MovieManiaContext> options) : Db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MovieManiaContext).Assembly);
+        
+        modelBuilder.ApplyConfiguration(new ProductionCountryEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieLanguageEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieGenreEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieKeywordEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieCompanyEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieCastEntityConfiguration());
+        modelBuilder.ApplyConfiguration(new MovieCrewEntityConfiguration());
     }
 }
