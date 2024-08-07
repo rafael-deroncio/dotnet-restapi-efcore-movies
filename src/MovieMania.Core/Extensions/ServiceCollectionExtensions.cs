@@ -20,6 +20,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IKeywordService, KeywordService>();
         services.AddSingleton<IProductionCompanyService, ProductionCompanyService>();
         services.AddSingleton<IPersonService, PersonService>();
+        services.AddSingleton<ILanguageService, LanguageService>();
+        services.AddSingleton<IMovieService, MovieService>();
         services.AddSingleton<IPaginationService, PaginationService>();
 
         // Service URI
@@ -74,6 +76,18 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IBaseRepository<PersonEntity>, BaseRepository<PersonEntity>>(
             provider => new BaseRepository<PersonEntity>(
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
+            ));
+
+        services.AddSingleton<IBaseRepository<LanguageEntity>, BaseRepository<LanguageEntity>>(
+            provider => new BaseRepository<LanguageEntity>(
+                provider.GetService<MovieManiaContext>(),
+                provider.GetService<IDatabaseMemory>() ?? null
+            ));
+
+        services.AddSingleton<IBaseRepository<LanguageRoleEntity>, BaseRepository<LanguageRoleEntity>>(
+            provider => new BaseRepository<LanguageRoleEntity>(
                 provider.GetService<MovieManiaContext>(),
                 provider.GetService<IDatabaseMemory>() ?? null
             ));
