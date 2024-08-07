@@ -13,6 +13,6 @@ public record ProductionCompanyRequest
     /// </summary>
     [Required(ErrorMessage = "The company name is required.")]
     [StringLength(100, ErrorMessage = "The company name must be at most 100 characters long.")]
-    [JsonPropertyName("company")]
-    public string Company { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using MovieMania.Domain.DTOs;
 
 namespace MovieMania.Domain.Requests;
 
@@ -103,4 +104,46 @@ public class MovieRequest
     [Range(0, int.MaxValue, ErrorMessage = "The votes count must be a positive value.")]
     [JsonPropertyName("votes_count")]
     public int VotesCount { get; set; }
+
+    /// <summary>
+    /// Gets or sets the production countries of the movie.
+    /// </summary>
+    [JsonPropertyName("production_countries")]
+    public List<MovieProductionCountry> ProductionCountries { get; set; }
+
+    /// <summary>
+    /// Gets or sets the languages of the movie.
+    /// </summary>
+    [JsonPropertyName("languages")]
+    public List<MovieLanguage> Languages { get; set; }
+
+    /// <summary>
+    /// Gets or sets the genres of the movie.
+    /// </summary>
+    [JsonPropertyName("genres")]
+    public List<MovieGenre> Genres { get; set; }
+
+    /// <summary>
+    /// Gets or sets the keywords associated with the movie.
+    /// </summary>
+    [JsonPropertyName("keywords")]
+    public List<MovieKeyword> Keywords { get; set; }
+
+    /// <summary>
+    /// Gets or sets the production companies of the movie.
+    /// </summary>
+    [JsonPropertyName("companies")]
+    public List<MovieCompanie> Companies { get; set; }
+
+    /// <summary>
+    /// Gets or sets the cast members of the movie.
+    /// </summary>
+    [JsonPropertyName("casts")]
+    public List<MovieCast> Casts { get; set; }
+
+    /// <summary>
+    /// Gets or sets the crew members of the movie.
+    /// </summary>
+    [JsonPropertyName("crews")]
+    public List<MovieCrew> Crews { get; set; }
 }
