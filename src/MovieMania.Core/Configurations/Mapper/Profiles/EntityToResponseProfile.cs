@@ -52,5 +52,10 @@ public class EntityToResponseProfile : Profile
             .ForMember(dest => dest.Id,
                 opts => opts.MapFrom(src => src.PersonId))
             .ReverseMap();
+
+        CreateMap<MovieEntity, MovieResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.MovieId))
+            .ReverseMap();
     }
 }

@@ -279,5 +279,4 @@ public static class DatabaseInitializer
             await context.SaveChangesAsync();
         }
     }
-
 }
