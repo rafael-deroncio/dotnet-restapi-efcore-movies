@@ -24,7 +24,7 @@ public class ProductionCompanyService(
     {
         try
         {
-            if ((await _repository.Get()).Where(x => x.Company == request.Company).Any())
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on create production company entity", "ProductionCompany alredy registred with name or iso code");
 
             ProductionCompanyEntity entity = _mapper.Map<ProductionCompanyEntity>(request);
@@ -112,7 +112,7 @@ public class ProductionCompanyService(
             ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
                 ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
 
-            entity.Company = request.Company.Trim();
+            entity.Name = request.Name.Trim();
 
             return _mapper.Map<ProductionCompanyResponse>(await _repository.Update(entity));
         }
