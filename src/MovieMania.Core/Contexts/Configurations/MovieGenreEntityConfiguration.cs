@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieMania.Core.Contexts.Entities;
 
@@ -20,3 +20,4 @@ public class MovieGenreEntityConfiguration : IEntityTypeConfiguration<MovieGenre
             .HasForeignKey(mg => mg.GenreId);
     }
 }
+

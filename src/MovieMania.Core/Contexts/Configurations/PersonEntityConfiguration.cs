@@ -8,7 +8,7 @@ public class PersonEntityConfiguration : IEntityTypeConfiguration<PersonEntity>
 {
     public void Configure(EntityTypeBuilder<PersonEntity> builder)
     {
-        builder.ToTable("people");
+        builder.ToTable("persons");
 
         builder.HasMany(p => p.MovieCasts)
             .WithOne(mc => mc.Person)

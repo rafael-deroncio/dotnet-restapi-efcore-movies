@@ -12,8 +12,8 @@ public record ProductionCompanyEntity : EntityBase
 
     [Required]
     [StringLength(100)]
-    [Column("company")]
-    public string Company { get; set; }
+    [Column("name")]
+    public string Name { get; set; }
 
     public ICollection<MovieCompanyEntity> MovieCompanies { get; set; }
 }

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MovieMania.Core.Contexts.Entities;
 
@@ -24,3 +24,4 @@ public class MovieLanguageEntityConfiguration : IEntityTypeConfiguration<MovieLa
             .HasForeignKey(ml => ml.LanguageRoleId);
     }
 }
+
