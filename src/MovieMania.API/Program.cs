@@ -62,7 +62,7 @@ app.UseHsts();
 
 app.UseHttpsRedirection();
 
-app.InitializeDatabase();
+// app.InitializeDatabase();
 
 app.LoadDatabaseMomory();
 
