@@ -2,7 +2,7 @@
 
 namespace MovieMania.Domain.DTOs;
 
-public record LanguageRole : LanguageRoleRequest
+public record MovieCompanyRequest
 {
     public int Id { get; set; }
 }

@@ -1,8 +1,8 @@
 ﻿using MovieMania.Domain.Requests;
 
-namespace MovieMania.Domain.DTOs;
+namespace MovieMania.Domain.Requests;
 
-public record Language : LanguageRequest
+public record MovieKeywordRequest
 {
     public int Id { get; set; }
 }

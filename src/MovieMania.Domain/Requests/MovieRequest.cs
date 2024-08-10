@@ -109,41 +109,41 @@ public class MovieRequest
     /// Gets or sets the production countries of the movie.
     /// </summary>
     [JsonPropertyName("production_countries")]
-    public List<MovieProductionCountry> ProductionCountries { get; set; }
+    public List<MovieProductionCountryRequest> ProductionCountries { get; set; }
 
     /// <summary>
     /// Gets or sets the languages of the movie.
     /// </summary>
     [JsonPropertyName("languages")]
-    public List<MovieLanguage> Languages { get; set; }
+    public List<MovieLanguageRequest> Languages { get; set; }
 
     /// <summary>
     /// Gets or sets the genres of the movie.
     /// </summary>
     [JsonPropertyName("genres")]
-    public List<MovieGenre> Genres { get; set; }
+    public List<MovieGenreRequest> Genres { get; set; }
 
     /// <summary>
     /// Gets or sets the keywords associated with the movie.
     /// </summary>
     [JsonPropertyName("keywords")]
-    public List<MovieKeyword> Keywords { get; set; }
+    public List<MovieKeywordRequest> Keywords { get; set; }
 
     /// <summary>
     /// Gets or sets the production companies of the movie.
     /// </summary>
     [JsonPropertyName("companies")]
-    public List<MovieCompanie> Companies { get; set; }
+    public List<MovieCompanyRequest> Companies { get; set; }
 
     /// <summary>
     /// Gets or sets the cast members of the movie.
     /// </summary>
     [JsonPropertyName("casts")]
-    public List<MovieCast> Casts { get; set; }
+    public List<MovieCastRequest> Casts { get; set; }
 
     /// <summary>
     /// Gets or sets the crew members of the movie.
     /// </summary>
     [JsonPropertyName("crews")]
-    public List<MovieCrew> Crews { get; set; }
+    public List<MovieCrewRequest> Crews { get; set; }
 }

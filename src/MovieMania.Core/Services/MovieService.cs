@@ -58,11 +58,11 @@ public class MovieService(
                 {
                     entity.ProductionCountries = entity.ProductionCountries.Select(x =>
                     {
-                        _ = _countryService.GetCountryById(x.CountryId).GetAwaiter().GetResult();
+                        _ = _countryService.GetCountryById(x.CountryId).Result;
                         return new ProductionCountryEntity()
                         {
                             CountryId = x.CountryId,
-                            Country = _context.Countries.FindAsync(x.CountryId).GetAwaiter().GetResult(),
+                            Country = _context.Countries.FindAsync(x.CountryId).Result,
                         };
                     }
                     ).ToArray();
@@ -82,15 +82,15 @@ public class MovieService(
                 {
                     entity.Languages = entity.Languages.Select(x =>
                     {
-                        _ = _languageService.GetLanguageById(x.LanguageId).GetAwaiter().GetResult();
-                        _ = _languageService.GetLanguageRoleById(x.LanguageId).GetAwaiter().GetResult();
+                        _ = _languageService.GetLanguageById(x.LanguageId).Result;
+                        _ = _languageService.GetLanguageRoleById(x.LanguageId).Result;
                         return new MovieLanguageEntity()
                         {
                             LanguageId = x.LanguageId,
-                            Language = _context.Languages.FindAsync(x.LanguageId).GetAwaiter().GetResult(),
+                            Language = _context.Languages.FindAsync(x.LanguageId).Result,
 
                             LanguageRoleId = x.LanguageRoleId,
-                            LanguageRole = _context.LanguageRoles.FindAsync(x.LanguageRoleId).GetAwaiter().GetResult(),
+                            LanguageRole = _context.LanguageRoles.FindAsync(x.LanguageRoleId).Result,
                         };
                     }
                     ).ToArray();
@@ -109,11 +109,11 @@ public class MovieService(
                 {
                     entity.Genres = entity.Genres.Select(x =>
                     {
-                        _ = _genreService.GetGenreById(x.GenreId).GetAwaiter().GetResult();
+                        _ = _genreService.GetGenreById(x.GenreId).Result;
                         return new MovieGenreEntity()
                         {
                             GenreId = x.GenreId,
-                            Genre = _context.Genres.FindAsync(x.GenreId).GetAwaiter().GetResult()
+                            Genre = _context.Genres.FindAsync(x.GenreId).Result
                         };
                     }
                     ).ToArray();
@@ -132,11 +132,11 @@ public class MovieService(
                 {
                     entity.Keywords = entity.Keywords.Select(x =>
                     {
-                        _ = _keywordService.GetKeywordById(x.KeywordId).GetAwaiter().GetResult();
+                        _ = _keywordService.GetKeywordById(x.KeywordId).Result;
                         return new MovieKeywordEntity()
                         {
                             KeywordId = x.KeywordId,
-                            Keyword = _context.Keywords.FindAsync(x.KeywordId).GetAwaiter().GetResult()
+                            Keyword = _context.Keywords.FindAsync(x.KeywordId).Result
                         };
                     }
                     ).ToArray();
@@ -155,11 +155,11 @@ public class MovieService(
                 {
                     entity.Companies = entity.Companies.Select(x =>
                     {
-                        _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId).GetAwaiter().GetResult();
+                        _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId).Result;
                         return new MovieCompanyEntity()
                         {
                             CompanyId = x.CompanyId,
-                            ProductionCompany = _context.ProductionCompanies.FindAsync(x.CompanyId).GetAwaiter().GetResult()
+                            ProductionCompany = _context.ProductionCompanies.FindAsync(x.CompanyId).Result
                         };
                     }
                     ).ToArray();
@@ -178,15 +178,15 @@ public class MovieService(
                 {
                     entity.Casts = entity.Casts.Select(x =>
                     {
-                        _ = _genderService.GetGenderById(x.GenderId).GetAwaiter().GetResult();
-                        _ = _personService.GetPersonById(x.PersonId).GetAwaiter().GetResult();
+                        _ = _genderService.GetGenderById(x.GenderId).Result;
+                        _ = _personService.GetPersonById(x.PersonId).Result;
                         return new MovieCastEntity()
                         {
                             GenderId = x.GenderId,
-                            Gender = _context.Genders.FindAsync(x.GenderId).GetAwaiter().GetResult(),
+                            Gender = _context.Genders.FindAsync(x.GenderId).Result,
 
                             PersonId = x.PersonId,
-                            Person = _context.Persons.FindAsync(x.PersonId).GetAwaiter().GetResult(),
+                            Person = _context.Persons.FindAsync(x.PersonId).Result,
 
                             CharacterName = x.CharacterName,
                             CastOrder = x.CastOrder
@@ -208,15 +208,15 @@ public class MovieService(
                 {
                     entity.Crews = entity.Crews.Select(x =>
                     {
-                        _ = _departmentService.GetDepartmentById(x.DepartmentId).GetAwaiter().GetResult();
-                        _ = _personService.GetPersonById(x.PersonId).GetAwaiter().GetResult();
+                        _ = _departmentService.GetDepartmentById(x.DepartmentId).Result;
+                        _ = _personService.GetPersonById(x.PersonId).Result;
                         return new MovieCrewEntity()
                         {
                             DepartmentId = x.DepartmentId,
-                            Department = _context.Departments.FindAsync(x.DepartmentId).GetAwaiter().GetResult(),
+                            Department = _context.Departments.FindAsync(x.DepartmentId).Result,
 
                             PersonId = x.PersonId,
-                            Person = _context.Persons.FindAsync(x.PersonId).GetAwaiter().GetResult(),
+                            Person = _context.Persons.FindAsync(x.PersonId).Result,
 
                             Job = x.Job
                         };

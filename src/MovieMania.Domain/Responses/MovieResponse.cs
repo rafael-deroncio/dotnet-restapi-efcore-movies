@@ -5,7 +5,7 @@ namespace MovieMania.Domain.Responses;
 public record MovieResponse
 {
     [JsonPropertyName("id")]
-    public int MovieId { get; set; }
+    public int Id { get; set; }
 
     [JsonPropertyName("title")]
     public string Title { get; set; }
