@@ -26,7 +26,8 @@ public record MovieEntity : EntityBase
     [Column("popularity")]
     public float Popularity { get; set; }
 
-    [Column("release_date")]
+    [Column("release_date", TypeName = "Date")]
+    [DataType(DataType.Date)]
     public DateTime ReleaseDate { get; set; }
 
     [Column("revenue")]
