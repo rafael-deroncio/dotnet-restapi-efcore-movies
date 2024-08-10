@@ -5,11 +5,13 @@ namespace MovieMania.Core.Configurations.DTOs;
 
 public record EntityBase
 {
-    [Column("created_at")]
+    [Column("created_at", TypeName = "Date")]
+    [DataType(DataType.Date)]
     [Required]
     public DateTime CreatedAt { get; set; }
 
-    [Column("updated_at")]
+    [Column("updated_at", TypeName = "Date")]
+    [DataType(DataType.Date)]
     [Required]
     public DateTime UpdatedAt { get; set; }
 }
