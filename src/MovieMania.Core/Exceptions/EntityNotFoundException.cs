@@ -11,4 +11,11 @@ public class EntityNotFoundException : BaseException
         Code = HttpStatusCode.NotFound;
         Type =  ResponseType.Error;
     }
+
+    public EntityNotFoundException(string title, string message) : base(title, message, HttpStatusCode.NotFound)
+    {
+        Title = title;
+        Code = HttpStatusCode.NotFound;
+        Type =  ResponseType.Error;
+    }
 }

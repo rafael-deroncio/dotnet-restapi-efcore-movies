@@ -20,11 +20,13 @@ public class GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<Glob
         }
         catch (BaseException ex)
         {
+            string[] errors = ex.Message.Split(", ");
+
             ExceptionResponse response = new()
             {
                 Title = ex.Title,
                 Type = ex.Type.GetDescription(),
-                Messages = [ex.Message]
+                Messages = errors.Any() ? errors: [ex.Message]
             };
 
             string json = JsonSerializer.Serialize(response);

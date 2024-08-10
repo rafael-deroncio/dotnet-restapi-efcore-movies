@@ -9,6 +9,15 @@ public class BaseException : Exception
     public ResponseType Type { get; set; }
     public HttpStatusCode Code { get; set; }
 
+    public BaseException(string title, string message, HttpStatusCode code = HttpStatusCode.Continue)
+        : base(message)
+    {
+        Title = title;
+        Code = code;
+        Type =  (int)code >= 500 ? ResponseType.Fatal :
+                (int)code >= 400 ? ResponseType.Warning : ResponseType.Error;
+    }
+
     public BaseException(string title, string[] messages, HttpStatusCode code = HttpStatusCode.Continue)
         : base(string.Join(", ", messages.Select(msg => $"Error: {msg}")))
     {

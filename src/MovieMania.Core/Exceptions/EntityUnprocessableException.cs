@@ -11,4 +11,11 @@ public class EntityUnprocessableException : BaseException
         Code = HttpStatusCode.UnprocessableEntity;
         Type =  ResponseType.Error;
     }
+
+    public EntityUnprocessableException(string title, string message) : base(title, message, HttpStatusCode.UnprocessableEntity)
+    {
+        Title = title;
+        Code = HttpStatusCode.UnprocessableEntity;
+        Type =  ResponseType.Error;
+    }
 }
