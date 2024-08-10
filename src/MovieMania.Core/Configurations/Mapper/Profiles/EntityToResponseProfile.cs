@@ -58,6 +58,55 @@ public class EntityToResponseProfile : Profile
                 opts => opts.MapFrom(src => src.MovieId))
             .ReverseMap();
 
-            
+        CreateMap<ProductionCountryEntity, ProductionCountryResponse>()
+            .ForMember(dest => dest.Country,
+                opts => opts.MapFrom(src => src.Country))
+            .ReverseMap();
+
+        CreateMap<MovieLanguageEntity, MovieLanguageResponse>()
+            .ForMember(dest => dest.Language,
+                opts => opts.MapFrom(src => src.Language))
+            .ForMember(dest => dest.LanguageRole,
+                opts => opts.MapFrom(src => src.LanguageRole))
+            .ReverseMap();
+
+        CreateMap<MovieGenreEntity, GenreResponse>()
+            .ForMember(dest => dest.Name,
+                opts => opts.MapFrom(src => src.Genre.Name))
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.Genre.GenreId))
+            .ReverseMap();
+
+        CreateMap<MovieKeywordEntity, KeywordResponse>()
+            .ForPath(dest => dest.Id,
+                opts => opts.MapFrom(src => src.Keyword.KeywordId))
+            .ForPath(dest => dest.Keyword,
+                opts => opts.MapFrom(src => src.Keyword.Keyword))
+            .ForPath(dest => dest.CreatedAt,
+                opts => opts.MapFrom(src => src.Keyword.CreatedAt))
+            .ReverseMap();
+
+        CreateMap<MovieCompanyEntity, ProductionCompanyResponse>()
+            .ForPath(dest => dest.Name,
+                opts => opts.MapFrom(src => src.ProductionCompany.Name))
+            .ForPath(dest => dest.Id,
+                opts => opts.MapFrom(src => src.ProductionCompany.CompanyId))
+            .ForPath(dest => dest.CreatedAt,
+                opts => opts.MapFrom(src => src.ProductionCompany.CreatedAt))
+            .ReverseMap();
+
+        CreateMap<MovieCastEntity, CastResponse>()
+            .ForMember(dest => dest.Gender,
+                opts => opts.MapFrom(src => src.Gender))
+            .ForMember(dest => dest.Person,
+                opts => opts.MapFrom(src => src.Person))
+            .ReverseMap();
+
+        CreateMap<MovieCrewEntity, CrewResponse>()
+            .ForMember(dest => dest.Person,
+                opts => opts.MapFrom(src => src.Person))
+            .ForMember(dest => dest.Department,
+                opts => opts.MapFrom(src => src.Department))
+            .ReverseMap();
     }
 }
