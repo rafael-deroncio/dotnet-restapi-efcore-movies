@@ -5,7 +5,7 @@ namespace MovieMania.Core.Exceptions;
 
 public class EntityBadRequestException : BaseException
 {
-    public EntityBadRequestException(string title, string message) : base(title, message, HttpStatusCode.NotFound)
+    public EntityBadRequestException(string title, string[] messages) : base(title, messages, HttpStatusCode.NotFound)
     {
         Title = title;
         Code = HttpStatusCode.BadRequest;

@@ -5,7 +5,7 @@ namespace MovieMania.Core.Exceptions;
 
 public class EntityNotFoundException : BaseException
 {
-    public EntityNotFoundException(string title, string message) : base(title, message, HttpStatusCode.NotFound)
+    public EntityNotFoundException(string title, string[] messages) : base(title, messages, HttpStatusCode.NotFound)
     {
         Title = title;
         Code = HttpStatusCode.NotFound;
