@@ -48,187 +48,19 @@ public class MovieService(
                 throw new EntityBadRequestException("Error on create movie entity", "Movie already registered with the same title.");
 
             MovieEntity entity = _mapper.Map<MovieEntity>(request);
+            List<string> errors = [];
 
-            string[] errors = [];
+            OnCreateMovieProccessProductionCountries(ref entity, ref errors);
+            OnCreateMovieProccessLanguages(ref entity, ref errors);
+            OnCreateMovieProccessGenres(ref entity, ref errors);
+            OnCreateMovieProccessKeywords(ref entity, ref errors);
+            OnCreateMovieProccessCompanies(ref entity, ref errors);
+            OnCreateMovieProccessCasts(ref entity, ref errors);
+            OnCreateMovieProccessCrews(ref entity, ref errors);
 
-            // Country
-            if (entity.ProductionCountries != null && entity.ProductionCountries.Any())
-            {
-                try
-                {
-                    entity.ProductionCountries = entity.ProductionCountries.Select(x =>
-                    {
-                        _ = _countryService.GetCountryById(x.CountryId).Result;
-                        return new ProductionCountryEntity()
-                        {
-                            CountryId = x.CountryId,
-                            Country = _context.Countries.FindAsync(x.CountryId).Result,
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Language
-            if (entity.Languages != null && entity.Languages.Any())
-            {
-                // Language
-                try
-                {
-                    entity.Languages = entity.Languages.Select(x =>
-                    {
-                        _ = _languageService.GetLanguageById(x.LanguageId).Result;
-                        _ = _languageService.GetLanguageRoleById(x.LanguageId).Result;
-                        return new MovieLanguageEntity()
-                        {
-                            LanguageId = x.LanguageId,
-                            Language = _context.Languages.FindAsync(x.LanguageId).Result,
-
-                            LanguageRoleId = x.LanguageRoleId,
-                            LanguageRole = _context.LanguageRoles.FindAsync(x.LanguageRoleId).Result,
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Genres
-            if (entity.Genres != null && entity.Genres.Any())
-            {
-                try
-                {
-                    entity.Genres = entity.Genres.Select(x =>
-                    {
-                        _ = _genreService.GetGenreById(x.GenreId).Result;
-                        return new MovieGenreEntity()
-                        {
-                            GenreId = x.GenreId,
-                            Genre = _context.Genres.FindAsync(x.GenreId).Result
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Keywords
-            if (entity.Keywords != null && entity.Keywords.Any())
-            {
-                try
-                {
-                    entity.Keywords = entity.Keywords.Select(x =>
-                    {
-                        _ = _keywordService.GetKeywordById(x.KeywordId).Result;
-                        return new MovieKeywordEntity()
-                        {
-                            KeywordId = x.KeywordId,
-                            Keyword = _context.Keywords.FindAsync(x.KeywordId).Result
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Companies
-            if (entity.Companies != null && entity.Companies.Any())
-            {
-                try
-                {
-                    entity.Companies = entity.Companies.Select(x =>
-                    {
-                        _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId).Result;
-                        return new MovieCompanyEntity()
-                        {
-                            CompanyId = x.CompanyId,
-                            ProductionCompany = _context.ProductionCompanies.FindAsync(x.CompanyId).Result
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Language
-            if (entity.Casts != null && entity.Casts.Any())
-            {
-                try
-                {
-                    entity.Casts = entity.Casts.Select(x =>
-                    {
-                        _ = _genderService.GetGenderById(x.GenderId).Result;
-                        _ = _personService.GetPersonById(x.PersonId).Result;
-                        return new MovieCastEntity()
-                        {
-                            GenderId = x.GenderId,
-                            Gender = _context.Genders.FindAsync(x.GenderId).Result,
-
-                            PersonId = x.PersonId,
-                            Person = _context.Persons.FindAsync(x.PersonId).Result,
-
-                            CharacterName = x.CharacterName,
-                            CastOrder = x.CastOrder
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
-
-            // Person
-            if (entity.Crews != null && entity.Crews.Any())
-            {
-                try
-                {
-                    entity.Crews = entity.Crews.Select(x =>
-                    {
-                        _ = _departmentService.GetDepartmentById(x.DepartmentId).Result;
-                        _ = _personService.GetPersonById(x.PersonId).Result;
-                        return new MovieCrewEntity()
-                        {
-                            DepartmentId = x.DepartmentId,
-                            Department = _context.Departments.FindAsync(x.DepartmentId).Result,
-
-                            PersonId = x.PersonId,
-                            Person = _context.Persons.FindAsync(x.PersonId).Result,
-
-                            Job = x.Job
-                        };
-                    }
-                    ).ToArray();
-                }
-                catch (BaseException exception)
-                {
-                    _ = errors.Append(exception.Message);
-                }
-                catch (Exception) { throw; }
-            }
+            // Errors
+            if (errors.Any())
+                throw new EntityBadRequestException(title: "Movie Entity Error", messages: errors.ToArray());
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
@@ -237,7 +69,9 @@ public class MovieService(
             await _entity.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<MovieResponse>(entity);
+            MovieResponse response = _mapper.Map<MovieResponse>(entity);
+
+            return response;
         }
         catch (BaseException)
         {
@@ -393,5 +227,217 @@ public class MovieService(
                 title: "Movie Entity Error",
                 message: $"Unable to update movie with id {id} at this time. Please try again.");
         }
+    }
+
+    private void OnCreateMovieProccessProductionCountries(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Country
+        if (entity.ProductionCountries != null && entity.ProductionCountries.Any())
+        {
+            try
+            {
+                entity.ProductionCountries = entity.ProductionCountries.Select(x =>
+                {
+                    _ = _countryService.GetCountryById(x.CountryId).Result;
+                    return new ProductionCountryEntity()
+                    {
+                        CountryId = x.CountryId,
+                        Country = _context.Countries.FindAsync(x.CountryId).Result,
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+    }
+
+    private void OnCreateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Language
+        if (entity.Languages != null && entity.Languages.Any())
+        {
+            // Language
+            try
+            {
+                entity.Languages = entity.Languages.Select(x =>
+                {
+                    _ = _languageService.GetLanguageById(x.LanguageId).Result;
+                    _ = _languageService.GetLanguageRoleById(x.LanguageId).Result;
+                    return new MovieLanguageEntity()
+                    {
+                        LanguageId = x.LanguageId,
+                        Language = _context.Languages.FindAsync(x.LanguageId).Result,
+
+                        LanguageRoleId = x.LanguageRoleId,
+                        LanguageRole = _context.LanguageRoles.FindAsync(x.LanguageRoleId).Result,
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+    }
+
+    private void OnCreateMovieProccessGenres(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Genres
+        if (entity.Genres != null && entity.Genres.Any())
+        {
+            try
+            {
+                entity.Genres = entity.Genres.Select(x =>
+                {
+                    _ = _genreService.GetGenreById(x.GenreId).Result;
+                    return new MovieGenreEntity()
+                    {
+                        GenreId = x.GenreId,
+                        Genre = _context.Genres.FindAsync(x.GenreId).Result
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+
+    }
+
+    private void OnCreateMovieProccessKeywords(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Keywords
+        if (entity.Keywords != null && entity.Keywords.Any())
+        {
+            try
+            {
+                entity.Keywords = entity.Keywords.Select(x =>
+                {
+                    _ = _keywordService.GetKeywordById(x.KeywordId).Result;
+                    return new MovieKeywordEntity()
+                    {
+                        KeywordId = x.KeywordId,
+                        Keyword = _context.Keywords.FindAsync(x.KeywordId).Result
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+
+    }
+
+    private void OnCreateMovieProccessCompanies(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Companies
+        if (entity.Companies != null && entity.Companies.Any())
+        {
+            try
+            {
+                entity.Companies = entity.Companies.Select(x =>
+                {
+                    _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId).Result;
+                    return new MovieCompanyEntity()
+                    {
+                        CompanyId = x.CompanyId,
+                        ProductionCompany = _context.ProductionCompanies.FindAsync(x.CompanyId).Result
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+
+    }
+
+    private void OnCreateMovieProccessCasts(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Language
+        if (entity.Casts != null && entity.Casts.Any())
+        {
+            try
+            {
+                entity.Casts = entity.Casts.Select(x =>
+                {
+                    _ = _genderService.GetGenderById(x.GenderId).Result;
+                    _ = _personService.GetPersonById(x.PersonId).Result;
+                    return new MovieCastEntity()
+                    {
+                        GenderId = x.GenderId,
+                        Gender = _context.Genders.FindAsync(x.GenderId).Result,
+
+                        PersonId = x.PersonId,
+                        Person = _context.Persons.FindAsync(x.PersonId).Result,
+
+                        CharacterName = x.CharacterName,
+                        CastOrder = x.CastOrder
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+
+    }
+
+    private void OnCreateMovieProccessCrews(ref MovieEntity entity, ref List<string> errors)
+    {
+        // Person
+        if (entity.Crews != null && entity.Crews.Any())
+        {
+            try
+            {
+                entity.Crews = entity.Crews.Select(x =>
+                {
+                    _ = _departmentService.GetDepartmentById(x.DepartmentId).Result;
+                    _ = _personService.GetPersonById(x.PersonId).Result;
+                    return new MovieCrewEntity()
+                    {
+                        DepartmentId = x.DepartmentId,
+                        Department = _context.Departments.FindAsync(x.DepartmentId).Result,
+
+                        PersonId = x.PersonId,
+                        Person = _context.Persons.FindAsync(x.PersonId).Result,
+
+                        Job = x.Job
+                    };
+                }
+                ).ToArray();
+            }
+            catch (Exception exception)
+            {
+                if (exception.InnerException is BaseException baseException)
+                    errors.Add(baseException.Message);
+                else throw;
+            }
+        }
+
     }
 }
