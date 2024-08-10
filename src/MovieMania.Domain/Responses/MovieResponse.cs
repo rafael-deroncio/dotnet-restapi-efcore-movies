@@ -46,17 +46,17 @@ public record MovieResponse
     [JsonPropertyName("production_contries")]
     public List<ProductionCountryResponse> ProductionCountries { get; set; }
 
-    [JsonPropertyName("companies")]
-    public List<ProductionCompanyResponse> Companies { get; set; }
-    
     [JsonPropertyName("languages")]
-    public List<LanguageResponse> Languages { get; set; }
+    public List<MovieLanguageResponse> Languages { get; set; }
 
     [JsonPropertyName("genres")]
     public List<GenreResponse> Genres { get; set; }
 
     [JsonPropertyName("keywords")]
     public List<KeywordResponse> Keywords { get; set; }
+
+    [JsonPropertyName("companies")]
+    public List<ProductionCompanyResponse> Companies { get; set; }
 
     [JsonPropertyName("casts")]
     public List<CastResponse> Casts { get; set; }
