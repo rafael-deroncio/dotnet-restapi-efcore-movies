@@ -45,9 +45,9 @@ public class MovieRequest
     /// Gets or sets the popularity of the movie.
     /// </summary>
     [Required(ErrorMessage = "The popularity is required.")]
-    [Range(0, double.MaxValue, ErrorMessage = "The popularity must be a positive value.")]
+    [Range(0, float.MaxValue, ErrorMessage = "The popularity must be a positive value.")]
     [JsonPropertyName("popularity")]
-    public double Popularity { get; set; }
+    public float Popularity { get; set; }
 
     /// <summary>
     /// Gets or sets the release date of the movie.
@@ -61,9 +61,9 @@ public class MovieRequest
     /// Gets or sets the revenue of the movie.
     /// </summary>
     [Required(ErrorMessage = "The revenue is required.")]
-    [Range(0, double.MaxValue, ErrorMessage = "The revenue must be a positive value.")]
+    [Range(0.0, double.MaxValue, ErrorMessage = "The revenue must be a positive value.")]
     [JsonPropertyName("revenue")]
-    public double Revenue { get; set; }
+    public decimal Revenue { get; set; }
 
     /// <summary>
     /// Gets or sets the runtime of the movie in minutes.
@@ -95,7 +95,7 @@ public class MovieRequest
     [Required(ErrorMessage = "The votes average is required.")]
     [Range(0, 10, ErrorMessage = "The votes average must be between 0 and 10.")]
     [JsonPropertyName("votes_avg")]
-    public double VotesAverage { get; set; }
+    public float VotesAverage { get; set; }
 
     /// <summary>
     /// Gets or sets the total number of votes for the movie.

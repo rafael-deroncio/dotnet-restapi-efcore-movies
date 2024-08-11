@@ -37,7 +37,7 @@ public record MovieEntity : EntityBase
     public int Runtime { get; set; }
 
     [Column("status")]
-    public string MovieStatus { get; set; }
+    public string Status { get; set; }
 
     [Column("tagline")]
     public string Tagline { get; set; }

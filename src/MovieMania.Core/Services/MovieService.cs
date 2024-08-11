@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;
@@ -50,17 +51,17 @@ public class MovieService(
             MovieEntity entity = _mapper.Map<MovieEntity>(request);
             List<string> errors = [];
 
-            OnCreateMovieProccessProductionCountries(ref entity, ref errors);
-            OnCreateMovieProccessLanguages(ref entity, ref errors);
-            OnCreateMovieProccessGenres(ref entity, ref errors);
-            OnCreateMovieProccessKeywords(ref entity, ref errors);
-            OnCreateMovieProccessCompanies(ref entity, ref errors);
-            OnCreateMovieProccessCasts(ref entity, ref errors);
-            OnCreateMovieProccessCrews(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors);
 
             // Errors
             if (errors.Any())
-                throw new EntityBadRequestException(title: "Movie Entity Error", messages: errors.ToArray());
+                throw new EntityBadRequestException(title: "Movie Entity Error", messages: [.. errors]);
 
             entity.CreatedAt = DateTime.UtcNow;
             entity.UpdatedAt = DateTime.UtcNow;
@@ -90,7 +91,7 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _entity.FindAsync(id)
+            MovieEntity entity = await _entity.AsNoTracking().FirstOrDefaultAsync(x => x.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             _entity.Remove(entity);
@@ -112,35 +113,19 @@ public class MovieService(
     {
         try
         {
-            IQueryable<MovieEntity> query = _entity;
-
-            if (filter.AddProductionCountries)
-                query = query.Include(m => m.ProductionCountries);
-
-            if (filter.AddCompanies)
-                query = query.Include(m => m.Companies);
-
-            if (filter.AddLanguages)
-                query = query.Include(m => m.Languages);
-
-            if (filter.AddGenres)
-                query = query.Include(m => m.Genres);
-
-            if (filter.AddKeywords)
-                query = query.Include(m => m.Keywords);
-
-            if (filter.AddCasts)
-                query = query.Include(m => m.Casts);
-
-            if (filter.AddCrews)
-                query = query.Include(m => m.Crews);
-
-            // if (filter.AddImages)
-            //     query = query.Include(m => m.MovieImages);
+            IQueryable<MovieEntity> query = _entity.AsTracking();
 
             MovieEntity entity = await query.FirstOrDefaultAsync(m => m.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
+            if (!filter.AddProductionCountries) entity.ProductionCountries = [];
+            if (!filter.AddCompanies) entity.Companies = [];
+            if (!filter.AddLanguages) entity.Languages = [];
+            if (!filter.AddGenres) entity.Genres = [];
+            if (!filter.AddKeywords) entity.Keywords = [];
+            if (!filter.AddCasts) entity.Casts = [];
+            if (!filter.AddCrews) entity.Crews = [];
+            // if (!filter.AddImages) entity.Images = [];
 
             return _mapper.Map<MovieResponse>(entity);
         }
@@ -158,35 +143,24 @@ public class MovieService(
     {
         try
         {
-            IQueryable<MovieEntity> query = _entity;
-
-            if (filter.AddProductionCountries)
-                query = query.Include(m => m.ProductionCountries);
-
-            if (filter.AddCompanies)
-                query = query.Include(m => m.Companies);
-
-            if (filter.AddLanguages)
-                query = query.Include(m => m.Languages);
-
-            if (filter.AddGenres)
-                query = query.Include(m => m.Genres);
-
-            if (filter.AddKeywords)
-                query = query.Include(m => m.Keywords);
-
-            if (filter.AddCasts)
-                query = query.Include(m => m.Casts);
-
-            if (filter.AddCrews)
-                query = query.Include(m => m.Crews);
-
-            // if (filter.AddImages)
-            //     query = query.Include(m => m.MovieImages);
+            IQueryable<MovieEntity> query = _entity.AsTracking();
 
             IEnumerable<MovieEntity> entities = query
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
+
+            entities = entities.Select(entity =>
+            {
+                if (!filter.AddProductionCountries) entity.ProductionCountries = [];
+                if (!filter.AddCompanies) entity.Companies = [];
+                if (!filter.AddLanguages) entity.Languages = [];
+                if (!filter.AddGenres) entity.Genres = [];
+                if (!filter.AddKeywords) entity.Keywords = [];
+                if (!filter.AddCasts) entity.Casts = [];
+                if (!filter.AddCrews) entity.Crews = [];
+                // if (!filter.AddImages) entity.Images = [];
+                return entity;
+            });
 
             return await _paginationService.GetPagination<MovieResponse>(new()
             {
@@ -213,8 +187,37 @@ public class MovieService(
             MovieEntity entity = await _entity.FindAsync(id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
-            entity.Title = request.Title.Trim();
+            entity = _mapper.Map<MovieEntity>(request);
+            List<string> errors = [];
 
+            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors);
+
+            // Errors
+            if (errors.Any())
+                throw new EntityBadRequestException(title: "Movie Entity Error", messages: [.. errors]);
+
+            entity.MovieId = id;
+            entity.Title = request.Title.Trim();
+            entity.Budget = request.Budget;
+            entity.Homepage = request.Homepage;
+            entity.Overview = request.Overview;
+            entity.Popularity = request.Popularity;
+            entity.ReleaseDate = DateTime.SpecifyKind(request.ReleaseDate, DateTimeKind.Utc);
+            entity.Revenue = request.Revenue;
+            entity.Runtime = request.Runtime;
+            entity.Status = request.Status;
+            entity.Tagline = request.Tagline;
+            entity.VotesAvg = request.VotesAverage;
+            entity.VotesCount = request.VotesCount;
+            entity.UpdatedAt = DateTime.UtcNow;
+
+            entity = _entity.Update(entity).Entity;
             await _context.SaveChangesAsync();
 
             return _mapper.Map<MovieResponse>(entity);
@@ -229,7 +232,7 @@ public class MovieService(
         }
     }
 
-    private void OnCreateMovieProccessProductionCountries(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessProductionCountries(ref MovieEntity entity, ref List<string> errors)
     {
         // Country
         if (entity.ProductionCountries != null && entity.ProductionCountries.Any())
@@ -256,7 +259,7 @@ public class MovieService(
         }
     }
 
-    private void OnCreateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors)
     {
         // Language
         if (entity.Languages != null && entity.Languages.Any())
@@ -288,7 +291,7 @@ public class MovieService(
         }
     }
 
-    private void OnCreateMovieProccessGenres(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessGenres(ref MovieEntity entity, ref List<string> errors)
     {
         // Genres
         if (entity.Genres != null && entity.Genres.Any())
@@ -316,7 +319,7 @@ public class MovieService(
 
     }
 
-    private void OnCreateMovieProccessKeywords(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessKeywords(ref MovieEntity entity, ref List<string> errors)
     {
         // Keywords
         if (entity.Keywords != null && entity.Keywords.Any())
@@ -344,7 +347,7 @@ public class MovieService(
 
     }
 
-    private void OnCreateMovieProccessCompanies(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCompanies(ref MovieEntity entity, ref List<string> errors)
     {
         // Companies
         if (entity.Companies != null && entity.Companies.Any())
@@ -372,7 +375,7 @@ public class MovieService(
 
     }
 
-    private void OnCreateMovieProccessCasts(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCasts(ref MovieEntity entity, ref List<string> errors)
     {
         // Language
         if (entity.Casts != null && entity.Casts.Any())
@@ -407,7 +410,7 @@ public class MovieService(
 
     }
 
-    private void OnCreateMovieProccessCrews(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCrews(ref MovieEntity entity, ref List<string> errors)
     {
         // Person
         if (entity.Crews != null && entity.Crews.Any())
