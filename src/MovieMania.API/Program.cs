@@ -38,6 +38,8 @@ builder.Services.AddDbContext<MovieManiaContext>(options =>
     string connection = builder.Configuration.GetConnectionString("MovieManiaConnection");
     string assembly = Assembly.GetExecutingAssembly().GetName().Name;
     options.UseNpgsql(connection, opts => opts.MigrationsAssembly(assembly));
+    options.EnableSensitiveDataLogging(false);
+    options.LogTo(_ => { }, LogLevel.None);
 }, ServiceLifetime.Singleton, ServiceLifetime.Singleton);
 
 WebApplication app = builder.Build();
