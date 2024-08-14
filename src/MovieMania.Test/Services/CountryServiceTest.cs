@@ -1,3 +1,4 @@
+using MovieMania.Core.Exceptions;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
@@ -61,10 +62,44 @@ public class CountryServiceTest
         Assert.Equal(callsCreate, repositoryCreateCalls.Count());
     }
 
-    // [Fact]
+    [Fact]
     public async Task CreateCountry_InvalidRequest_ThrowsException()
     {
+        // Arrange
+        string isoCode = "BR";
+        string name = "Brazil";
+        string exceptionTitle = "Error on create country entity";
+        string exceptionMessage = "Country alredy registred with name or iso code";
+        int callsGet = 1;
+        int callsCreate = 0;
+        CountryServiceFixture fixture = new();
 
+        // Act
+        ICountryService service = fixture.WithGetAllCountry(isoCode, name)
+                                          .Instance();
+
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(
+            async () =>
+            {
+                CountryRequest request = fixture.CountryRequestMock();
+                request.IsoCode = isoCode;
+                request.Name = name;
+
+                CountryResponse response = await service.CreateCountry(request);
+            });
+
+        IEnumerable<ICall> repositoryGetCalls = fixture.BaseRepositoryCalls()
+            .Where(call => call.GetMethodInfo().Name == "Get");
+
+        IEnumerable<ICall> repositoryCreateCalls = fixture.BaseRepositoryCalls()
+            .Where(call => call.GetMethodInfo().Name == "Create");
+
+        // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.Equal(exceptionMessage, exception.Message);
+        Assert.Equal(callsGet, repositoryGetCalls.Count());
+        Assert.Equal(callsCreate, repositoryCreateCalls.Count());
     }
     #endregion
 
