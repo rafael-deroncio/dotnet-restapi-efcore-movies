@@ -25,7 +25,7 @@ public class DepartmentService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create department entity", "Department alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create department entity", "Department alredy registred with name");
 
             DepartmentEntity entity = _mapper.Map<DepartmentEntity>(request);
 
@@ -111,6 +111,9 @@ public class DepartmentService(
         {
             DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
                 ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
+                throw new EntityBadRequestException("Error on update department entity", "Department alredy registred with name");
 
             entity.Name = request.Name.Trim();
 
