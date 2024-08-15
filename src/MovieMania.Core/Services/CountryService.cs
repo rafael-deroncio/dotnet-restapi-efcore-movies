@@ -112,6 +112,9 @@ public class CountryService(
             CountryEntity entity = await _repository.Get(new() { CountryId = id })
                 ?? throw new EntityNotFoundException("Country Not Found", $"Country with id {id} not exists.");
 
+            if ((await _repository.Get()).Where(x => x.IsoCode == request.IsoCode || x.Name == request.Name).Any())
+                throw new EntityBadRequestException("Error on update country entity", "Country alredy registred with name or iso code");
+
             entity.IsoCode = request.IsoCode.Trim().ToUpper();
             entity.Name = request.Name.Trim();
 

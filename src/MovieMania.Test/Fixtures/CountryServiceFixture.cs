@@ -4,6 +4,7 @@ using MovieMania.Core.Configurations.Mapper;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts.Entities;
 using MovieMania.Core.Repositories.Interfaces;
+using MovieMania.Core.Requests;
 using MovieMania.Core.Services;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
@@ -68,16 +69,56 @@ public class CountryServiceFixture
         return this;
     }
 
-    public CountryServiceFixture WithGetCreateCountry()
+    public CountryServiceFixture WithGetCountry(int id, bool returnsNull = false)
+    {
+        CountryEntity entity = null;
+        CountryEntity argument = Arg.Any<CountryEntity>();
+
+        if (!returnsNull)
+        {
+            entity = _fixture.Create<CountryEntity>();
+            entity.CountryId = id;
+        }
+
+        _repository.Get(argument).Returns(entity);
+        return this;
+    }
+
+    public CountryServiceFixture WithCreateCountry()
     {
         CountryEntity argument = Arg.Any<CountryEntity>();
         CountryEntity entity = _fixture.Create<CountryEntity>();
         _repository.Create(argument).Returns(entity);
         return this;
     }
+
+    public CountryServiceFixture WithUpdateCountry()
+    {
+        CountryEntity argument = Arg.Any<CountryEntity>();
+        CountryEntity entity = _fixture.Create<CountryEntity>();
+        _repository.Update(argument).Returns(entity);
+        return this;
+    }
+
+    public CountryServiceFixture WithDeleteCountry(bool success = true)
+    {
+        CountryEntity argument = Arg.Any<CountryEntity>();
+        _repository.Delete(argument).Returns(success);
+        return this;
+    }
+
+    public CountryServiceFixture WithGetPagination()
+    {
+        PaginationRequest<CountryResponse> request = Arg.Any<PaginationRequest<CountryResponse>>();
+        PaginationResponse<CountryResponse> response = _fixture.Create<PaginationResponse<CountryResponse>>();
+        _paginationService.GetPagination<CountryResponse>(request).Returns(response);
+        return this;
+    }
     #endregion
 
     #region Mocks
     public CountryRequest CountryRequestMock() => _fixture.Create<CountryRequest>();
+    public PaginationRequest PaginationRequestMock() => _fixture.Create<PaginationRequest>();
+
     #endregion
 }
