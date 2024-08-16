@@ -25,7 +25,7 @@ public class GenderService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Gender == request.Gender).Any())
-                throw new EntityBadRequestException("Error on create gender entity", "Gender alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create gender entity", "Gender alredy registred with gender");
 
             GenderEntity entity = _mapper.Map<GenderEntity>(request);
 
@@ -111,6 +111,9 @@ public class GenderService(
         {
             GenderEntity entity = await _repository.Get(new() { GenderId = id })
                 ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+
+            if ((await _repository.Get()).Where(x => x.Gender == request.Gender).Any())
+                throw new EntityBadRequestException("Error on update gender entity", "Gender alredy registred with gender");
 
             entity.Gender = request.Gender.Trim();
 
