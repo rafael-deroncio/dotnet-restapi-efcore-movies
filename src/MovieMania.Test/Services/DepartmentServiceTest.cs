@@ -298,7 +298,7 @@ public class DepartmentServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedDepartmentResponse()
+    public async Task GetPagedDepartments_ValidRequest_ReturnsPaginatedDepartmentResponse()
     {
         // Arrange
         int callsGet = 2;

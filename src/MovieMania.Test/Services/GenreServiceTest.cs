@@ -298,7 +298,7 @@ public class GenreServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedGenreResponse()
+    public async Task GetPagedGenres_ValidRequest_ReturnsPaginatedGenreResponse()
     {
         // Arrange
         int callsGet = 2;

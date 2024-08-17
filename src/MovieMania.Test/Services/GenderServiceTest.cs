@@ -298,7 +298,7 @@ public class GenderServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedGenderResponse()
+    public async Task GetPagedGenders_ValidRequest_ReturnsPaginatedGenderResponse()
     {
         // Arrange
         int callsGet = 2;

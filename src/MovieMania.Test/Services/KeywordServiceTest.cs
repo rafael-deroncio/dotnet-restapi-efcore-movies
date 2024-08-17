@@ -298,7 +298,7 @@ public class KeywordServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedKeywordResponse()
+    public async Task GetPagedKeywords_ValidRequest_ReturnsPaginatedKeywordResponse()
     {
         // Arrange
         int callsGet = 2;

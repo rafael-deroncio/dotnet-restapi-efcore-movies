@@ -298,7 +298,7 @@ public class ProductionCompanyServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedProductionCompanyResponse()
+    public async Task GetPagedCompanies_ValidRequest_ReturnsPaginatedProductionCompanyResponse()
     {
         // Arrange
         int callsGet = 2;

@@ -298,7 +298,7 @@ public class PersonServiceTest
 
     #region Paged
     [Fact]
-    public async Task GetPagedCountries_ValidRequest_ReturnsPaginatedPersonResponse()
+    public async Task GetPagedPersons_ValidRequest_ReturnsPaginatedPersonResponse()
     {
         // Arrange
         int callsGet = 2;
