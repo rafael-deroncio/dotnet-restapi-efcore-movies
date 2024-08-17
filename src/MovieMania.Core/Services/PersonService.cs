@@ -25,7 +25,7 @@ public class PersonService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create person entity", "Person alredy registred or iso code");
+                throw new EntityBadRequestException("Error on create person entity", "Person alredy registred");
 
             PersonEntity entity = _mapper.Map<PersonEntity>(request);
 
@@ -111,7 +111,10 @@ public class PersonService(
         {
             PersonEntity entity = await _repository.Get(new() { PersonId = id })
                 ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
-
+            
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
+                throw new EntityBadRequestException("Error on update person entity", "Person alredy registred");
+            
             entity.Name = request.Name.Trim();
 
             return _mapper.Map<PersonResponse>(await _repository.Update(entity));
