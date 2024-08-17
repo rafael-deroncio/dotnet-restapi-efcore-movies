@@ -25,7 +25,7 @@ public class KeywordService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Keyword == request.Keyword).Any())
-                throw new EntityBadRequestException("Error on create keyword entity", "Keyword alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create keyword entity", "Keyword alredy registred");
 
             KeywordEntity entity = _mapper.Map<KeywordEntity>(request);
 
@@ -110,6 +110,9 @@ public class KeywordService(
         {
             KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
                 ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+
+            if ((await _repository.Get()).Where(x => x.Keyword == request.Keyword).Any())
+                throw new EntityBadRequestException("Error on update keyword entity", "Keyword alredy registred");
 
             entity.Keyword = request.Keyword.Trim();
 
