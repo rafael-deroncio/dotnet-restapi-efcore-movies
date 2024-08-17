@@ -25,7 +25,7 @@ public class ProductionCompanyService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create production company entity", "ProductionCompany alredy registred");
+                throw new EntityBadRequestException("Error on create production company entity", "Production Company alredy registred");
 
             ProductionCompanyEntity entity = _mapper.Map<ProductionCompanyEntity>(request);
 
@@ -111,6 +111,9 @@ public class ProductionCompanyService(
         {
             ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
                 ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+
+            if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
+                throw new EntityBadRequestException("Error on update production company entity", "Production Company alredy registred");
 
             entity.Name = request.Name.Trim();
 
