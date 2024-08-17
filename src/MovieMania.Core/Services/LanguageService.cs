@@ -27,7 +27,7 @@ public class LanguageService(
         try
         {
             if ((await _languageRepository.Get()).Where(x => x.Language == request.Language).Any())
-                throw new EntityBadRequestException("Error on create language entity", "Language alredy registred or iso code");
+                throw new EntityBadRequestException("Error on create language entity", "Language alredy registred");
 
             LanguageEntity entity = _mapper.Map<LanguageEntity>(request);
 
@@ -47,10 +47,10 @@ public class LanguageService(
     {
         try
         {
-            LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
-                ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
+            LanguageEntity entity = await _languageRepository.Get(new() { LanguageId = id })
+                ?? throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
 
-            return await _languageRoleRepository.Delete(entity);
+            return await _languageRepository.Delete(entity);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -114,6 +114,9 @@ public class LanguageService(
             LanguageEntity entity = await _languageRepository.Get(new() { LanguageId = id })
                 ?? throw new EntityNotFoundException("Language Not Found", $"Language with id {id} not exists.");
 
+            if ((await _languageRepository.Get()).Where(x => x.Language == request.Language).Any())
+                throw new EntityBadRequestException("Error on update language entity", "Language alredy registred");
+
             entity.Language = request.Language.Trim();
 
             return _mapper.Map<LanguageResponse>(await _languageRepository.Update(entity));
@@ -133,7 +136,7 @@ public class LanguageService(
         try
         {
             if ((await _languageRoleRepository.Get()).Where(x => x.Role == request.Role).Any())
-                throw new EntityBadRequestException("Error on create language role entity", "Language Role alredy registred or iso code");
+                throw new EntityBadRequestException("Error on create language role entity", "Language Role alredy registred");
 
             LanguageRoleEntity entity = _mapper.Map<LanguageRoleEntity>(request);
 
@@ -220,6 +223,10 @@ public class LanguageService(
             LanguageRoleEntity entity = await _languageRoleRepository.Get(new() { LanguageRoleId = id })
                 ?? throw new EntityNotFoundException("Language Role Not Found", $"Language Role with id {id} not exists.");
 
+            if ((await _languageRoleRepository.Get()).Where(x => x.Role == request.Role).Any())
+                throw new EntityBadRequestException("Error on update language role entity", "Language Role alredy registred");
+
+
             entity.Role = request.Role.Trim();
 
             return _mapper.Map<LanguageRoleResponse>(await _languageRoleRepository.Update(entity));
@@ -233,5 +240,4 @@ public class LanguageService(
                 message: $"Unable to update language role with id {id} at this time. Please try again.");
         }
     }
-
 }
