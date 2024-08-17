@@ -25,7 +25,7 @@ public class PersonService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create person entity", "Person alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create person entity", "Person alredy registred or iso code");
 
             PersonEntity entity = _mapper.Map<PersonEntity>(request);
 

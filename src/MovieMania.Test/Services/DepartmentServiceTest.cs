@@ -96,7 +96,7 @@ public class DepartmentServiceTest
         // Arrange
         string name = "Production";
         string exceptionTitle = "Error on create department entity";
-        string exceptionMessage = "Department alredy registred with name";
+        string exceptionMessage = "Department alredy registred";
         int callsGet = 1;
         int callsCreate = 0;
         DepartmentServiceFixture fixture = new();
@@ -201,7 +201,7 @@ public class DepartmentServiceTest
         int id = 1;
         string name = "Production";
         string exceptionTitle = "Error on update department entity";
-        string exceptionMessage = $"Department alredy registred with name";
+        string exceptionMessage = $"Department alredy registred";
         int callsGet = 2;
         int callsUpdate = 0;
         DepartmentServiceFixture fixture = new();

@@ -96,7 +96,7 @@ public class GenreServiceTest
         // Arrange
         string genre = "Male";
         string exceptionTitle = "Error on create genre entity";
-        string exceptionMessage = "Genre alredy registred with name";
+        string exceptionMessage = "Genre alredy registred";
         int callsGet = 1;
         int callsCreate = 0;
         GenreServiceFixture fixture = new();
@@ -201,7 +201,7 @@ public class GenreServiceTest
         int id = 1;
         string genre = "Male";
         string exceptionTitle = "Error on update genre entity";
-        string exceptionMessage = $"Genre alredy registred with name";
+        string exceptionMessage = $"Genre alredy registred";
         int callsGet = 2;
         int callsUpdate = 0;
         GenreServiceFixture fixture = new();

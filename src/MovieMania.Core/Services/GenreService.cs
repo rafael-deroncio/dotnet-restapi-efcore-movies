@@ -25,7 +25,7 @@ public class GenreService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create genre entity", "Genre alredy registred with name");
+                throw new EntityBadRequestException("Error on create genre entity", "Genre alredy registred");
 
             GenreEntity entity = _mapper.Map<GenreEntity>(request);
 
@@ -113,7 +113,7 @@ public class GenreService(
                 ?? throw new EntityNotFoundException("Genre Not Found", $"Genre with id {id} not exists.");
 
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on update genre entity", "Genre alredy registred with name");
+                throw new EntityBadRequestException("Error on update genre entity", "Genre alredy registred");
 
             entity.Name = request.Name.Trim();
 

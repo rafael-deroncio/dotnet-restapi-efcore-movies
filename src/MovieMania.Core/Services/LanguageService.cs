@@ -27,7 +27,7 @@ public class LanguageService(
         try
         {
             if ((await _languageRepository.Get()).Where(x => x.Language == request.Language).Any())
-                throw new EntityBadRequestException("Error on create language entity", "Language alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create language entity", "Language alredy registred or iso code");
 
             LanguageEntity entity = _mapper.Map<LanguageEntity>(request);
 
@@ -133,7 +133,7 @@ public class LanguageService(
         try
         {
             if ((await _languageRoleRepository.Get()).Where(x => x.Role == request.Role).Any())
-                throw new EntityBadRequestException("Error on create language role entity", "Language Role alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create language role entity", "Language Role alredy registred or iso code");
 
             LanguageRoleEntity entity = _mapper.Map<LanguageRoleEntity>(request);
 

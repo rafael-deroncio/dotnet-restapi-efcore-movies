@@ -25,7 +25,7 @@ public class DepartmentService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create department entity", "Department alredy registred with name");
+                throw new EntityBadRequestException("Error on create department entity", "Department alredy registred");
 
             DepartmentEntity entity = _mapper.Map<DepartmentEntity>(request);
 
@@ -113,7 +113,7 @@ public class DepartmentService(
                 ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
 
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on update department entity", "Department alredy registred with name");
+                throw new EntityBadRequestException("Error on update department entity", "Department alredy registred");
 
             entity.Name = request.Name.Trim();
 

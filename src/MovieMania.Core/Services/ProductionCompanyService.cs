@@ -25,7 +25,7 @@ public class ProductionCompanyService(
         try
         {
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
-                throw new EntityBadRequestException("Error on create production company entity", "ProductionCompany alredy registred with name or iso code");
+                throw new EntityBadRequestException("Error on create production company entity", "ProductionCompany alredy registred or iso code");
 
             ProductionCompanyEntity entity = _mapper.Map<ProductionCompanyEntity>(request);
 
