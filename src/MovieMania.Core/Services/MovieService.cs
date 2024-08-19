@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;
 using MovieMania.Core.Exceptions;
-using MovieMania.Core.Extensions;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
@@ -24,12 +22,10 @@ public class MovieService(
     ILanguageService languageService,
     IPersonService personService,
     IProductionCompanyService productionCompanyService
-
 ) : IMovieService
 {
     private readonly ILogger<IMovieService> _logger = logger;
     private readonly MovieManiaContext _context = context;
-    private readonly DbSet<MovieEntity> _entity = context.GetEntity<MovieEntity>();
     private readonly IPaginationService _paginationService = paginationService;
     private readonly IObjectConverter _mapper = mapper;
     private readonly ICountryService _countryService = countryService;
@@ -45,7 +41,7 @@ public class MovieService(
     {
         try
         {
-            if (await _entity.Where(movie => movie.Title == request.Title).AnyAsync())
+            if (await _context.Movies.Where(movie => movie.Title == request.Title).AnyAsync())
                 throw new EntityBadRequestException("Error on create movie entity", "Movie already registered with the same title.");
 
             MovieEntity entity = _mapper.Map<MovieEntity>(request);
@@ -67,7 +63,7 @@ public class MovieService(
             entity.UpdatedAt = DateTime.UtcNow;
             entity.ReleaseDate = DateTime.SpecifyKind(entity.ReleaseDate, DateTimeKind.Utc);
 
-            await _entity.AddAsync(entity);
+            await _context.Movies.AddAsync(entity);
             await _context.SaveChangesAsync();
 
             MovieResponse response = _mapper.Map<MovieResponse>(entity);
@@ -91,10 +87,10 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _entity.AsNoTracking().FirstOrDefaultAsync(x => x.MovieId == id)
+            MovieEntity entity = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
-            _entity.Remove(entity);
+            _context.Movies.Remove(entity);
             await _context.SaveChangesAsync();
 
             return true;
@@ -113,9 +109,7 @@ public class MovieService(
     {
         try
         {
-            IQueryable<MovieEntity> query = _entity.AsTracking();
-
-            MovieEntity entity = await query.FirstOrDefaultAsync(m => m.MovieId == id)
+            MovieEntity entity = await _context.Movies.FirstOrDefaultAsync(m => m.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             if (!filter.AddProductionCountries) entity.ProductionCountries = [];
@@ -143,7 +137,7 @@ public class MovieService(
     {
         try
         {
-            IQueryable<MovieEntity> query = _entity.AsTracking();
+            IQueryable<MovieEntity> query = _context.Movies.AsTracking();
 
             IEnumerable<MovieEntity> entities = query
                 .Skip((request.Page - 1) * request.Size)
@@ -167,7 +161,7 @@ public class MovieService(
                 Content = _mapper.Map<IEnumerable<MovieResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = await _entity.CountAsync()
+                Total = await _context.Movies.CountAsync()
             });
         }
         catch (BaseException) { throw; }
@@ -184,7 +178,7 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _entity.FindAsync(id)
+            MovieEntity entity = await _context.Movies.FindAsync(id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             entity = _mapper.Map<MovieEntity>(request);
@@ -217,7 +211,7 @@ public class MovieService(
             entity.VotesCount = request.VotesCount;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            entity = _entity.Update(entity).Entity;
+            entity = _context.Movies.Update(entity).Entity;
             await _context.SaveChangesAsync();
 
             return _mapper.Map<MovieResponse>(entity);
