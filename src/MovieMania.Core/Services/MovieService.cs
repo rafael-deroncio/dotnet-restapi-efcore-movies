@@ -41,7 +41,7 @@ public class MovieService(
     {
         try
         {
-            if (await _context.Movies.Where(movie => movie.Title == request.Title).AnyAsync())
+            if (_context.Movies.Where(movie => movie.Title == request.Title).Any())
                 throw new EntityBadRequestException("Error on create movie entity", "Movie already registered with the same title.");
 
             MovieEntity entity = _mapper.Map<MovieEntity>(request);
@@ -63,12 +63,10 @@ public class MovieService(
             entity.UpdatedAt = DateTime.UtcNow;
             entity.ReleaseDate = DateTime.SpecifyKind(entity.ReleaseDate, DateTimeKind.Utc);
 
-            await _context.Movies.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            _context.Movies.Add(entity);
+            _context.SaveChanges();
 
-            MovieResponse response = _mapper.Map<MovieResponse>(entity);
-
-            return response;
+            return await Task.FromResult(_mapper.Map<MovieResponse>(entity));
         }
         catch (BaseException)
         {
@@ -87,13 +85,13 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _context.Movies.FirstOrDefaultAsync(x => x.MovieId == id)
+            MovieEntity entity = _context.Movies.FirstOrDefault(x => x.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             _context.Movies.Remove(entity);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return true;
+            return await Task.FromResult(true);
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -109,7 +107,7 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _context.Movies.FirstOrDefaultAsync(m => m.MovieId == id)
+            MovieEntity entity = _context.Movies.FirstOrDefault(m => m.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             if (!filter.AddProductionCountries) entity.ProductionCountries = [];
@@ -121,7 +119,7 @@ public class MovieService(
             if (!filter.AddCrews) entity.Crews = [];
             // if (!filter.AddImages) entity.Images = [];
 
-            return _mapper.Map<MovieResponse>(entity);
+            return await Task.FromResult(_mapper.Map<MovieResponse>(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -161,7 +159,7 @@ public class MovieService(
                 Content = _mapper.Map<IEnumerable<MovieResponse>>(entities),
                 Page = request.Page,
                 Size = request.Size,
-                Total = await _context.Movies.CountAsync()
+                Total = _context.Movies.Count()
             });
         }
         catch (BaseException) { throw; }
@@ -178,7 +176,7 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = await _context.Movies.FindAsync(id)
+            MovieEntity entity = _context.Movies.Find(id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
 
             entity = _mapper.Map<MovieEntity>(request);
@@ -212,9 +210,9 @@ public class MovieService(
             entity.UpdatedAt = DateTime.UtcNow;
 
             entity = _context.Movies.Update(entity).Entity;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return _mapper.Map<MovieResponse>(entity);
+            return await Task.FromResult(_mapper.Map<MovieResponse>(entity));
         }
         catch (BaseException) { throw; }
         catch (Exception exception)
@@ -235,11 +233,11 @@ public class MovieService(
             {
                 entity.ProductionCountries = entity.ProductionCountries.Select(x =>
                 {
-                    _ = _countryService.GetCountryById(x.CountryId).Result;
+                    _ = _countryService.GetCountryById(x.CountryId);
                     return new ProductionCountryEntity()
                     {
                         CountryId = x.CountryId,
-                        Country = _context.Countries.FindAsync(x.CountryId).Result,
+                        Country = _context.Countries.Find(x.CountryId),
                     };
                 }
                 ).ToArray();
@@ -263,15 +261,15 @@ public class MovieService(
             {
                 entity.Languages = entity.Languages.Select(x =>
                 {
-                    _ = _languageService.GetLanguageById(x.LanguageId).Result;
-                    _ = _languageService.GetLanguageRoleById(x.LanguageId).Result;
+                    _ = _languageService.GetLanguageById(x.LanguageId);
+                    _ = _languageService.GetLanguageRoleById(x.LanguageId);
                     return new MovieLanguageEntity()
                     {
                         LanguageId = x.LanguageId,
-                        Language = _context.Languages.FindAsync(x.LanguageId).Result,
+                        Language = _context.Languages.Find(x.LanguageId),
 
                         LanguageRoleId = x.LanguageRoleId,
-                        LanguageRole = _context.LanguageRoles.FindAsync(x.LanguageRoleId).Result,
+                        LanguageRole = _context.LanguageRoles.Find(x.LanguageRoleId),
                     };
                 }
                 ).ToArray();
@@ -294,11 +292,11 @@ public class MovieService(
             {
                 entity.Genres = entity.Genres.Select(x =>
                 {
-                    _ = _genreService.GetGenreById(x.GenreId).Result;
+                    _ = _genreService.GetGenreById(x.GenreId);
                     return new MovieGenreEntity()
                     {
                         GenreId = x.GenreId,
-                        Genre = _context.Genres.FindAsync(x.GenreId).Result
+                        Genre = _context.Genres.Find(x.GenreId)
                     };
                 }
                 ).ToArray();
@@ -322,11 +320,11 @@ public class MovieService(
             {
                 entity.Keywords = entity.Keywords.Select(x =>
                 {
-                    _ = _keywordService.GetKeywordById(x.KeywordId).Result;
+                    _ = _keywordService.GetKeywordById(x.KeywordId);
                     return new MovieKeywordEntity()
                     {
                         KeywordId = x.KeywordId,
-                        Keyword = _context.Keywords.FindAsync(x.KeywordId).Result
+                        Keyword = _context.Keywords.Find(x.KeywordId)
                     };
                 }
                 ).ToArray();
@@ -350,11 +348,11 @@ public class MovieService(
             {
                 entity.Companies = entity.Companies.Select(x =>
                 {
-                    _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId).Result;
+                    _ = _productionCompanyService.GetProductionCompanyById(x.CompanyId);
                     return new MovieCompanyEntity()
                     {
                         CompanyId = x.CompanyId,
-                        ProductionCompany = _context.ProductionCompanies.FindAsync(x.CompanyId).Result
+                        ProductionCompany = _context.ProductionCompanies.Find(x.CompanyId)
                     };
                 }
                 ).ToArray();
@@ -378,15 +376,15 @@ public class MovieService(
             {
                 entity.Casts = entity.Casts.Select(x =>
                 {
-                    _ = _genderService.GetGenderById(x.GenderId).Result;
-                    _ = _personService.GetPersonById(x.PersonId).Result;
+                    _ = _genderService.GetGenderById(x.GenderId);
+                    _ = _personService.GetPersonById(x.PersonId);
                     return new MovieCastEntity()
                     {
                         GenderId = x.GenderId,
-                        Gender = _context.Genders.FindAsync(x.GenderId).Result,
+                        Gender = _context.Genders.Find(x.GenderId),
 
                         PersonId = x.PersonId,
-                        Person = _context.Persons.FindAsync(x.PersonId).Result,
+                        Person = _context.Persons.Find(x.PersonId),
 
                         CharacterName = x.CharacterName,
                         CastOrder = x.CastOrder
@@ -413,15 +411,15 @@ public class MovieService(
             {
                 entity.Crews = entity.Crews.Select(x =>
                 {
-                    _ = _departmentService.GetDepartmentById(x.DepartmentId).Result;
-                    _ = _personService.GetPersonById(x.PersonId).Result;
+                    _ = _departmentService.GetDepartmentById(x.DepartmentId);
+                    _ = _personService.GetPersonById(x.PersonId);
                     return new MovieCrewEntity()
                     {
                         DepartmentId = x.DepartmentId,
-                        Department = _context.Departments.FindAsync(x.DepartmentId).Result,
+                        Department = _context.Departments.Find(x.DepartmentId),
 
                         PersonId = x.PersonId,
-                        Person = _context.Persons.FindAsync(x.PersonId).Result,
+                        Person = _context.Persons.Find(x.PersonId),
 
                         Job = x.Job
                     };
