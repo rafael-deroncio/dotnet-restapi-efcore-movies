@@ -63,6 +63,11 @@ public class EntityToResponseProfile : Profile
                 opts => opts.MapFrom(src => src.Country))
             .ReverseMap();
 
+        CreateMap<MovieImageEntity, ImageResponse>()
+            .ForMember(dest => dest.Id,
+                opts => opts.MapFrom(src => src.ImageId))
+            .ReverseMap();
+
         CreateMap<MovieLanguageEntity, MovieLanguageResponse>()
             .ForMember(dest => dest.Language,
                 opts => opts.MapFrom(src => src.Language))
