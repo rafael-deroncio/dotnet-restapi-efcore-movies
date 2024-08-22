@@ -1,4 +1,5 @@
 using MovieMania.Core.Exceptions;
+using MovieMania.Core.Services;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
@@ -10,36 +11,130 @@ namespace MovieMania.Test.Services;
 public class MovieServiceTest
 {
     #region Get
-    // [Fact]
+    [Fact]
     public async Task GetMovieById_ValidId_ReturnsMovieResponseWithFullObject()
     {
         // Arrange
-        
+        int movieId = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(movieId);
+        MovieService service = fixture.Instance();
 
         // Act
+        MovieFilterRequest filter = fixture.MovieFilterRequestMock(full: true);
+        MovieResponse response = await service.GetMovieById(movieId, filter);
 
-        // Assert
+        // AssertWithMovieEntity
+        Assert.NotNull(response);
+        Assert.NotEmpty(response.ProductionCountries);
+        Assert.NotEmpty(response.Companies);
+        Assert.NotEmpty(response.Languages);
+        Assert.NotEmpty(response.Genres);
+        Assert.NotEmpty(response.Keywords);
+        Assert.NotEmpty(response.Casts);
+        Assert.NotEmpty(response.Crews);
     }
 
-    // [Fact]
+    [Fact]
+    public async Task GetMovieById_ValidId_ReturnsMovieResponseWithProductionCountries()
+    {
+        // Arrange
+        int movieId = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(movieId);
+        MovieService service = fixture.Instance();
+
+        // Act
+        MovieFilterRequest filter = fixture.MovieFilterRequestMock();
+        filter.AddProductionCountries = true;
+        MovieResponse response = await service.GetMovieById(movieId, filter);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.NotEmpty(response.ProductionCountries);
+        Assert.Empty(response.Companies);
+        Assert.Empty(response.Languages);
+        Assert.Empty(response.Genres);
+        Assert.Empty(response.Keywords);
+        Assert.Empty(response.Casts);
+        Assert.Empty(response.Crews);
+    }
+
+    [Fact]
+    public async Task GetMovieById_ValidId_ReturnsMovieResponseWithoutRelatedObjects()
+    {
+        // Arrange
+        int movieId = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(movieId);
+        MovieService service = fixture.Instance();
+
+        // Act
+        MovieFilterRequest filter = fixture.MovieFilterRequestMock();
+        MovieResponse response = await service.GetMovieById(movieId, filter);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Empty(response.ProductionCountries);
+        Assert.Empty(response.Companies);
+        Assert.Empty(response.Languages);
+        Assert.Empty(response.Genres);
+        Assert.Empty(response.Keywords);
+        Assert.Empty(response.Casts);
+        Assert.Empty(response.Crews);
+    }
+
+    [Fact]
     public async Task GetMovieById_InvalidId_ThrowsException()
     {
         // Arrange
+        int movieId = 1;
+        string exceptionTitle = "Movie Not Found";
+        string exceptionMesage = $"Movie with id {movieId} not exists.";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity();
+        MovieService service = fixture.Instance();
 
         // Act
+        EntityNotFoundException exception = await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+        {
+            MovieFilterRequest filter = fixture.MovieFilterRequestMock();
+            MovieResponse response = await service.GetMovieById(movieId, filter);
+        });
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.Equal(exceptionMesage, exception.Message);
     }
     #endregion
 
     #region Create
-    // [Fact]
+    [Fact]
     public async Task CreateMovie_ValidRequest_ReturnsMovieResponse()
     {
         // Arrange
+        int movieId = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity()
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetGenreById()
+                                                               .WithGenreEntity()
+                                                               .WithGetKeywordById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetProductionCompanyById()
+                                                               .WithProductionCompanyEntity()
+                                                               .WithGetGenderById()
+                                                               .WithGenderEntity()
+                                                               .WithGetPersonById()
+                                                               .WithPersonEntity()
+                                                               .WithGetDepartmentById()
+                                                               .WithDepartmentEntity();
 
         // Act
-
+        MovieRequest request = fixture.MovieRequestMock();
+        MovieResponse response = await fixture.Instance().CreateMovie(request);
+        
         // Assert
     }
 
