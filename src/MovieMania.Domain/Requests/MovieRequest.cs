@@ -21,7 +21,7 @@ public class MovieRequest
     /// Gets or sets the budget of the movie.
     /// </summary>
     [Required(ErrorMessage = "The budget is required.")]
-    [Range(0, double.MaxValue, ErrorMessage = "The budget must be a positive value.")]
+    [Range(typeof(decimal), "0", "79228162514264337593543950335", ErrorMessage = "The budget must be a positive value.")]
     [JsonPropertyName("budget")]
     public decimal Budget { get; set; }
 
@@ -61,7 +61,7 @@ public class MovieRequest
     /// Gets or sets the revenue of the movie.
     /// </summary>
     [Required(ErrorMessage = "The revenue is required.")]
-    [Range(0.0, double.MaxValue, ErrorMessage = "The revenue must be a positive value.")]
+    [Range(typeof(decimal), "0", "79228162514264337593543950335", ErrorMessage = "The revenue must be a positive value.")]
     [JsonPropertyName("revenue")]
     public decimal Revenue { get; set; }
 

@@ -80,7 +80,7 @@ public class MovieServiceFixture
     public IEnumerable<ICall> KeywordServiceCalls() => _keywordService.ReceivedCalls();
     public IEnumerable<ICall> LanguageServiceCalls() => _languageService.ReceivedCalls();
     public IEnumerable<ICall> PersonServiceCalls() => _personService.ReceivedCalls();
-    public IEnumerable<ICall> ProductionCompanyServiceCalls() => _personService.ReceivedCalls();
+    public IEnumerable<ICall> ProductionCompanyServiceCalls() => _productionCompanyService.ReceivedCalls();
     #endregion
 
     #region Fixtures

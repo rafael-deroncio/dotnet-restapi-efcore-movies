@@ -110,7 +110,6 @@ public class MovieServiceTest
     public async Task CreateMovie_ValidRequest_ReturnsMovieResponse()
     {
         // Arrange
-        int movieId = 1;
         MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity()
                                                                .WithGetCountryById()
                                                                .WithCountryEntity()
@@ -134,8 +133,44 @@ public class MovieServiceTest
         // Act
         MovieRequest request = fixture.MovieRequestMock();
         MovieResponse response = await fixture.Instance().CreateMovie(request);
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
         
         // Assert
+        Assert.NotNull(response);
+        Assert.NotEmpty(callsGetPersonById);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.NotEmpty(callsGetProductionCompanyById);
+        Assert.NotEmpty(callsGenderServiceCalls);
+        Assert.NotEmpty(callsGetDepartmentById);
     }
 
     // [Fact]
