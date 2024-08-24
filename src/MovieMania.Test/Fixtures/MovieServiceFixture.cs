@@ -195,59 +195,147 @@ public class MovieServiceFixture
         return this;
     }
 
-    public MovieServiceFixture WithGetLanguageById()
+    public MovieServiceFixture WithGetLanguageById(bool returnsNull = false)
     {
-        LanguageResponse response = _fixture.Create<LanguageResponse>();
-        _languageService.GetLanguageById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Language Not Found", $"Language with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+
+            LanguageResponse response = _fixture.Create<LanguageResponse>();
+            _languageService.GetLanguageById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetLanguageRoleById()
+    public MovieServiceFixture WithGetLanguageRoleById(bool returnsNull = false)
     {
-        LanguageRoleResponse response = _fixture.Create<LanguageRoleResponse>();
-        _languageService.GetLanguageRoleById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Language Role Not Found", $"Language Role with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            LanguageRoleResponse response = _fixture.Create<LanguageRoleResponse>();
+            _languageService.GetLanguageRoleById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetGenreById()
+    public MovieServiceFixture WithGetGenreById(bool returnsNull = false)
     {
-        GenreResponse response = _fixture.Create<GenreResponse>();
-        _genreService.GetGenreById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Genre Not Found", $"Genre with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            GenreResponse response = _fixture.Create<GenreResponse>();
+            _genreService.GetGenreById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetKeywordById()
+    public MovieServiceFixture WithGetKeywordById(bool returnsNull = false)
     {
-        KeywordResponse response = _fixture.Create<KeywordResponse>();
-        _keywordService.GetKeywordById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Keyword Not Found", $"Keyword with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            KeywordResponse response = _fixture.Create<KeywordResponse>();
+            _keywordService.GetKeywordById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetProductionCompanyById()
+    public MovieServiceFixture WithGetProductionCompanyById(bool returnsNull = false)
     {
-        ProductionCompanyResponse response = _fixture.Create<ProductionCompanyResponse>();
-        _productionCompanyService.GetProductionCompanyById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Production Company Not Found", $"Production Company with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            ProductionCompanyResponse response = _fixture.Create<ProductionCompanyResponse>();
+            _productionCompanyService.GetProductionCompanyById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetGenderById()
+    public MovieServiceFixture WithGetGenderById(bool returnsNull = false)
     {
-        GenderResponse response = _fixture.Create<GenderResponse>();
-        _genderService.GetGenderById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Production Company Not Found", $"Production Company with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            GenderResponse response = _fixture.Create<GenderResponse>();
+            _genderService.GetGenderById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetPersonById()
+    public MovieServiceFixture WithGetPersonById(bool returnsNull = false)
     {
-        PersonResponse response = _fixture.Create<PersonResponse>();
-        _personService.GetPersonById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Person Not Found", $"Person with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            PersonResponse response = _fixture.Create<PersonResponse>();
+            _personService.GetPersonById(Arg.Any<int>()).Returns(response);
+        }
+
         return this;
     }
 
-    public MovieServiceFixture WithGetDepartmentById()
+    public MovieServiceFixture WithGetDepartmentById(bool returnsNull = false)
     {
-        DepartmentResponse response = _fixture.Create<DepartmentResponse>();
-        _departmentService.GetDepartmentById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Department Not Found", $"Department with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            DepartmentResponse response = _fixture.Create<DepartmentResponse>();
+            _departmentService.GetDepartmentById(Arg.Any<int>()).Returns(response);
+        }
         return this;
     }
     #endregion
