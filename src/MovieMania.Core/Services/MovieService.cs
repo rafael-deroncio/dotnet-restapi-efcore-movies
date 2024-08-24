@@ -244,7 +244,9 @@ public class MovieService(
             }
             catch (Exception exception)
             {
-                if (exception.InnerException is BaseException baseException)
+                if (exception is BaseException)
+                    errors.Add(exception.Message);
+                else if (exception.InnerException is BaseException baseException)
                     errors.Add(baseException.Message);
                 else throw;
             }

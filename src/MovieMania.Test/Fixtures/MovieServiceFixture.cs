@@ -5,6 +5,7 @@ using MovieMania.Core.Configurations.Mapper;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;
+using MovieMania.Core.Exceptions;
 using MovieMania.Core.Repositories.Interfaces;
 using MovieMania.Core.Requests;
 using MovieMania.Core.Services;
@@ -14,6 +15,7 @@ using MovieMania.Domain.Responses;
 using NSubstitute;
 using NSubstitute.Core;
 using NSubstitute.Core.Arguments;
+using NSubstitute.ExceptionExtensions;
 
 namespace MovieMania.Test.Fixtures;
 
@@ -84,10 +86,11 @@ public class MovieServiceFixture
     #endregion
 
     #region Fixtures
-    public MovieServiceFixture WithMovieEntity(int id = 0)
+    public MovieServiceFixture WithMovieEntity(int id = 0, string title = null)
     {
         MovieEntity entity = _fixture.Create<MovieEntity>();
         entity.MovieId = id;
+        entity.Title = string.IsNullOrEmpty(title) ? entity.Title : title;
 
         _context.Movies = ConfigureMovieEntity(entity); ;
         return this;
@@ -174,10 +177,21 @@ public class MovieServiceFixture
         return this;
     }
 
-    public MovieServiceFixture WithGetCountryById()
+    public MovieServiceFixture WithGetCountryById(bool returnsNull = false)
     {
-        CountryResponse response = _fixture.Create<CountryResponse>();
-        _countryService.GetCountryById(Arg.Any<int>()).Returns(response);
+        int id = Arg.Any<int>();
+
+        if (returnsNull)
+        {
+            EntityNotFoundException exception = new("Country Not Found", $"Country with id {id} not exists.");
+            _countryService.GetCountryById(id).Throws(exception);
+        }
+        else
+        {
+            CountryResponse response = _fixture.Create<CountryResponse>();
+            _countryService.GetCountryById(id).ReturnsForAnyArgs(response);
+        }
+
         return this;
     }
 
