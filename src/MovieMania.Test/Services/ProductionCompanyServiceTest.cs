@@ -38,7 +38,7 @@ public class ProductionCompanyServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Production Company Not Found";
-        string exceptionMessage = $"Production Company with id {id} not exists.";
+        string exceptionMessage = $"Production Company with id {id} not exists";
         int callsGet = 1;
         ProductionCompanyServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class ProductionCompanyServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Production Company Not Found";
-        string exceptionMessage = $"Production Company with id {id} not exists.";
+        string exceptionMessage = $"Production Company with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         ProductionCompanyServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class ProductionCompanyServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Production Company Not Found";
-        string exceptionMessage = $"Production Company with id {id} not exists.";
+        string exceptionMessage = $"Production Company with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         ProductionCompanyServiceFixture fixture = new();

@@ -38,7 +38,7 @@ public class GenderServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Gender Not Found";
-        string exceptionMessage = $"Gender with id {id} not exists.";
+        string exceptionMessage = $"Gender with id {id} not exists";
         int callsGet = 1;
         GenderServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class GenderServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Gender Not Found";
-        string exceptionMessage = $"Gender with id {id} not exists.";
+        string exceptionMessage = $"Gender with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         GenderServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class GenderServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Gender Not Found";
-        string exceptionMessage = $"Gender with id {id} not exists.";
+        string exceptionMessage = $"Gender with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         GenderServiceFixture fixture = new();

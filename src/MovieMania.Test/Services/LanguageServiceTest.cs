@@ -38,7 +38,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Not Found";
-        string exceptionMessage = $"Language with id {id} not exists.";
+        string exceptionMessage = $"Language with id {id} not exists";
         int callsGet = 1;
         LanguageServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Not Found";
-        string exceptionMessage = $"Language with id {id} not exists.";
+        string exceptionMessage = $"Language with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         LanguageServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Not Found";
-        string exceptionMessage = $"Language with id {id} not exists.";
+        string exceptionMessage = $"Language with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         LanguageServiceFixture fixture = new();
@@ -355,7 +355,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Role Not Found";
-        string exceptionMessage = $"Language Role with id {id} not exists.";
+        string exceptionMessage = $"Language Role with id {id} not exists";
         int callsGet = 1;
         LanguageServiceFixture fixture = new();
 
@@ -482,7 +482,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Role Not Found";
-        string exceptionMessage = $"Language Role with id {id} not exists.";
+        string exceptionMessage = $"Language Role with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         LanguageServiceFixture fixture = new();
@@ -586,7 +586,7 @@ public class LanguageServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Language Role Not Found";
-        string exceptionMessage = $"Language Role with id {id} not exists.";
+        string exceptionMessage = $"Language Role with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         LanguageServiceFixture fixture = new();

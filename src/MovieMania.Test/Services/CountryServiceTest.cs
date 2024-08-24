@@ -38,7 +38,7 @@ public class CountryServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Country Not Found";
-        string exceptionMessage = $"Country with id {id} not exists.";
+        string exceptionMessage = $"Country with id {id} not exists";
         int callsGet = 1;
         CountryServiceFixture fixture = new();
 
@@ -167,7 +167,7 @@ public class CountryServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Country Not Found";
-        string exceptionMessage = $"Country with id {id} not exists.";
+        string exceptionMessage = $"Country with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         CountryServiceFixture fixture = new();
@@ -273,7 +273,7 @@ public class CountryServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Country Not Found";
-        string exceptionMessage = $"Country with id {id} not exists.";
+        string exceptionMessage = $"Country with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         CountryServiceFixture fixture = new();

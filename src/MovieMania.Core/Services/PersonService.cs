@@ -46,7 +46,7 @@ public class PersonService(
         try
         {
             PersonEntity entity = await _repository.Get(new() { PersonId = id })
-                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists");
 
             return await _repository.Delete(entity);
         }
@@ -65,7 +65,7 @@ public class PersonService(
         try
         {
             PersonEntity entity = await _repository.Get(new() { PersonId = id })
-                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists");
 
             return _mapper.Map<PersonResponse>(entity);
         }
@@ -110,7 +110,7 @@ public class PersonService(
         try
         {
             PersonEntity entity = await _repository.Get(new() { PersonId = id })
-                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Person Not Found", $"Person with id {id} not exists");
             
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on update person entity", "Person alredy registred");

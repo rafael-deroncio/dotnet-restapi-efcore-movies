@@ -46,7 +46,7 @@ public class KeywordService(
         try
         {
             KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
-                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists");
 
             return await _repository.Delete(entity);
         }
@@ -65,7 +65,7 @@ public class KeywordService(
         try
         {
             KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
-                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists");
             
             return _mapper.Map<KeywordResponse>(entity);        }
         catch (BaseException) { throw; }
@@ -109,7 +109,7 @@ public class KeywordService(
         try
         {
             KeywordEntity entity = await _repository.Get(new() { KeywordId = id })
-                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Keyword Not Found", $"Keyword with id {id} not exists");
 
             if ((await _repository.Get()).Where(x => x.Keyword == request.Keyword).Any())
                 throw new EntityBadRequestException("Error on update keyword entity", "Keyword alredy registred");

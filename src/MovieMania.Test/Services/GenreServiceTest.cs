@@ -38,7 +38,7 @@ public class GenreServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Genre Not Found";
-        string exceptionMessage = $"Genre with id {id} not exists.";
+        string exceptionMessage = $"Genre with id {id} not exists";
         int callsGet = 1;
         GenreServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class GenreServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Genre Not Found";
-        string exceptionMessage = $"Genre with id {id} not exists.";
+        string exceptionMessage = $"Genre with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         GenreServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class GenreServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Genre Not Found";
-        string exceptionMessage = $"Genre with id {id} not exists.";
+        string exceptionMessage = $"Genre with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         GenreServiceFixture fixture = new();

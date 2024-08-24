@@ -38,7 +38,7 @@ public class PersonServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Person Not Found";
-        string exceptionMessage = $"Person with id {id} not exists.";
+        string exceptionMessage = $"Person with id {id} not exists";
         int callsGet = 1;
         PersonServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class PersonServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Person Not Found";
-        string exceptionMessage = $"Person with id {id} not exists.";
+        string exceptionMessage = $"Person with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         PersonServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class PersonServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Person Not Found";
-        string exceptionMessage = $"Person with id {id} not exists.";
+        string exceptionMessage = $"Person with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         PersonServiceFixture fixture = new();

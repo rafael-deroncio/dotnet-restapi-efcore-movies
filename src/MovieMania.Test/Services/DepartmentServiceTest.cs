@@ -38,7 +38,7 @@ public class DepartmentServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Department Not Found";
-        string exceptionMessage = $"Department with id {id} not exists.";
+        string exceptionMessage = $"Department with id {id} not exists";
         int callsGet = 1;
         DepartmentServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class DepartmentServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Department Not Found";
-        string exceptionMessage = $"Department with id {id} not exists.";
+        string exceptionMessage = $"Department with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         DepartmentServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class DepartmentServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Department Not Found";
-        string exceptionMessage = $"Department with id {id} not exists.";
+        string exceptionMessage = $"Department with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         DepartmentServiceFixture fixture = new();

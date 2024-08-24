@@ -183,7 +183,7 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Country Not Found", $"Country with id {id} not exists.");
+            EntityNotFoundException exception = new("Country Not Found", $"Country with id {id} not exists");
             _countryService.GetCountryById(id).Throws(exception);
         }
         else
@@ -201,14 +201,14 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Language Not Found", $"Language with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Language Not Found", $"Language with id {id} not exists");
+            _languageService.GetLanguageById(id).Throws(exception);
         }
         else
         {
 
             LanguageResponse response = _fixture.Create<LanguageResponse>();
-            _languageService.GetLanguageById(Arg.Any<int>()).Returns(response);
+            _languageService.GetLanguageById(id).Returns(response);
         }
 
         return this;
@@ -220,13 +220,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Language Role Not Found", $"Language Role with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Language Role Not Found", $"Language Role with id {id} not exists");
+            _languageService.GetLanguageRoleById(id).Throws(exception);
         }
         else
         {
             LanguageRoleResponse response = _fixture.Create<LanguageRoleResponse>();
-            _languageService.GetLanguageRoleById(Arg.Any<int>()).Returns(response);
+            _languageService.GetLanguageRoleById(id).Returns(response);
         }
 
         return this;
@@ -238,13 +238,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Genre Not Found", $"Genre with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Genre Not Found", $"Genre with id {id} not exists");
+            _genreService.GetGenreById(id).Throws(exception);
         }
         else
         {
             GenreResponse response = _fixture.Create<GenreResponse>();
-            _genreService.GetGenreById(Arg.Any<int>()).Returns(response);
+            _genreService.GetGenreById(id).Returns(response);
         }
 
         return this;
@@ -256,13 +256,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Keyword Not Found", $"Keyword with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Keyword Not Found", $"Keyword with id {id} not exists");
+            _keywordService.GetKeywordById(id).Throws(exception);
         }
         else
         {
             KeywordResponse response = _fixture.Create<KeywordResponse>();
-            _keywordService.GetKeywordById(Arg.Any<int>()).Returns(response);
+            _keywordService.GetKeywordById(id).Returns(response);
         }
 
         return this;
@@ -274,13 +274,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Production Company Not Found", $"Production Company with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Production Company Not Found", $"Production Company with id {id} not exists");
+            _productionCompanyService.GetProductionCompanyById(id).Throws(exception);
         }
         else
         {
             ProductionCompanyResponse response = _fixture.Create<ProductionCompanyResponse>();
-            _productionCompanyService.GetProductionCompanyById(Arg.Any<int>()).Returns(response);
+            _productionCompanyService.GetProductionCompanyById(id).Returns(response);
         }
 
         return this;
@@ -292,13 +292,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Production Company Not Found", $"Production Company with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Gender Not Found", $"Gender with id {id} not exists");
+            _genderService.GetGenderById(id).Throws(exception);
         }
         else
         {
             GenderResponse response = _fixture.Create<GenderResponse>();
-            _genderService.GetGenderById(Arg.Any<int>()).Returns(response);
+            _genderService.GetGenderById(id).Returns(response);
         }
 
         return this;
@@ -310,13 +310,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Person Not Found", $"Person with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Person Not Found", $"Person with id {id} not exists");
+            _personService.GetPersonById(id).Throws(exception);
         }
         else
         {
             PersonResponse response = _fixture.Create<PersonResponse>();
-            _personService.GetPersonById(Arg.Any<int>()).Returns(response);
+            _personService.GetPersonById(id).Returns(response);
         }
 
         return this;
@@ -328,13 +328,13 @@ public class MovieServiceFixture
 
         if (returnsNull)
         {
-            EntityNotFoundException exception = new("Department Not Found", $"Department with id {id} not exists.");
-            _countryService.GetCountryById(id).Throws(exception);
+            EntityNotFoundException exception = new("Department Not Found", $"Department with id {id} not exists");
+            _departmentService.GetDepartmentById(id).Throws(exception);
         }
         else
         {
             DepartmentResponse response = _fixture.Create<DepartmentResponse>();
-            _departmentService.GetDepartmentById(Arg.Any<int>()).Returns(response);
+            _departmentService.GetDepartmentById(id).Returns(response);
         }
         return this;
     }

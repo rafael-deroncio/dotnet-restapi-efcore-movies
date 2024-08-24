@@ -38,7 +38,7 @@ public class KeywordServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Keyword Not Found";
-        string exceptionMessage = $"Keyword with id {id} not exists.";
+        string exceptionMessage = $"Keyword with id {id} not exists";
         int callsGet = 1;
         KeywordServiceFixture fixture = new();
 
@@ -165,7 +165,7 @@ public class KeywordServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Keyword Not Found";
-        string exceptionMessage = $"Keyword with id {id} not exists.";
+        string exceptionMessage = $"Keyword with id {id} not exists";
         int callsGet = 1;
         int callsUpdate = 0;
         KeywordServiceFixture fixture = new();
@@ -269,7 +269,7 @@ public class KeywordServiceTest
         // Arrange
         int id = 1;
         string exceptionTitle = "Keyword Not Found";
-        string exceptionMessage = $"Keyword with id {id} not exists.";
+        string exceptionMessage = $"Keyword with id {id} not exists";
         int callsGet = 1;
         int callsDelete = 0;
         KeywordServiceFixture fixture = new();

@@ -86,7 +86,7 @@ public class MovieService(
         try
         {
             MovieEntity entity = _context.Movies.FirstOrDefault(x => x.MovieId == id)
-                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists");
 
             _context.Movies.Remove(entity);
             _context.SaveChanges();
@@ -108,7 +108,7 @@ public class MovieService(
         try
         {
             MovieEntity entity = _context.Movies.FirstOrDefault(m => m.MovieId == id)
-                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists");
 
             if (!filter.AddProductionCountries) entity.ProductionCountries = [];
             if (!filter.AddCompanies) entity.Companies = [];
@@ -177,7 +177,7 @@ public class MovieService(
         try
         {
             MovieEntity entity = _context.Movies.Find(id)
-                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists");
 
             entity = _mapper.Map<MovieEntity>(request);
             List<string> errors = [];
@@ -256,6 +256,8 @@ public class MovieService(
     private void OnCreateOrUpdateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors)
     {
         // Language
+        List<string> languageErrors = [];
+
         if (entity.Languages != null && entity.Languages.Any())
         {
             // Language
@@ -263,27 +265,45 @@ public class MovieService(
             {
                 entity.Languages = entity.Languages.Select(x =>
                 {
-                    _ = _languageService.GetLanguageById(x.LanguageId);
-                    _ = _languageService.GetLanguageRoleById(x.LanguageId);
-                    return new MovieLanguageEntity()
-                    {
-                        LanguageId = x.LanguageId,
-                        Language = _context.Languages.Find(x.LanguageId),
+                    MovieLanguageEntity language = new();
 
-                        LanguageRoleId = x.LanguageRoleId,
-                        LanguageRole = _context.LanguageRoles.Find(x.LanguageRoleId),
-                    };
+                    try
+                    {
+                        _ = _languageService.GetLanguageById(x.LanguageId);
+                        language.LanguageId = x.LanguageId;
+                        language.Language = _context.Languages.Find(x.LanguageId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            languageErrors.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            languageErrors.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    try
+                    {
+                        _ = _languageService.GetLanguageRoleById(x.LanguageId);
+                        language.LanguageRoleId = x.LanguageRoleId;
+                        language.LanguageRole = _context.LanguageRoles.Find(x.LanguageRoleId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            languageErrors.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            languageErrors.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    return language;
                 }
                 ).ToArray();
+
+                errors.AddRange(languageErrors);
             }
-            catch (Exception exception)
-            {
-                if (exception is BaseException)
-                    errors.Add(exception.Message);
-                else if (exception.InnerException is BaseException baseException)
-                    errors.Add(baseException.Message);
-                else throw;
-            }
+            catch (Exception) { throw; }
         }
     }
 
@@ -367,7 +387,9 @@ public class MovieService(
             }
             catch (Exception exception)
             {
-                if (exception.InnerException is BaseException baseException)
+                if (exception is BaseException)
+                    errors.Add(exception.Message);
+                else if (exception.InnerException is BaseException baseException)
                     errors.Add(baseException.Message);
                 else throw;
             }
@@ -382,32 +404,54 @@ public class MovieService(
         {
             try
             {
+                List<string> castErros = [];
+
                 entity.Casts = entity.Casts.Select(x =>
                 {
-                    _ = _genderService.GetGenderById(x.GenderId);
-                    _ = _personService.GetPersonById(x.PersonId);
-                    return new MovieCastEntity()
+
+                    MovieCastEntity cast = new()
                     {
-                        GenderId = x.GenderId,
-                        Gender = _context.Genders.Find(x.GenderId),
-
-                        PersonId = x.PersonId,
-                        Person = _context.Persons.Find(x.PersonId),
-
                         CharacterName = x.CharacterName,
                         CastOrder = x.CastOrder
                     };
+
+                    try
+                    {
+                        _ = _genderService.GetGenderById(x.GenderId);
+                        cast.GenderId = x.GenderId;
+                        cast.Gender = _context.Genders.Find(x.GenderId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            castErros.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            castErros.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    try
+                    {
+                        _ = _personService.GetPersonById(x.PersonId);
+                        cast.PersonId = x.PersonId;
+                        cast.Person = _context.Persons.Find(x.PersonId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            castErros.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            castErros.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    return cast;
                 }
                 ).ToArray();
+
+                errors.AddRange(castErros);
             }
-            catch (Exception exception)
-            {
-                if (exception is BaseException)
-                    errors.Add(exception.Message);
-                else if (exception.InnerException is BaseException baseException)
-                    errors.Add(baseException.Message);
-                else throw;
-            }
+            catch (Exception) { throw; }
         }
 
     }
@@ -419,32 +463,52 @@ public class MovieService(
         {
             try
             {
+                List<string> crewErrors = [];
+
                 entity.Crews = entity.Crews.Select(x =>
                 {
-                    _ = _departmentService.GetDepartmentById(x.DepartmentId);
-                    _ = _personService.GetPersonById(x.PersonId);
-                    return new MovieCrewEntity()
+                    MovieCrewEntity crew = new()
                     {
-                        DepartmentId = x.DepartmentId,
-                        Department = _context.Departments.Find(x.DepartmentId),
-
-                        PersonId = x.PersonId,
-                        Person = _context.Persons.Find(x.PersonId),
-
                         Job = x.Job
                     };
+
+                    try
+                    {
+                        _ = _departmentService.GetDepartmentById(x.DepartmentId);
+                        crew.DepartmentId = x.DepartmentId;
+                        crew.Department = _context.Departments.Find(x.DepartmentId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            crewErrors.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            crewErrors.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    try
+                    {
+                        _ = _personService.GetPersonById(x.PersonId);
+                        crew.PersonId = x.PersonId;
+                        crew.Person = _context.Persons.Find(x.PersonId);
+                    }
+                    catch (Exception exception)
+                    {
+                        if (exception is BaseException)
+                            crewErrors.Add(exception.Message);
+                        else if (exception.InnerException is BaseException baseException)
+                            crewErrors.Add(baseException.Message);
+                        else throw;
+                    }
+
+                    return crew;
                 }
                 ).ToArray();
-            }
-            catch (Exception exception)
-            {
-                if (exception is BaseException)
-                    errors.Add(exception.Message);
-                else if (exception.InnerException is BaseException baseException)
-                    errors.Add(baseException.Message);
-                else throw;
-            }
-        }
 
+                errors.AddRange(crewErrors);
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

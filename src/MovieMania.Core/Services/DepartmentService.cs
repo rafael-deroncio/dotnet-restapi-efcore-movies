@@ -46,7 +46,7 @@ public class DepartmentService(
         try
         {
             DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
-                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists");
 
             return await _repository.Delete(entity);
         }
@@ -65,7 +65,7 @@ public class DepartmentService(
         try
         {
             DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
-                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists");
 
             return _mapper.Map<DepartmentResponse>(entity);
         }
@@ -110,7 +110,7 @@ public class DepartmentService(
         try
         {
             DepartmentEntity entity = await _repository.Get(new() { DepartmentId = id })
-                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Department Not Found", $"Department with id {id} not exists");
 
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on update department entity", "Department alredy registred");

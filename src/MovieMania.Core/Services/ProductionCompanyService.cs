@@ -46,7 +46,7 @@ public class ProductionCompanyService(
         try
         {
             ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
-                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists");
 
             return await _repository.Delete(entity);
         }
@@ -65,7 +65,7 @@ public class ProductionCompanyService(
         try
         {
             ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
-                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists");
 
             return _mapper.Map<ProductionCompanyResponse>(entity);
         }
@@ -110,7 +110,7 @@ public class ProductionCompanyService(
         try
         {
             ProductionCompanyEntity entity = await _repository.Get(new() { CompanyId = id })
-                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Production Company Not Found", $"Production Company with id {id} not exists");
 
             if ((await _repository.Get()).Where(x => x.Name == request.Name).Any())
                 throw new EntityBadRequestException("Error on update production company entity", "Production Company alredy registred");

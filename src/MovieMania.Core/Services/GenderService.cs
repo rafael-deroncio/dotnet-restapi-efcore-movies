@@ -46,7 +46,7 @@ public class GenderService(
         try
         {
             GenderEntity entity = await _repository.Get(new() { GenderId = id })
-                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists");
 
             return await _repository.Delete(entity);
         }
@@ -65,7 +65,7 @@ public class GenderService(
         try
         {
             GenderEntity entity = await _repository.Get(new() { GenderId = id })
-                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists");
 
             return _mapper.Map<GenderResponse>(entity);
         }
@@ -110,7 +110,7 @@ public class GenderService(
         try
         {
             GenderEntity entity = await _repository.Get(new() { GenderId = id })
-                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists.");
+                ?? throw new EntityNotFoundException("Gender Not Found", $"Gender with id {id} not exists");
 
             if ((await _repository.Get()).Where(x => x.Gender == request.Gender).Any())
                 throw new EntityBadRequestException("Error on update gender entity", "Gender alredy registred with gender");
