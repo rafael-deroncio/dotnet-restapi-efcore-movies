@@ -1488,14 +1488,26 @@ public class MovieServiceTest
     #endregion
 
     #region Paged
-    // [Fact]
+    [Fact]
     public async Task GetPagedMovies_ValidRequest_ReturnsPaginatedMovieResponse()
     {
         // Arrange
+        int id = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetPagination();
+        MovieService service = fixture.Instance();
 
         // Act
+        MovieFilterRequest filter = fixture.MovieFilterRequestMock(full: true);
+        PaginationRequest request = fixture.PaginationRequestMock();
+        PaginationResponse<MovieResponse> response = await service.GetPagedMovies(request, filter);
+
+        IEnumerable<ICall> callsGetPagination = fixture.PaginationServiceCalls().Where(x => 
+            x.GetMethodInfo(). Name == "GetPagination");
 
         // Assert
+        Assert.NotNull(response);
+        Assert.Single(callsGetPagination);
     }
     #endregion
 }

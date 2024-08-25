@@ -135,9 +135,7 @@ public class MovieService(
     {
         try
         {
-            IQueryable<MovieEntity> query = _context.Movies.AsTracking();
-
-            IEnumerable<MovieEntity> entities = query
+            IEnumerable<MovieEntity> entities = _context.Movies
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size);
 

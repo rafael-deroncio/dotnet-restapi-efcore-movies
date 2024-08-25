@@ -177,6 +177,17 @@ public class MovieServiceFixture
         return this;
     }
 
+    public MovieServiceFixture WithGetPagination()
+    {
+        MovieMania.Core.Requests.PaginationRequest<MovieResponse> request = 
+            Arg.Any<MovieMania.Core.Requests.PaginationRequest<MovieResponse>>();
+        
+        PaginationResponse<MovieResponse> response = _fixture.Create<PaginationResponse<MovieResponse>>();
+
+        _paginationService.GetPagination<MovieResponse>(request).Returns(response);
+        return this;
+    }
+
     public MovieServiceFixture WithGetCountryById(bool returnsNull = false)
     {
         int id = Arg.Any<int>();
