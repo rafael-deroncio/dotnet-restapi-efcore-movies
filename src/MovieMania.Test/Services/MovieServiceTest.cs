@@ -792,97 +792,660 @@ public class MovieServiceTest
     #endregion
 
     #region Update
-    // [Fact]
+    [Fact]
     public async Task UpdateMovie_ValidIdAndRequest_ReturnsMovieResponse()
     {
         // Arrange
+        int id = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetGenreById()
+                                                               .WithGenreEntity()
+                                                               .WithGetKeywordById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetProductionCompanyById()
+                                                               .WithProductionCompanyEntity()
+                                                               .WithGetGenderById()
+                                                               .WithGenderEntity()
+                                                               .WithGetPersonById()
+                                                               .WithPersonEntity()
+                                                               .WithGetDepartmentById()
+                                                               .WithDepartmentEntity();
 
         // Act
+        MovieRequest request = fixture.MovieRequestMock();
+        MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(response);
+        Assert.NotEmpty(callsGetPersonById);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.NotEmpty(callsGetProductionCompanyById);
+        Assert.NotEmpty(callsGenderServiceCalls);
+        Assert.NotEmpty(callsGetDepartmentById);
     }
 
-    // [Fact]
+    [Fact]
     public async Task UpdateMovie_InvalidId_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Not Found";
+        string exceptionMesage = $"Movie with id {id} not exists";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity();
 
         // Act
+        EntityNotFoundException exception = await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.Equal(exceptionMesage, exception.Message);
     }
 
-    // [Fact]
+    [Fact]
     public async Task UpdateMovie_InvalidRequest_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string title = "XPTO";
+        string exceptionTitle = "Error on update movie entity";
+        string exceptionMesage = "Movie already registered with the same title.";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id: id, title: title);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            request.Title = title;
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.Equal(exceptionMesage, exception.Message);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidProductionCountries_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Country with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById(returnsNull: true)
+                                                               .WithCountryEntity();
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetLanguageRoleById);
+        Assert.Empty(callsGetGenreById);
+        Assert.Empty(callsGetKeywordById);
+        Assert.Empty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidLanguages_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Language with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById(returnsNull: true)
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById();
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.Empty(callsGetGenreById);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetKeywordById);
+        Assert.Empty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
+    public async Task UpdateMovie_InvalidLanguageRoles_ThrowsException()
+    {
+        // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Language Role with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById(returnsNull: true);
+
+        // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
+
+        // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.Empty(callsGetGenreById);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetKeywordById);
+        Assert.Empty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetDepartmentById);
+    }
+
+    [Fact]
     public async Task UpdateMovie_InvalidGenres_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Genre with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithGenreEntity()
+                                                               .WithGetGenreById(returnsNull: true);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetKeywordById);
+        Assert.Empty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidKeywords_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Keyword with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithGenreEntity()
+                                                               .WithGetGenreById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetKeywordById(returnsNull: true);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.Empty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidCompanies_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Production Company with id ";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithGenreEntity()
+                                                               .WithGetGenreById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetKeywordById()
+                                                               .WithProductionCompanyEntity()
+                                                               .WithGetProductionCompanyById(returnsNull: true);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.StartsWith(exceptionMessage, exception.Message);
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.NotEmpty(callsGetProductionCompanyById);
+        Assert.Empty(callsGenderServiceCalls);
+        Assert.Empty(callsGetPersonById);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidCasts_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Gender with id, Error: Person with id";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithGenreEntity()
+                                                               .WithGetGenreById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetKeywordById()
+                                                               .WithProductionCompanyEntity()
+                                                               .WithGetProductionCompanyById()
+                                                               .WithGenderEntity()
+                                                               .WithGetGenderById(returnsNull: true)
+                                                               .WithPersonEntity()
+                                                               .WithGetPersonById(returnsNull: true);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.True(exception.Message.Split(",").Where(x => x.StartsWith(exceptionMessage.Split(",")[0])).Any());
+        Assert.True(exception.Message.Split(",").Where(x => x.StartsWith(exceptionMessage.Split(",")[1])).Any());
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.NotEmpty(callsGetProductionCompanyById);
+        Assert.NotEmpty(callsGenderServiceCalls);
+        Assert.NotEmpty(callsGetPersonById);
+        Assert.Empty(callsGetDepartmentById);
     }
 
+    [Fact]
     public async Task UpdateMovie_InvalidCrews_ThrowsException()
     {
         // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Entity Error";
+        string exceptionMessage = "Error: Person with id";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id)
+                                                               .WithGetCountryById()
+                                                               .WithCountryEntity()
+                                                               .WithLanguageEntity()
+                                                               .WithGetLanguageById()
+                                                               .WithLanguageRoleEntity()
+                                                               .WithGetLanguageRoleById()
+                                                               .WithGenreEntity()
+                                                               .WithGetGenreById()
+                                                               .WithKeywordEntity()
+                                                               .WithGetKeywordById()
+                                                               .WithProductionCompanyEntity()
+                                                               .WithGetProductionCompanyById()
+                                                               .WithGenderEntity()
+                                                               .WithGetGenderById()
+                                                               .WithPersonEntity()
+                                                               .WithGetPersonById(returnsNull: true)
+                                                               .WithDepartmentEntity()
+                                                               .WithGetDepartmentById(returnsNull: true);
 
         // Act
+        EntityBadRequestException exception = await Assert.ThrowsAsync<EntityBadRequestException>(async () =>
+        {
+            MovieRequest request = fixture.MovieRequestMock();
+            MovieResponse response = await fixture.Instance().UpdateMovie(id, request);
+        });
+
+        IEnumerable<ICall> callsGetCountryById = fixture.CountryServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetCountryById");
+
+        IEnumerable<ICall> callsGetLanguageById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageById");
+
+        IEnumerable<ICall> callsGetLanguageRoleById = fixture.LanguageServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetLanguageRoleById");
+
+        IEnumerable<ICall> callsGetGenreById = fixture.GenreServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenreById");
+
+        IEnumerable<ICall> callsGetKeywordById = fixture.KeywordServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetKeywordById");
+
+        IEnumerable<ICall> callsGetProductionCompanyById = fixture.ProductionCompanyServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetProductionCompanyById");
+
+        IEnumerable<ICall> callsGenderServiceCalls = fixture.GenderServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetGenderById");
+
+        IEnumerable<ICall> callsGetPersonById = fixture.PersonServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetPersonById");
+
+        IEnumerable<ICall> callsGetDepartmentById = fixture.DepartmentServiceCalls()
+            .Where(x => x.GetMethodInfo().Name == "GetDepartmentById");
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.True(exception.Message.Split(",").Where(x => x.StartsWith(exceptionMessage.Split(",")[0])).Any());
+        Assert.NotEmpty(callsGetCountryById);
+        Assert.NotEmpty(callsGetLanguageById);
+        Assert.NotEmpty(callsGetLanguageRoleById);
+        Assert.NotEmpty(callsGetGenreById);
+        Assert.NotEmpty(callsGetKeywordById);
+        Assert.NotEmpty(callsGetProductionCompanyById);
+        Assert.NotEmpty(callsGenderServiceCalls);
+        Assert.NotEmpty(callsGetPersonById);
+        Assert.Empty(callsGetDepartmentById);
     }
     #endregion
 

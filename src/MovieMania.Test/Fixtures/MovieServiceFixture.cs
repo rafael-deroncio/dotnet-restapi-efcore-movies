@@ -92,7 +92,7 @@ public class MovieServiceFixture
         entity.MovieId = id;
         entity.Title = string.IsNullOrEmpty(title) ? entity.Title : title;
 
-        _context.Movies = ConfigureMovieEntity(entity); ;
+        _context.Movies = ConfigureEntity(entity);
         return this;
     }
 

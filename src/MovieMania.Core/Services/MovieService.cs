@@ -47,13 +47,13 @@ public class MovieService(
             MovieEntity entity = _mapper.Map<MovieEntity>(request);
             List<string> errors = [];
 
-            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors, false);
+            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors, false);
 
             // Errors
             if (errors.Any())
@@ -176,19 +176,22 @@ public class MovieService(
     {
         try
         {
-            MovieEntity entity = _context.Movies.Find(id)
+            MovieEntity entity = _context.Movies.FirstOrDefault(x => x.MovieId == id)
                 ?? throw new EntityNotFoundException("Movie Not Found", $"Movie with id {id} not exists");
+
+            if (_context.Movies.Where(movie => movie.Title == request.Title).Any())
+                throw new EntityBadRequestException("Error on update movie entity", "Movie already registered with the same title.");
 
             entity = _mapper.Map<MovieEntity>(request);
             List<string> errors = [];
 
-            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors);
-            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors);
+            OnCreateOrUpdateMovieProccessProductionCountries(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessLanguages(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessGenres(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessKeywords(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessCompanies(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessCasts(ref entity, ref errors, true);
+            OnCreateOrUpdateMovieProccessCrews(ref entity, ref errors, true);
 
             // Errors
             if (errors.Any())
@@ -209,7 +212,7 @@ public class MovieService(
             entity.VotesCount = request.VotesCount;
             entity.UpdatedAt = DateTime.UtcNow;
 
-            entity = _context.Movies.Update(entity).Entity;
+            _context.Movies.Update(entity);
             _context.SaveChanges();
 
             return await Task.FromResult(_mapper.Map<MovieResponse>(entity));
@@ -224,8 +227,11 @@ public class MovieService(
         }
     }
 
-    private void OnCreateOrUpdateMovieProccessProductionCountries(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessProductionCountries(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Country
         if (entity.ProductionCountries != null && entity.ProductionCountries.Any())
         {
@@ -253,8 +259,11 @@ public class MovieService(
         }
     }
 
-    private void OnCreateOrUpdateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessLanguages(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Language
         List<string> languageErrors = [];
 
@@ -307,8 +316,11 @@ public class MovieService(
         }
     }
 
-    private void OnCreateOrUpdateMovieProccessGenres(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessGenres(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Genres
         if (entity.Genres != null && entity.Genres.Any())
         {
@@ -337,8 +349,11 @@ public class MovieService(
 
     }
 
-    private void OnCreateOrUpdateMovieProccessKeywords(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessKeywords(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Keywords
         if (entity.Keywords != null && entity.Keywords.Any())
         {
@@ -367,8 +382,11 @@ public class MovieService(
 
     }
 
-    private void OnCreateOrUpdateMovieProccessCompanies(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCompanies(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Companies
         if (entity.Companies != null && entity.Companies.Any())
         {
@@ -397,8 +415,11 @@ public class MovieService(
 
     }
 
-    private void OnCreateOrUpdateMovieProccessCasts(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCasts(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Language
         if (entity.Casts != null && entity.Casts.Any())
         {
@@ -456,8 +477,11 @@ public class MovieService(
 
     }
 
-    private void OnCreateOrUpdateMovieProccessCrews(ref MovieEntity entity, ref List<string> errors)
+    private void OnCreateOrUpdateMovieProccessCrews(ref MovieEntity entity, ref List<string> errors, bool failFast)
     {
+        if (failFast && errors.Any())
+            return;
+
         // Person
         if (entity.Crews != null && entity.Crews.Any())
         {
