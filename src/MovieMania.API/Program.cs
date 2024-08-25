@@ -9,31 +9,19 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Host.ConfigureSerilog();
 
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddLowerCaseRouting();
-
-builder.Services.AddCors(builder.Configuration);
-
-builder.Services.AddApiVersioning(builder.Configuration);
-
-builder.Services.AddSwagger(builder.Configuration);
-
-builder.Services.AddSwaggerJwtBearer(builder.Configuration);
-
-builder.Services.AddAuthentication(builder.Configuration);
-
-builder.Services.AddAuthorization();
-
-builder.Services.AddServices();
-
-builder.Services.AddRepositories();
-
-builder.Services.AddInMemoryDatabase();
-
-builder.Services.AddObjectConverter();
-
-builder.Services.AddDbContext<MovieManiaContext>(options =>
+builder.Services.AddEndpointsApiExplorer()
+                .AddLowerCaseRouting()
+                .AddCors(builder.Configuration)
+                .AddApiVersioning(builder.Configuration)
+                .AddSwagger(builder.Configuration)
+                .AddSwaggerJwtBearer(builder.Configuration)
+                .AddAuthentication(builder.Configuration)
+                .AddAuthorization()
+                .AddServices()
+                .AddRepositories()
+                .AddInMemoryDatabase()
+                .AddObjectConverter()
+                .AddDbContext<MovieManiaContext>(options =>
 {
     string connection = builder.Configuration.GetConnectionString("MovieManiaConnection");
     string assembly = Assembly.GetExecutingAssembly().GetName().Name;
@@ -44,30 +32,17 @@ builder.Services.AddDbContext<MovieManiaContext>(options =>
 
 WebApplication app = builder.Build();
 
-app.UseSerilogRequestLogging();
-
-app.UseCors();
-
-app.UseRouting();
-
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.UseApiVersioning();
-
-app.UseSwagger(builder.Configuration);
-
-app.UseGlobalExceptionHandler();
-
-app.UseHsts();
-
-app.UseHttpsRedirection();
-
-// app.InitializeDatabase();
-
-app.LoadDatabaseMomory();
+app.UseSerilogRequestLogging()
+    .UseCors()
+    .UseRouting()
+    .UseAuthentication()
+    .UseAuthorization()
+    .UseApiVersioning()
+    .UseSwagger(builder.Configuration)
+    .UseGlobalExceptionHandler()
+    .UseHsts()
+    .UseHttpsRedirection()
+    .LoadDatabaseMomory();
 
 app.MapControllers();
-
 app.Run();

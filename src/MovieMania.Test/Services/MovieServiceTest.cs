@@ -1,6 +1,5 @@
 using MovieMania.Core.Exceptions;
 using MovieMania.Core.Services;
-using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
 using MovieMania.Test.Fixtures;

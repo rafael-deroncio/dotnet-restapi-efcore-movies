@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;

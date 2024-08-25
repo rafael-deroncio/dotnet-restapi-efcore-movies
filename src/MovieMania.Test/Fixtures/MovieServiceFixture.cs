@@ -6,15 +6,12 @@ using MovieMania.Core.Configurations.Mapper.Interfaces;
 using MovieMania.Core.Contexts;
 using MovieMania.Core.Contexts.Entities;
 using MovieMania.Core.Exceptions;
-using MovieMania.Core.Repositories.Interfaces;
-using MovieMania.Core.Requests;
 using MovieMania.Core.Services;
 using MovieMania.Core.Services.Interfaces;
 using MovieMania.Domain.Requests;
 using MovieMania.Domain.Responses;
 using NSubstitute;
 using NSubstitute.Core;
-using NSubstitute.Core.Arguments;
 using NSubstitute.ExceptionExtensions;
 
 namespace MovieMania.Test.Fixtures;
