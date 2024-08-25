@@ -1450,24 +1450,40 @@ public class MovieServiceTest
     #endregion
 
     #region Delete
-    // [Fact]
+    [Fact]
     public async Task DeleteMovie_ValidId_ReturnsTrue()
     {
         // Arrange
+        int id = 1;
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity(id);
 
         // Act
+        bool result = await fixture.Instance().DeleteMovie(id);
 
         // Assert
+        Assert.True(result);
     }
 
-    // [Fact]
+    [Fact]
     public async Task DeleteMovie_InvalidId_ThrowsException()
     {
         // Arrange
+        // Arrange
+        int id = 1;
+        string exceptionTitle = "Movie Not Found";
+        string exceptionMesage = $"Movie with id {id} not exists";
+        MovieServiceFixture fixture = new MovieServiceFixture().WithMovieEntity();
 
         // Act
+        EntityNotFoundException exception = await Assert.ThrowsAsync<EntityNotFoundException>(async () =>
+        {
+            await fixture.Instance().DeleteMovie(id);
+        });
 
         // Assert
+        Assert.NotNull(exception);
+        Assert.Equal(exceptionTitle, exception.Title);
+        Assert.Equal(exceptionMesage, exception.Message);
     }
     #endregion
 
